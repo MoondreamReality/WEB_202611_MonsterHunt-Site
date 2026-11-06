@@ -31,9 +31,9 @@ a{color:#111}a:hover{color:#444}
 .floaty{animation:floaty 2400ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.floaty,.card-breathe,.err-shake,.tv-on,.tv-off,.dim-in,.dim-out{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611061026">
-<script src="mh.js?v=202611061026"></script>
-<script src="dcmini.js?v=202611061026"></script>
+<link rel="stylesheet" href="mh.css?v=202611061034">
+<script src="mh.js?v=202611061034"></script>
+<script src="dcmini.js?v=202611061034"></script>
 
 </head>
 <body data-layout="flex">
@@ -61,7 +61,7 @@ a{color:#111}a:hover{color:#444}
           <svg width="10" height="14" viewBox="0 0 10 14" aria-hidden="true"><path d="M5 1 L9 5 H1 Z M5 13 L9 9 H1 Z" fill="#111"></path></svg>
         </span>
       </div>
-      <div style="display: flex; height: 460px">
+      <div data-fit="380" data-fit-min="300" data-fit-max="560" style="display: flex; height: 380px">
         <div ref="{{setList}}" onScroll="{{onScroll}}" class="noscroll" tabindex="0" aria-label="怪獸列表" style="flex: 1; min-width: 0; overflow-y: auto; overscroll-behavior: contain">
           <div style="padding: 18px 12px 22px 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 22px; column-gap: 8px">
             <sc-for list="{{mons}}" as="m" hint-placeholder-count="9">
@@ -124,7 +124,7 @@ a{color:#111}a:hover{color:#444}
     </div></sc-if>
   </div>
 
-  <nav aria-label="主選單" style="margin-top: auto; padding: 0 16px 16px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+  <nav aria-label="主選單" style="margin-top: auto; padding: 14px 16px 16px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
     <a href="scan.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111; min-height: 64px">
       <span style="width: 40px; height: 36px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="10" height="10" fill="none" stroke="#111" stroke-width="2"></rect><rect x="13" y="13" width="5" height="3" fill="#111" transform="rotate(45 15 15)"></rect></svg></span>
       <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">搜查</span>

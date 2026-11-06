@@ -186,6 +186,7 @@
       after(cb) { cbs.push(cb); }
     };
     comp.__host = host;
+    window.__dcComp = comp;
     function render() {
       queued = false;
       let vals;
@@ -239,8 +240,21 @@
     } else if (mode === 'tall') {
       app.style.setProperty('--mh-h', Math.floor(Hl) + 'px');
     } else {
+      // data-fit：可伸縮的區塊（例如圖鑑列表），先回到設計高度，放不下再縮，最小到 data-fit-min
+      const fitEl = root && root.querySelector('[data-fit]');
+      const base = fitEl ? +fitEl.getAttribute('data-fit') : 0;
+      if (fitEl) fitEl.style.height = base + 'px';
       app.style.setProperty('--mh-h', 'auto');
-      const natural = root ? root.offsetHeight : 844;
+      let natural = root ? root.offsetHeight : 844;
+      if (fitEl && natural > Hl) {
+        const min = +(fitEl.getAttribute('data-fit-min') || base);
+        fitEl.style.height = Math.max(min, Math.floor(base - (natural - Hl))) + 'px';
+        natural = root.offsetHeight;
+      } else if (fitEl && fitEl.getAttribute('data-fit-max') && natural < Hl) {
+        const max = +fitEl.getAttribute('data-fit-max');
+        fitEl.style.height = Math.min(max, Math.floor(base + (Hl - natural))) + 'px';
+        natural = root.offsetHeight;
+      }
       app.style.setProperty('--mh-h', Math.max(Math.floor(Hl), natural) + 'px');
     }
     lastW = v.W;
@@ -260,7 +274,10 @@
     app.style.height = h + 'px';
     stage.style.height = Math.max(sh, v.H) + 'px';
   }
-  function fit() { try { sizePage(); } catch (e) {} }
+  function fit() {
+    try { sizePage(); } catch (e) {}
+    try { if (window.__dcComp) window.__dcComp.forceUpdate(); } catch (e) {}
+  }
   let rt = null;
   const onResize = () => { clearTimeout(rt); rt = setTimeout(fit, 60); };
   window.addEventListener('resize', onResize);
