@@ -1,5 +1,5 @@
-/* 外框：把 390×844 的遊戲畫面等比縮放置中 */
-html, body { margin: 0; height: 100%; background: #111; overflow: hidden; overscroll-behavior: none; }
+/* 外框：遊戲畫面寬度填滿手機，高度依頁面而定（超過螢幕就整頁捲動） */
+html, body { margin: 0; background: #111; overflow-x: hidden; overscroll-behavior-y: none; }
 body {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -8,6 +8,7 @@ body {
   background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
   background-size: 6px 6px;
 }
+#stage { position: relative; width: 100%; min-height: 100vh; overflow: hidden; }
 #app {
   position: absolute; left: 0; top: 0;
   width: 390px; height: 844px; overflow: hidden;

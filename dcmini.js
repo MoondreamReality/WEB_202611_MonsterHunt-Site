@@ -204,22 +204,73 @@
     if (comp.componentDidMount) { try { comp.componentDidMount(); } catch (e) { console.error(e); } }
     window.addEventListener('pagehide', () => { try { comp.componentWillUnmount && comp.componentWillUnmount(); } catch (e) {} });
     fit();
+    watch();
   }
 
-  // ---------- 等比縮放 390×844 畫面到手機螢幕 ----------
-  function fit() {
-    const app = document.getElementById('app');
+  // ---------- 版面：寬度填滿手機，高度跟著手機走 ----------
+  // body[data-layout]：flex＝上下排列、選單貼底（內容比螢幕高就整頁捲動）
+  //                    main＝開場（絕對定位，高度介於 620～844）
+  //                    tall＝寶藏解鎖（內容自然長高，整頁捲動）
+  const MAXW = 480;
+  function viewport() {
     const vv = window.visualViewport;
-    const W = vv ? vv.width : window.innerWidth;
-    const H = vv ? vv.height : window.innerHeight;
-    const s = Math.min(W / 390, H / 844);
-    app.style.transform = 'scale(' + s + ')';
-    app.style.left = Math.max(0, (W - 390 * s) / 2) + 'px';
-    app.style.top = Math.max(0, (H - 844 * s) / 2) + 'px';
+    // 用 innerHeight 而不是 visualViewport.height：避免 iOS 鍵盤跳出時整個畫面重排
+    return { W: vv ? vv.width : window.innerWidth, H: window.innerHeight };
   }
-  window.addEventListener('resize', fit);
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
-  window.addEventListener('orientationchange', () => setTimeout(fit, 200));
+  function scaleOf(W) { return Math.min(W, MAXW) / 390; }
+  // 開場頁的高度在元件建立前就要決定（放大鏡的原點依它計算），之後只在轉向時重算
+  function mainHeight() {
+    const v = viewport();
+    return Math.round(Math.min(844, Math.max(620, v.H / scaleOf(v.W))));
+  }
+  window.MH_PAGE_H = mainHeight();
+  let lastW = 0;
+
+  function sizePage() {
+    const app = document.getElementById('app');
+    const root = app.firstElementChild;
+    const mode = document.body.getAttribute('data-layout') || 'flex';
+    const v = viewport();
+    const s = scaleOf(v.W);
+    const Hl = v.H / s;
+    if (mode === 'main') {
+      if (Math.abs(v.W - lastW) > 40) window.MH_PAGE_H = mainHeight();
+      app.style.setProperty('--mh-h', window.MH_PAGE_H + 'px');
+    } else if (mode === 'tall') {
+      app.style.setProperty('--mh-h', Math.floor(Hl) + 'px');
+    } else {
+      app.style.setProperty('--mh-h', 'auto');
+      const natural = root ? root.offsetHeight : 844;
+      app.style.setProperty('--mh-h', Math.max(Math.floor(Hl), natural) + 'px');
+    }
+    lastW = v.W;
+    place();
+  }
+  function place() {
+    const app = document.getElementById('app');
+    const stage = document.getElementById('stage');
+    const root = app.firstElementChild;
+    const v = viewport();
+    const s = scaleOf(v.W);
+    const h = root ? root.offsetHeight : 844;
+    const sh = h * s;
+    app.style.transform = 'scale(' + s + ')';
+    app.style.left = Math.max(0, (v.W - 390 * s) / 2) + 'px';
+    app.style.top = sh < v.H ? Math.round((v.H - sh) / 2) + 'px' : '0px';
+    app.style.height = h + 'px';
+    stage.style.height = Math.max(sh, v.H) + 'px';
+  }
+  function fit() { try { sizePage(); } catch (e) {} }
+  let rt = null;
+  const onResize = () => { clearTimeout(rt); rt = setTimeout(fit, 60); };
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', () => setTimeout(fit, 250));
+  function watch() {
+    const root = document.getElementById('app').firstElementChild;
+    if (root && window.ResizeObserver) new ResizeObserver(() => place()).observe(root);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    setTimeout(fit, 300); setTimeout(fit, 1200);
+  }
 
   window.DCMini = { boot, fit };
 })();

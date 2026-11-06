@@ -27,16 +27,16 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611060951">
-<script src="mh.js?v=202611060951"></script>
-<script src="dcmini.js?v=202611060951"></script>
+<link rel="stylesheet" href="mh.css?v=202611061026">
+<script src="mh.js?v=202611061026"></script>
+<script src="dcmini.js?v=202611061026"></script>
 
 </head>
-<body>
-<div id="app"></div>
+<body data-layout="flex">
+<div id="stage"><div id="app"></div></div>
 <template id="dc-tpl">
 
-<div class="desk" style="position: relative; width: 390px; height: 844px; box-sizing: border-box; color: #111; font-family: 'DotGothic16', monospace; display: flex; flex-direction: column; overflow: hidden">
+<div class="desk" style="position: relative; width: 390px; height: var(--mh-h, 844px); box-sizing: border-box; color: #111; font-family: 'DotGothic16', monospace; display: flex; flex-direction: column; overflow: hidden">
   <div style="height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 15px">
     <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg>
     <span style="font-weight: bold">搜查令</span>
@@ -127,8 +127,8 @@ a{color:#111}a:hover{color:#444}
   </nav>
   <a ref="{{setCatchLink}}" href="{{catchHref}}" tabindex="-1" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none">前往發現怪獸</a>
   <sc-if value="{{fxOn}}" hint-placeholder-val="{{ false }}">
-    <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; z-index: 20; overflow: hidden">
-      <div style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; opacity: {{fx.dim}}; background-image: repeating-conic-gradient(#111 0 25%, transparent 0 50%); background-size: 4px 4px"></div>
+    <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: var(--mh-h, 844px); z-index: 20; overflow: hidden">
+      <div style="position: absolute; left: 0; top: 0; width: 390px; height: var(--mh-h, 844px); opacity: {{fx.dim}}; background-image: repeating-conic-gradient(#111 0 25%, transparent 0 50%); background-size: 4px 4px"></div>
       <sc-if value="{{fx.showQR}}" hint-placeholder-val="{{ false }}">
         <div style="position: absolute; left: 32px; top: 142px; width: 326px; height: 300px; background: {{fx.vfBg}}">
           <div style="position: absolute; left: {{fx.cIn}}; top: {{fx.cIn}}; width: 36px; height: 6px; background: {{fx.vfFg}}"></div>
