@@ -27,9 +27,9 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611061040">
-<script src="mh.js?v=202611061040"></script>
-<script src="dcmini.js?v=202611061040"></script>
+<link rel="stylesheet" href="mh.css?v=202611061046">
+<script src="mh.js?v=202611061046"></script>
+<script src="dcmini.js?v=202611061046"></script>
 
 </head>
 <body data-layout="flex">
@@ -51,7 +51,7 @@ a{color:#111}a:hover{color:#444}
         </div>
       </div>
       <div style="padding: 14px">
-        <div style="height: 300px; background: #111; position: relative; display: flex; align-items: center; justify-content: center">
+        <div ref="{{setVf}}" data-fit="300" data-fit-min="170" data-fit-max="340" style="height: 300px; background: #111; position: relative; display: flex; align-items: center; justify-content: center">
           <div style="position: absolute; left: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
           <div style="position: absolute; left: 14px; top: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
           <div style="position: absolute; right: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
@@ -60,7 +60,7 @@ a{color:#111}a:hover{color:#444}
           <div style="position: absolute; left: 14px; bottom: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
           <div style="position: absolute; right: 14px; bottom: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
           <div style="position: absolute; right: 14px; bottom: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
-          <div style="position: absolute; left: 30px; right: 30px; top: 120px; height: 0; border-top: 4px dashed #f4f4f0"></div>
+          <div style="position: absolute; left: 30px; right: 30px; top: 40%; height: 0; border-top: 4px dashed #f4f4f0"></div>
           <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 70px; color: #f4f4f0">
             <svg width="36" height="36" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="12" y="2" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="2" y="12" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="12" y="12" width="2" height="2" fill="#f4f4f0"></rect><rect x="16" y="16" width="2" height="2" fill="#f4f4f0"></rect><rect x="16" y="12" width="2" height="2" fill="#f4f4f0"></rect><rect x="12" y="16" width="2" height="2" fill="#f4f4f0"></rect></svg>
             <span style="font-size: 14px">對準怪獸身上的 QR Code</span>
@@ -104,7 +104,7 @@ a{color:#111}a:hover{color:#444}
     </div>
   </div>
 
-  <nav aria-label="主選單" style="margin-top: auto; padding: 0 16px 18px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+  <nav aria-label="主選單" style="margin-top: auto; padding: 14px 16px 16px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
     <a href="scan.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111; min-height: 64px">
       <span style="width: 40px; height: 36px; background: #111; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="10" height="10" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="13" y="13" width="5" height="3" fill="#f4f4f0" transform="rotate(45 15 15)"></rect></svg></span>
       <span style="background: #111; color: #f4f4f0; padding: 0 6px; font-size: 13px">搜查</span>
@@ -123,7 +123,7 @@ a{color:#111}a:hover{color:#444}
     <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: var(--mh-h, 844px); z-index: 20; overflow: hidden">
       <div style="position: absolute; left: 0; top: 0; width: 390px; height: var(--mh-h, 844px); opacity: {{fx.dim}}; background-image: repeating-conic-gradient(#111 0 25%, transparent 0 50%); background-size: 4px 4px"></div>
       <sc-if value="{{fx.showQR}}" hint-placeholder-val="{{ false }}">
-        <div style="position: absolute; left: 32px; top: 142px; width: 326px; height: 300px; background: {{fx.vfBg}}">
+        <div style="position: absolute; left: {{fx.vfX}}; top: {{fx.vfY}}; width: {{fx.vfW}}; height: {{fx.vfH}}; background: {{fx.vfBg}}">
           <div style="position: absolute; left: {{fx.cIn}}; top: {{fx.cIn}}; width: 36px; height: 6px; background: {{fx.vfFg}}"></div>
           <div style="position: absolute; left: {{fx.cIn}}; top: {{fx.cIn}}; width: 6px; height: 36px; background: {{fx.vfFg}}"></div>
           <div style="position: absolute; right: {{fx.cIn}}; top: {{fx.cIn}}; width: 36px; height: 6px; background: {{fx.vfFg}}"></div>
@@ -132,7 +132,7 @@ a{color:#111}a:hover{color:#444}
           <div style="position: absolute; left: {{fx.cIn}}; bottom: {{fx.cIn}}; width: 6px; height: 36px; background: {{fx.vfFg}}"></div>
           <div style="position: absolute; right: {{fx.cIn}}; bottom: {{fx.cIn}}; width: 36px; height: 6px; background: {{fx.vfFg}}"></div>
           <div style="position: absolute; right: {{fx.cIn}}; bottom: {{fx.cIn}}; width: 6px; height: 36px; background: {{fx.vfFg}}"></div>
-          <div style="position: absolute; left: 103px; top: 90px; width: 120px; height: 120px; display: grid; grid-template-columns: repeat(12, 10px); grid-auto-rows: 10px">
+          <div style="position: absolute; left: {{fx.qrX}}; top: {{fx.qrY}}; width: 120px; height: 120px; display: grid; grid-template-columns: repeat(12, 10px); grid-auto-rows: 10px">
             <sc-for list="{{fx.qr}}" as="q" hint-placeholder-count="144"><div style="background: {{q.c}}"></div></sc-for>
           </div>
           <sc-if value="{{fx.showBang}}" hint-placeholder-val="{{ false }}">
@@ -141,7 +141,7 @@ a{color:#111}a:hover{color:#444}
         </div>
       </sc-if>
       <sc-if value="{{fx.showScreen}}" hint-placeholder-val="{{ false }}">
-        <div style="position: absolute; left: 18px; top: 76px; width: 334px; height: 260px; background: #111; outline: 2px solid #f4f4f0"></div>
+        <div style="position: absolute; left: 18px; top: 44px; width: 334px; height: 260px; background: #111; outline: 2px solid #f4f4f0"></div>
       </sc-if>
       <sc-for list="{{fx.parts}}" as="d" hint-placeholder-count="104"><div style="position: absolute; left: {{d.x}}; top: {{d.y}}; width: {{d.s}}; height: {{d.s}}; box-sizing: border-box; background: {{d.c}}; border: {{d.b}}"></div></sc-for>
       <sc-for list="{{fx.rects}}" as="r" hint-placeholder-count="4"><div style="position: absolute; left: {{r.x}}; top: {{r.y}}; width: {{r.w}}; height: {{r.h}}; box-sizing: border-box; border: 2px solid #111; outline: 2px solid #f4f4f0"></div></sc-for>
@@ -199,11 +199,20 @@ class Component extends DCLogic {
     PAT.forEach((row, r) => row.split('').forEach((ch, c) => {
       if (ch !== 'X' && ch !== 'P') return;
       const src = qrOn[k % qrOn.length];
-      this.PARTS.push({ sx: src[0], sy: src[1], mx: 20 + rnd() * 340, my: 60 + rnd() * 740, tx: 101 + c * 14, ty: 122 + r * 14, d: (k % 10) * 15 });
+      this.PARTS.push({ sx: src[0], sy: src[1], mx: 20 + rnd() * 340, my: 60 + rnd() * 740, tx: 101 + c * 14, ty: 90 + r * 14, d: (k % 10) * 15 });
       k++;
     }));
     this.catchLink = null;
     this.setCatchLink = (el) => { this.catchLink = el; };
+    this.vfEl = null;
+    this.setVf = (el) => { this.vfEl = el; };
+    this.vf = { x: 32, y: 110, w: 326, h: 300 };
+    this.measureVf = () => {
+      const el = this.vfEl, root = el && el.closest('.desk');
+      if (!el || !root) return;
+      const a = el.getBoundingClientRect(), b = root.getBoundingClientRect(), k = 390 / (b.width || 390);
+      this.vf = { x: Math.round((a.left - b.left) * k), y: Math.round((a.top - b.top) * k), w: Math.round(a.width * k), h: Math.round(a.height * k) };
+    };
     this.startCatch = () => {
       if (this.fxTick || this.scanning) return;
       this.scanning = true;
@@ -225,6 +234,7 @@ class Component extends DCLogic {
       let reduce = false;
       try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
       if (reduce) { if (this.catchLink) this.catchLink.click(); return; }
+      this.measureVf();
       const t0 = Date.now();
       this.setState({ fxT: 0 });
       this.fxTick = setInterval(() => {
@@ -261,11 +271,14 @@ class Component extends DCLogic {
     const vfBg = flashOn ? '#f4f4f0' : '#111';
     const vfFg = flashOn ? '#111' : '#f4f4f0';
     const qr = this.QR.map((on) => ({ c: on ? vfFg : 'transparent' }));
+    const vf = this.vf;
+    const qx = Math.round((vf.w - 120) / 2), qy = Math.round((vf.h - 120) / 2);
+    const ox = vf.x + qx - 135, oy = vf.y + qy - 232;
     const parts = [];
     if (t >= 600) {
       this.PARTS.forEach((p) => {
         let x, y, sz;
-        if (t < 1100) { const k = st((t - 600 - p.d) / 350, 8); x = p.sx + (p.mx - p.sx) * k; y = p.sy + (p.my - p.sy) * k; sz = 10 + 2 * k; }
+        if (t < 1100) { const k = st((t - 600 - p.d) / 350, 8); x = p.sx + ox + (p.mx - p.sx - ox) * k; y = p.sy + oy + (p.my - p.sy - oy) * k; sz = 10 + 2 * k; }
         else { const k = st((t - 1100 - p.d) / 350, 8); x = p.mx + (p.tx - p.mx) * k; y = p.my + (p.ty - p.my) * k; sz = 12 + 2 * k; }
         const landed = t >= 1600;
         const flash = t >= 1600 && t < 1750;
@@ -273,7 +286,7 @@ class Component extends DCLogic {
       });
     }
     const rects = [];
-    const R0 = [18, 76, 334, 260], R1 = [16, 50, 358, 372];
+    const R0 = [18, 44, 334, 260], R1 = [16, 18, 358, 372];
     [1800, 1900, 2000, 2100].forEach((at, i) => {
       if (t >= at) {
         const f = (i + 1) / 4;
@@ -286,6 +299,7 @@ class Component extends DCLogic {
       showQR: t < 600,
       showBang: t >= 450 && t < 600,
       vfBg, vfFg, cIn, qr,
+      vfX: vf.x + 'px', vfY: vf.y + 'px', vfW: vf.w + 'px', vfH: vf.h + 'px', qrX: qx + 'px', qrY: qy + 'px',
       showScreen: t >= 1350,
       parts, rects
     };
@@ -309,6 +323,7 @@ class Component extends DCLogic {
       startCatch: this.startCatch,
       manualCode: this.manualCode,
       catchHref: this.state.catchHref || 'catch.html',
+      setVf: this.setVf,
       setCatchLink: this.setCatchLink,
       fxOn: this.state.fxT != null,
       fx: this.fxFrame(this.state.fxT),
