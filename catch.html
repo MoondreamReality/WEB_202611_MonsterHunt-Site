@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="format-detection" content="telephone=no">
+<title>發現怪獸：諦聽</title>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111}a:hover{color:#444}
+.desk{background-color:#f4f4f0;background-image:repeating-conic-gradient(#111 0 25%, transparent 0 50%);background-size:4px 4px}
+.dots{background-color:#f4f4f0;background-image:radial-gradient(#111 0.9px, transparent 1.1px);background-size:4px 4px}
+.stripes{background-image:repeating-linear-gradient(#111 0 2px, transparent 2px 4px);background-clip:content-box}
+@keyframes dlgbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.dlg-breathe{animation:dlgbreathe 1600ms steps(4) infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}25%{transform:translateY(-2px)}50%{transform:translateY(-4px)}75%{transform:translateY(-2px)}}
+.floaty{animation:floaty 2400ms steps(4) infinite}
+@media (prefers-reduced-motion: reduce){.dlg-breathe,.floaty{animation:none}}
+</style>
+<link rel="stylesheet" href="mh.css?v=202611060951">
+<script src="mh.js?v=202611060951"></script>
+<script src="dcmini.js?v=202611060951"></script>
+
+</head>
+<body>
+<div id="app"></div>
+<template id="dc-tpl">
+
+<div class="desk" style="width: 390px; height: 844px; box-sizing: border-box; color: #111; font-family: 'DotGothic16', monospace; display: flex; flex-direction: column; overflow: hidden">
+  <div style="height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 15px">
+    <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg>
+    <span style="font-weight: bold">搜查令</span>
+    <span>檔案</span>
+    <span>圖鑑</span>
+    <span>寶藏</span>
+  </div>
+
+  <div style="padding: 16px 16px 0 16px; display: flex; flex-direction: column; gap: 14px">
+    <div style="background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; display: flex; flex-direction: column">
+      <div class="stripes" style="background-image: repeating-linear-gradient(#111 0 2px, transparent 2px 4px), linear-gradient(#ffd23f, #ffd23f); background-clip: content-box, border-box; height: 24px; box-sizing: border-box; padding: 5px 4px; border-bottom: 2px solid #111; display: flex; align-items: center; position: relative">
+        <span aria-hidden="true" style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px"></span>
+        <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #ffd23f; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px; white-space: nowrap">{{file}}</span>
+      </div>
+      <div style="display: flex">
+        <div style="flex: 1; background: #111; height: 260px; position: relative; display: flex; align-items: center; justify-content: center">
+          <span aria-hidden="true" style="position: absolute; left: 24px; top: 26px; color: #f4f4f0; font-family: 'Silkscreen', monospace; font-size: 22px">+</span>
+          <span aria-hidden="true" style="position: absolute; right: 30px; top: 40px; color: #f4f4f0; font-family: 'Silkscreen', monospace; font-size: 14px">+</span>
+          <span aria-hidden="true" style="position: absolute; left: 44px; bottom: 34px; color: #f4f4f0; font-family: 'Silkscreen', monospace; font-size: 14px">+</span>
+          <span aria-hidden="true" style="position: absolute; right: 22px; bottom: 26px; color: #f4f4f0; font-family: 'Silkscreen', monospace; font-size: 22px">+</span>
+          <span aria-hidden="true" style="position: absolute; left: 50%; top: 18px; width: 4px; height: 4px; background: #f4f4f0"></span>
+          <sc-if value="{{bad}}"><span aria-hidden="true" style="color: #f4f4f0; font-size: 110px; font-weight: bold; line-height: 1">？</span></sc-if><sc-if value="{{ok}}"><img src="{{img}}" alt="像素怪獸「{{name}}」" class="floaty" style="width: 176px; height: 176px; image-rendering: pixelated; display: block"></sc-if>
+        </div>
+        <div aria-hidden="true" style="width: 18px; border-left: 2px solid #111; display: flex; flex-direction: column">
+          <div style="height: 18px; border-bottom: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M5 1 L9 6 H1 Z" fill="none" stroke="#111" stroke-width="1.5"></path></svg></div>
+          <div class="dots" style="flex: 1"></div>
+          <div style="height: 18px; border-top: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="10" height="8" viewBox="0 0 10 8"><path d="M5 7 L9 2 H1 Z" fill="none" stroke="#111" stroke-width="1.5"></path></svg></div>
+        </div>
+      </div>
+      <div style="border-top: 2px solid #111; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">
+        <div style="padding: 8px 12px; border-right: 2px solid #111; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>編號</span><span style="font-family: 'Silkscreen', monospace; font-size: 12px">{{no}}</span></div>
+        <div style="padding: 8px 12px; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>名字</span><span>{{name}}</span></div>
+        <div style="padding: 8px 12px; border-right: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>屬性</span><span>{{type}}</span></div>
+        <div style="padding: 8px 12px; display: flex; justify-content: space-between; font-size: 14px"><span>出沒</span><span>{{seen}}</span></div>
+      </div>
+    </div>
+
+    <div role="dialog" aria-labelledby="msg" class="dlg-breathe" style="background: #f4f4f0; border: 2px solid #111; box-shadow: inset 0 0 0 3px #f4f4f0, inset 0 0 0 5px #111, 3px 3px 0 #111; padding: 20px 18px 18px 18px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; gap: 14px; align-items: center">
+        <div aria-hidden="true" style="width: 52px; height: 52px; border: 2px solid #111; display: flex; align-items: center; justify-content: center; flex: none; background: #111; color: #f4f4f0">
+          <span style="font-family: 'Silkscreen', monospace; font-size: 22px; font-weight: bold">!!</span>
+        </div>
+        <div id="msg" style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 18px">{{headline}}</span>
+          <span style="font-size: 14px; line-height: 1.6">{{line}}</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 14px; justify-content: flex-end; align-items: center">
+        <a href="scan.html" style="height: 40px; padding: 0 16px; display: flex; align-items: center; border: 2px solid #111; border-radius: 10px; text-decoration: none; font-size: 15px; background: #f4f4f0">繼續搜查</a>
+        <a href="dex.html" style="height: 40px; padding: 0 18px; display: flex; align-items: center; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; text-decoration: none; font-size: 16px; background: #ffd23f; color: #111; font-weight: bold">收進圖鑑</a>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const v = this.renderVals();
+    document.title = v.ok ? '發現怪獸：' + v.name : '找不到怪獸';
+  }
+  renderVals() {
+    const r = this.r || (this.r = window.MH.handleCatchUrl());
+    const T = window.MH.total;
+    if (!r.mon) {
+      return { ok: false, bad: true, img: '', name: '？？？', no: 'No.??', file: 'No.??_？？？.png', type: '？？？', seen: '？？？',
+        headline: '找不到怪獸…', line: '這個 QR code 認不出來。回到搜查模式再掃一次看看！' };
+    }
+    const m = r.mon;
+    const nn = String(m.no).padStart(2, '0');
+    const left = T - r.got;
+    const tail = left > 0 ? '還差 ' + left + ' 隻，就能打開寶藏。' : '全部收服！快去打開寶藏吧！';
+    return {
+      ok: true, bad: false, img: m.img, name: m.name, no: 'No.' + nn, file: 'No.' + nn + '_' + m.name + '.png',
+      type: m.type, seen: m.seen,
+      headline: r.status === 'again' ? m.name + ' 已經在你的圖鑑裡了！' : m.name + ' 加入了你的圖鑑！',
+      line: m.catchLine + tail
+    };
+  }
+}
+</script>
+<script>DCMini.boot(Component);</script>
+</body>
+</html>

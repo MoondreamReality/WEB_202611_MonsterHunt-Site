@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="format-detection" content="telephone=no">
+<title>開場：霧城怪獸搜查令</title>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111}a:hover{color:#444}
+.desk{background-color:#f4f4f0;background-image:repeating-conic-gradient(#111 0 25%, transparent 0 50%);background-size:4px 4px}
+.stripes{background-image:repeating-linear-gradient(#111 0 2px, transparent 2px 4px);background-clip:content-box}
+.paper-cut{clip-path:polygon(0 0,100% 0,100% calc(100% - 52px),calc(100% - 52px) 100%,0 100%)}
+@keyframes dotblink{0%,100%{opacity:1}50%{opacity:0}}
+.dot{animation:dotblink 240ms steps(1) infinite}
+@keyframes crt{0%{transform:scale(0.02,0.006);filter:brightness(4)}25%{transform:scale(1,0.006);filter:brightness(4)}55%{transform:scale(1,0.1);filter:brightness(2)}100%{transform:scale(1,1);filter:brightness(1)}}
+.crt{animation:crt 760ms steps(12) both}
+@keyframes flick{0%,100%{opacity:1}50%{opacity:0.8}}
+.flicker{animation:flick 120ms steps(2) 760ms 3}
+@keyframes pop{0%{transform:scale(0.2)}50%{transform:scale(0.7)}100%{transform:scale(1)}}
+.pop{animation:pop 240ms steps(3) both}
+@keyframes blink{50%{opacity:0}}
+.cursor{animation:blink 800ms steps(1) infinite}
+@keyframes flyin{0%{transform:translateY(-520px) rotate(-14deg)}60%{transform:translateY(12px) rotate(3deg)}100%{transform:translateY(0) rotate(0deg)}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.fly{animation:flyin 1700ms steps(24) both, breathe 1200ms steps(4) 1700ms infinite}
+@keyframes hintblink{0%,100%{opacity:1}50%{opacity:0}}
+.hint{animation:hintblink 900ms steps(1) infinite}
+@keyframes packin{0%{transform:scale(0.5)}19%{transform:scale(1)}85%{transform:scale(1)}92%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes reveal{0%,49.9%{clip-path:inset(33.3% 0 33.3% 0)}50%,84.9%{clip-path:inset(0 0 33.3% 0)}85%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes topflap{0%,19%{transform:rotateX(-180deg);opacity:1}50%{transform:rotateX(0deg);opacity:1}50.1%,100%{transform:rotateX(0deg);opacity:0}}
+@keyframes botflap{0%,54%{transform:rotateX(180deg);opacity:1}85%{transform:rotateX(0deg);opacity:1}85.1%,100%{transform:rotateX(0deg);opacity:0}}
+@keyframes curlhide{0%,84.9%{opacity:0}85%,100%{opacity:1}}
+.reveal{animation:reveal 2600ms steps(1) both}
+.topflap{animation:topflap 2600ms steps(8) both;transform-origin:50% 100%;transform-style:preserve-3d}
+.botflap{animation:botflap 2600ms steps(8) both;transform-origin:50% 0;transform-style:preserve-3d}
+.curl-hide{animation:curlhide 2600ms steps(1) both}
+.face{position:absolute;left:0;top:0;right:0;bottom:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-sizing:border-box;border:2px solid #111}
+.face-back{transform:rotateX(180deg);background-color:#f4f4f0;background-image:radial-gradient(#111 0.9px, transparent 1.1px);background-size:4px 4px}
+.face-front{background:#f4f4f0}
+.pixel-round{clip-path:polygon(31.25% 0,68.75% 0,68.75% 6.25%,81.25% 6.25%,81.25% 12.5%,87.5% 12.5%,87.5% 18.75%,93.75% 18.75%,93.75% 31.25%,100% 31.25%,100% 68.75%,93.75% 68.75%,93.75% 81.25%,87.5% 81.25%,87.5% 87.5%,81.25% 87.5%,81.25% 93.75%,68.75% 93.75%,68.75% 100%,31.25% 100%,31.25% 93.75%,18.75% 93.75%,18.75% 87.5%,12.5% 87.5%,12.5% 81.25%,6.25% 81.25%,6.25% 68.75%,0 68.75%,0 31.25%,6.25% 31.25%,6.25% 18.75%,12.5% 18.75%,12.5% 12.5%,18.75% 12.5%,18.75% 6.25%,31.25% 6.25%)}
+@keyframes charge{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+.charging{animation:charge 150ms steps(2) 4}
+.lifted{transform:scale(1.06)}
+@media (prefers-reduced-motion: reduce){.charging{animation:none}}
+@keyframes slapin{0%{transform:translate(var(--fx),var(--fy)) rotate(calc(var(--r) + 24deg)) scale(1.12)}75%{transform:translate(0,0) rotate(var(--r)) scale(1.06)}100%{transform:translate(0,0) rotate(var(--r)) scale(1)}}
+.slapin{animation:slapin 420ms steps(6) both, flutter 2600ms steps(6) infinite}
+@keyframes flutter{0%,100%{transform:rotate(var(--r)) translateY(calc(-1 * var(--pd))) rotate(0deg) skewX(0deg) translateY(var(--pd))}30%{transform:rotate(var(--r)) translateY(calc(-1 * var(--pd))) rotate(1.4deg) skewX(0.6deg) translateY(var(--pd))}65%{transform:rotate(var(--r)) translateY(calc(-1 * var(--pd))) rotate(-0.8deg) skewX(-0.4deg) translateY(var(--pd))}}
+@keyframes sway{0%,100%{transform:rotate(0deg)}35%{transform:rotate(0.9deg)}70%{transform:rotate(-0.6deg)}}
+.sway{animation:sway 3000ms steps(6) infinite;transform-origin:50% 0}
+@keyframes btnbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.btn-breathe{animation:btnbreathe 1400ms steps(4) infinite}
+@keyframes gopullin{0%{clip-path:var(--in0)}100%{clip-path:var(--in1)}}
+@keyframes gopullout{0%{clip-path:var(--out0)}100%{clip-path:var(--out1)}}
+.go-in{animation:gopullin 360ms steps(8) both}
+.go-out{animation:gopullout 420ms steps(8) both}
+@keyframes pinin{0%{transform:translateY(-26px) scale(1.7);opacity:0}60%{transform:translateY(2px) scale(0.9);opacity:1}100%{transform:none;opacity:1}}
+.pinin{animation:pinin 220ms steps(3) both}
+@keyframes drawline{0%{transform:rotate(var(--a)) scaleX(0)}100%{transform:rotate(var(--a)) scaleX(1)}}
+.drawline{animation:drawline 300ms steps(5) both}
+@keyframes pulltape{0%{clip-path:inset(0 100% 0 0);-webkit-clip-path:inset(0 100% 0 0)}100%{clip-path:inset(0 0 0 0);-webkit-clip-path:inset(0 0 0 0)}}
+.pulltape{animation:pulltape 600ms steps(8) both}
+@keyframes magin{0%{transform:translateY(420px)}80%{transform:translateY(-16px)}100%{transform:translateY(0)}}
+.magin{animation:magin 600ms steps(8) 2200ms backwards}
+@keyframes fadein{0%{opacity:0}100%{opacity:1}}
+@keyframes idle{0%,84%,100%{transform:rotate(0deg)}86%{transform:rotate(-5deg)}88%{transform:rotate(5deg)}90%{transform:rotate(-4deg)}92%{transform:rotate(3deg)}94%{transform:rotate(-1deg)}96%{transform:rotate(0deg)}}
+.idle{animation:idle 3500ms 3300ms infinite}
+@keyframes charge-fill{0%{width:0}100%{width:100%}}
+.charge-fill{animation:charge-fill 600ms steps(8) both}
+.hintin{animation:fadein 1ms 2900ms backwards}
+.hintback{animation:fadein 1ms 380ms backwards}
+@media (prefers-reduced-motion: reduce){.slapin,.pinin,.drawline,.pulltape,.magin,.hintin,.idle,.sway,.btn-breathe{animation:none}.slapin{animation:none}}
+
+@keyframes dshake{0%,100%{transform:translate(0,0)}10%{transform:translate(-5px,0)}20%{transform:translate(5px,-1px)}30%{transform:translate(-4px,1px)}40%{transform:translate(4px,0)}50%{transform:translate(-3px,0)}60%{transform:translate(3px,1px)}70%{transform:translate(-2px,0)}80%{transform:translate(2px,0)}90%{transform:translate(-1px,0)}}
+.dshake{animation:dshake 1000ms steps(20) 1}
+@keyframes unfold{0%{transform:scale(0.42,0.12)}35%{transform:scale(1,0.12)}55%{transform:scale(1,0.12)}100%{transform:scale(1,1)}}
+.unfold{animation:packin 2600ms steps(8) both;transform-origin:50% 50%}
+@keyframes stampgo{0%{transform:translate(70px,300px);opacity:0}5%{transform:translate(70px,300px);opacity:1}48%{transform:translate(0,-46px)}70%{transform:translate(0,-46px)}73.6%{transform:translate(0,0)}82%{transform:translate(0,0)}90%{transform:translate(0,-56px)}100%{transform:translate(90px,420px);opacity:1}}
+.stampgo{animation:stampgo 2700ms steps(32) both}
+@keyframes inkin{0%{opacity:0;transform:rotate(-14deg) scale(1.15)}100%{opacity:0.92;transform:rotate(-14deg) scale(1)}}
+.inked{animation:inkin 120ms steps(2) both}
+@keyframes shake{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,-1px)}100%{transform:translate(0,0)}}
+.shake{animation:shake 240ms steps(4) 1}
+@keyframes lift{0%{transform:scale(1)}100%{transform:scale(1.6)}}
+.curl-lift{animation:lift 300ms steps(3) both;transform-origin:100% 100%}
+@keyframes blow{0%{transform:none}18%{transform:rotate(-2deg)}35%{transform:translate(-30px,-10px) rotate(-6deg)}100%{transform:translate(-540px,-130px) rotate(-28deg)}}
+.blow{animation:blow 1100ms steps(14) both;transform-origin:0 0}
+@keyframes gust{0%{transform:translateX(440px)}100%{transform:translateX(-440px)}}
+.gust{animation:gust 700ms steps(8) both}
+@media (prefers-reduced-motion: reduce){.shake,.flicker,.dshake{animation:none}.fly{animation:flyin 1700ms steps(24) both}}
+</style>
+<link rel="stylesheet" href="mh.css?v=202611060951">
+<script src="mh.js?v=202611060951"></script>
+<script src="dcmini.js?v=202611060951"></script>
+
+</head>
+<body>
+<div id="app"></div>
+<template id="dc-tpl">
+
+<div ref="{{setRoot}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #111; color: #111; font-family: 'DotGothic16', monospace">
+
+  <sc-if value="{{showBlack}}" hint-placeholder-val="{{ false }}">
+    <div class="dot" aria-hidden="true" style="position: absolute; left: 193px; top: 420px; width: 4px; height: 4px; background: #f4f4f0"></div>
+  </sc-if>
+
+  <sc-if value="{{showDesk}}" hint-placeholder-val="{{ true }}">
+    <div class="desk crt" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px">
+      <div class="{{innerClass}}" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px">
+        <div class="flicker" style="position: absolute; z-index: 4; left: 0; top: 0; right: 0; height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px 0 6px; font-size: 15px">
+          <button type="button" onClick="{{replay}}" aria-label="重播開場" style="width: 32px; height: 32px; padding: 0; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer">
+            <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg>
+          </button>
+          <span style="font-weight: bold">搜查令</span>
+          <span>檔案</span>
+          <span>圖鑑</span>
+          <span>寶藏</span>
+          <span style="margin-left: auto; font-family: 'Silkscreen', monospace; font-size: 11px">[場館名稱]</span>
+        </div>
+
+        <sc-if value="{{showUnder}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 16px; right: 16px; top: calc(50% + 16px); transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; gap: 16px; align-items: flex-start">
+              <button type="button" class="sway" onClick="{{openList}}" aria-label="放大搜查清單" style="flex: 1; background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; padding: 10px 14px 14px 14px; position: relative; display: flex; flex-direction: column; gap: 6px; text-align: left; font-family: inherit; color: #111; cursor: zoom-in">
+                <span aria-hidden="true" style="position: absolute; left: calc(50% - 6px); top: -9px; width: 12px; height: 12px"><span style="position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; background: #111"></span><span style="position: absolute; left: 0; top: 0; width: 12px; height: 12px; box-sizing: border-box; background: #e8384f; border: 2px solid #111"></span><span style="position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; background: #f4f4f0"></span></span>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 15px; border-bottom: 2px solid #111; padding-bottom: 6px">
+                  <span aria-hidden="true" style="flex: 1; height: 6px" class="stripes"></span>
+                  <span>搜查清單</span>
+                  <span aria-hidden="true" style="flex: 1; height: 6px" class="stripes"></span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span aria-hidden="true" style="width: 10px; height: 10px; border: 2px solid #111"></span>找到 9 隻怪獸</div>
+                <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span aria-hidden="true" style="width: 10px; height: 10px; border: 2px solid #111"></span>掃描 QR Code 收服</div>
+                <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span aria-hidden="true" style="width: 10px; height: 10px; border: 2px solid #111"></span>集滿打開寶藏</div>
+                <div aria-hidden="true" style="position: absolute; right: -2px; bottom: -2px; width: 0; height: 0; border-left: 18px solid #111; border-top: 18px solid transparent"></div>
+              </button>
+              <div style="display: flex; flex-direction: column; gap: 12px; width: 104px">
+                <a href="dex.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111">
+                  <span style="width: 44px; height: 40px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg></span>
+                  <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">怪獸圖鑑</span>
+                </a>
+                <a href="{{treasureHref}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111">
+                  <span style="width: 44px; height: 40px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="8" width="16" height="10" fill="none" stroke="#111" stroke-width="2"></rect><rect x="2" y="4" width="16" height="4" fill="#111"></rect><rect x="9" y="8" width="2" height="10" fill="#111"></rect></svg></span>
+                  <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">寶藏</span>
+                </a>
+              </div>
+            </div>
+            <button type="button" onClick="{{startSearch}}" class="btn-breathe" style="align-self: center; height: 48px; padding: 0 28px; display: flex; align-items: center; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; font-family: inherit; font-size: 17px; background: #ffd23f; color: #111; font-weight: bold; cursor: pointer">開始搜查</button>
+          </div>
+          <sc-if value="{{showBoard}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; pointer-events: none">
+          <sc-for list="{{papers}}" as="d" hint-placeholder-count="7"><div class="slapin" style="--fx: {{d.fx}}; --fy: {{d.fy}}; --r: {{d.r}}; --pd: {{d.pd}}; animation-delay: {{d.delay}}; animation-duration: {{d.dur}}; position: absolute; left: {{d.left}}; top: {{d.top}}; width: {{d.w}}; height: {{d.h}}; transform: {{d.rot}}; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; box-shadow: 2px 2px 0 #111; padding: 5px 6px; display: flex; flex-direction: column; gap: 4px; font-family: 'DotGothic16', monospace; color: #111; text-align: left">
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #111; padding-bottom: 2px"><span style="font-size: 10px; font-weight: bold">嫌犯檔案</span><span style="font-family: 'Silkscreen', monospace; font-size: 7px">{{d.no}}</span></div>
+                  <div style="display: flex; gap: 5px">
+                    <div style="width: 30px; height: 34px; flex: none; border: 1px solid #111; background-color: #f4f4f0; background-image: radial-gradient(#111 0.9px, transparent 1.1px); background-size: 3px 3px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold"><span style="background: #f4f4f0; padding: 0 2px; line-height: 1">?</span></div>
+                    <div style="display: flex; flex-direction: column; gap: 1px; font-size: 8px; line-height: 1.35; min-width: 0">
+                      <span>代號 {{d.name}}</span>
+                      <span>特徵 {{d.trait}}</span>
+                      <span>目擊 {{d.seen}}</span>
+                    </div>
+                  </div>
+                  <div style="height: 4px; width: 78%; background: #111"></div>
+                  <div style="height: 4px; width: 52%; background: #111"></div>
+                  <span style="align-self: flex-end; margin-top: auto; font-size: 8px; border: 1px solid #111; padding: 0 3px; transform: rotate(-8deg)">未歸案</span>
+                </div></sc-for>
+          <sc-for list="{{tapes}}" as="t" hint-placeholder-count="5"><div class="pulltape" aria-hidden="true" style="animation-delay: {{t.delay}}; position: absolute; left: {{t.left}}; top: {{t.top}}; width: {{t.width}}; height: 26px; transform: {{t.rot}}; transform-origin: 0 50%; background: #ffd23f; border-top: 2px solid #111; border-bottom: 2px solid #111; box-sizing: border-box; overflow: hidden; white-space: nowrap; font-family: 'Silkscreen', 'DotGothic16', monospace; font-size: 11px; line-height: 22px; color: #111; letter-spacing: 1px">{{tapeText}}</div></sc-for>
+          <sc-for list="{{strings}}" as="r" hint-placeholder-count="6"><div class="drawline" style="--a: {{r.ang}}; animation-delay: {{r.delay}}; position: absolute; left: {{r.left}}; top: {{r.top}}; width: {{r.width}}; height: 2px; transform: {{r.rot}}; transform-origin: 0 50%; background: #e8384f"></div></sc-for>
+          <sc-for list="{{pins}}" as="q" hint-placeholder-count="7"><div class="pinin" style="animation-delay: {{q.delay}}; position: absolute; left: {{q.left}}; top: {{q.top}}; width: 12px; height: 12px"><div style="position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; background: #111"></div><div style="position: absolute; left: 0; top: 0; width: 12px; height: 12px; box-sizing: border-box; background: #e8384f; border: 2px solid #111"></div><div style="position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; background: #f4f4f0"></div></div></sc-for>
+          </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{showMag}}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{showMagHint}}" hint-placeholder-val="{{ false }}">
+            <div class="{{hintClass}}" style="position: absolute; left: 194px; top: 574px; width: 84px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; box-shadow: 2px 2px 0 #111; overflow: hidden">
+              <div class="{{chargeClass}}" aria-hidden="true" style="position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #ffd23f"></div>
+              <span style="position: relative; display: block; padding: 3px 8px; font-size: 13px; line-height: 1.4; white-space: pre-line">長按拿起
+放大鏡</span>
+            </div>
+          </sc-if>
+          <div class="magin" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; pointer-events: none; z-index: 5">
+          <div data-mag="1" class="{{magClass}}" style="position: absolute; left: {{magLeft}}; top: {{magTop}}; width: 280px; height: 350px; pointer-events: none; transform-origin: 84px 84px; z-index: 5; transition: {{magTrans}}">
+            <div aria-hidden="true" class="pixel-round" style="position: absolute; left: {{shadowOff}}; top: {{shadowOff}}; width: 168px; height: 168px; background: #111"></div>
+            <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 280px; height: 350px; pointer-events: none; filter: drop-shadow(2px 0 0 #f4f4f0) drop-shadow(-2px 0 0 #f4f4f0) drop-shadow(0 2px 0 #f4f4f0) drop-shadow(0 -2px 0 #f4f4f0) drop-shadow(3px 3px 0 #111)"><sc-for list="{{handle}}" as="h" hint-placeholder-count="14">
+              <div aria-hidden="true" onPointerDown="{{h.down}}" onContextMenu="{{h.menu}}" style="position: absolute; left: {{h.x}}; top: {{h.y}}; width: {{h.w}}; height: {{h.w}}; background: #111; pointer-events: auto; touch-action: none; cursor: grab"><div style="position: absolute; left: 4px; top: 4px; width: 4px; height: 4px; background: {{h.hl}}"></div></div>
+            </sc-for></div>
+            <div aria-hidden="true" class="pixel-round" style="position: absolute; left: 0; top: 0; width: 168px; height: 168px; background: #111"></div>
+            <button type="button" onPointerDown="{{magDown}}" onContextMenu="{{noMenu}}" aria-label="放大鏡：長按拿起，拖曳查看" class="pixel-round" style="position: absolute; left: 4px; top: 4px; width: 160px; height: 160px; padding: 0; border: none; overflow: hidden; background: #f4f4f0; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: grab">
+              <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; transform-origin: 0 0; transform: {{lensTf}}; transition: {{lensTrans}}; pointer-events: none; text-align: left; color: #111; font-family: 'DotGothic16', monospace">
+                <div class="desk" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px"></div>
+                <div style="position: absolute; left: 16px; right: 16px; top: calc(50% + 16px); transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px">
+                  <div style="display: flex; gap: 16px; align-items: flex-start">
+                    <div class="sway" style="flex: 1; background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; padding: 10px 14px 14px 14px; position: relative; display: flex; flex-direction: column; gap: 6px">
+                        <span aria-hidden="true" style="position: absolute; left: calc(50% - 6px); top: -9px; width: 12px; height: 12px"><span style="position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; background: #111"></span><span style="position: absolute; left: 0; top: 0; width: 12px; height: 12px; box-sizing: border-box; background: #e8384f; border: 2px solid #111"></span><span style="position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; background: #f4f4f0"></span></span>
+                      <div style="display: flex; align-items: center; gap: 8px; font-size: 15px; border-bottom: 2px solid #111; padding-bottom: 6px">
+                        <span style="flex: 1; height: 6px" class="stripes"></span>
+                        <span>搜查清單</span>
+                        <span style="flex: 1; height: 6px" class="stripes"></span>
+                      </div>
+                      <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span style="width: 10px; height: 10px; border: 2px solid #111"></span>找到 9 隻怪獸</div>
+                      <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span style="width: 10px; height: 10px; border: 2px solid #111"></span>掃描 QR Code 收服</div>
+                      <div style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span style="width: 10px; height: 10px; border: 2px solid #111"></span>集滿打開寶藏</div>
+                      <div style="position: absolute; right: -2px; bottom: -2px; width: 0; height: 0; border-left: 18px solid #111; border-top: 18px solid transparent"></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px; width: 104px">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+                        <span style="width: 44px; height: 40px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg></span>
+                        <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">怪獸圖鑑</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+                        <span style="width: 44px; height: 40px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 20 20"><rect x="2" y="8" width="16" height="10" fill="none" stroke="#111" stroke-width="2"></rect><rect x="2" y="4" width="16" height="4" fill="#111"></rect><rect x="9" y="8" width="2" height="10" fill="#111"></rect></svg></span>
+                        <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">寶藏</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span class="btn-breathe" style="align-self: center; height: 48px; padding: 0 28px; display: flex; align-items: center; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; font-size: 17px; background: #ffd23f; color: #111; font-weight: bold">開始搜查</span>
+                </div>
+                <sc-for list="{{papers}}" as="d" hint-placeholder-count="7"><div class="slapin" style="--fx: {{d.fx}}; --fy: {{d.fy}}; --r: {{d.r}}; --pd: {{d.pd}}; animation-delay: {{d.delay}}; animation-duration: {{d.dur}}; position: absolute; left: {{d.left}}; top: {{d.top}}; width: {{d.w}}; height: {{d.h}}; transform: {{d.rot}}; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; box-shadow: 2px 2px 0 #111; padding: 5px 6px; display: flex; flex-direction: column; gap: 4px; font-family: 'DotGothic16', monospace; color: #111; text-align: left">
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #111; padding-bottom: 2px"><span style="font-size: 10px; font-weight: bold">嫌犯檔案</span><span style="font-family: 'Silkscreen', monospace; font-size: 7px">{{d.no}}</span></div>
+                  <div style="display: flex; gap: 5px">
+                    <div style="width: 30px; height: 34px; flex: none; border: 1px solid #111; background-color: #f4f4f0; background-image: radial-gradient(#111 0.9px, transparent 1.1px); background-size: 3px 3px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold"><span style="background: #f4f4f0; padding: 0 2px; line-height: 1">?</span></div>
+                    <div style="display: flex; flex-direction: column; gap: 1px; font-size: 8px; line-height: 1.35; min-width: 0">
+                      <span>代號 {{d.name}}</span>
+                      <span>特徵 {{d.trait}}</span>
+                      <span>目擊 {{d.seen}}</span>
+                    </div>
+                  </div>
+                  <div style="height: 4px; width: 78%; background: #111"></div>
+                  <div style="height: 4px; width: 52%; background: #111"></div>
+                  <span style="align-self: flex-end; margin-top: auto; font-size: 8px; border: 1px solid #111; padding: 0 3px; transform: rotate(-8deg)">未歸案</span>
+                </div></sc-for>
+                <sc-for list="{{tapes}}" as="t" hint-placeholder-count="5"><div class="pulltape" style="animation-delay: {{t.delay}}; position: absolute; left: {{t.left}}; top: {{t.top}}; width: {{t.width}}; height: 26px; transform: {{t.rot}}; transform-origin: 0 50%; background: #ffd23f; border-top: 2px solid #111; border-bottom: 2px solid #111; box-sizing: border-box; overflow: hidden; white-space: nowrap; font-family: 'Silkscreen', 'DotGothic16', monospace; font-size: 11px; line-height: 22px; color: #111; letter-spacing: 1px">{{tapeText}}</div></sc-for>
+                <sc-for list="{{strings}}" as="r" hint-placeholder-count="6"><div class="drawline" style="--a: {{r.ang}}; animation-delay: {{r.delay}}; position: absolute; left: {{r.left}}; top: {{r.top}}; width: {{r.width}}; height: 2px; transform: {{r.rot}}; transform-origin: 0 50%; background: #e8384f"></div></sc-for>
+                <sc-for list="{{pins}}" as="q" hint-placeholder-count="7"><div class="pinin" style="animation-delay: {{q.delay}}; position: absolute; left: {{q.left}}; top: {{q.top}}; width: 12px; height: 12px"><div style="position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; background: #111"></div><div style="position: absolute; left: 0; top: 0; width: 12px; height: 12px; box-sizing: border-box; background: #e8384f; border: 2px solid #111"></div><div style="position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; background: #f4f4f0"></div></div></sc-for>
+                <div style="position: absolute; left: 0; top: 0; right: 0; height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px 0 6px; font-size: 15px">
+                  <span style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 12 12"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg></span>
+                  <span style="font-weight: bold">搜查令</span>
+                  <span>檔案</span>
+                  <span>圖鑑</span>
+                  <span>寶藏</span>
+                  <span style="margin-left: auto; font-family: 'Silkscreen', monospace; font-size: 11px">[場館名稱]</span>
+                </div>
+              </div>
+              <span aria-hidden="true" style="position: absolute; left: 22px; top: 22px; width: 14px; height: 14px; background: #ffffff; opacity: 0.85"></span>
+              <span aria-hidden="true" style="position: absolute; left: 40px; top: 14px; width: 8px; height: 8px; background: #ffffff; opacity: 0.85"></span>
+            </button>
+          </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{zoomList}}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{closeList}}" aria-label="關閉放大的搜查清單" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; padding: 0; border: none; z-index: 8; cursor: zoom-out; background-color: transparent; background-image: repeating-conic-gradient(#111 0 25%, transparent 0 50%); background-size: 4px 4px"></button>
+          <div style="position: absolute; left: 28px; right: 28px; top: calc(50% + 16px); transform: translateY(-50%); z-index: 9; pointer-events: none">
+            <div role="dialog" aria-label="搜查清單" class="pop" style="pointer-events: auto; background: #f4f4f0; border: 3px solid #111; box-shadow: 6px 6px 0 #111; padding: 26px 24px 30px 24px; position: relative; display: flex; flex-direction: column; gap: 16px">
+              <span aria-hidden="true" style="position: absolute; left: calc(50% - 10px); top: -14px; width: 20px; height: 20px"><span style="position: absolute; left: 4px; top: 4px; width: 20px; height: 20px; background: #111"></span><span style="position: absolute; left: 0; top: 0; width: 20px; height: 20px; box-sizing: border-box; background: #e8384f; border: 3px solid #111"></span><span style="position: absolute; left: 5px; top: 5px; width: 5px; height: 5px; background: #f4f4f0"></span></span>
+              <div style="display: flex; align-items: center; gap: 12px; font-size: 26px; border-bottom: 3px solid #111; padding-bottom: 10px">
+                <span aria-hidden="true" style="flex: 1; height: 9px" class="stripes"></span>
+                <span>搜查清單</span>
+                <span aria-hidden="true" style="flex: 1; height: 9px" class="stripes"></span>
+              </div>
+              <div style="display: flex; gap: 12px; align-items: center; font-size: 20px"><span aria-hidden="true" style="width: 16px; height: 16px; border: 3px solid #111; flex: none"></span>找到 9 隻怪獸</div>
+              <div style="display: flex; gap: 12px; align-items: center; font-size: 20px"><span aria-hidden="true" style="width: 16px; height: 16px; border: 3px solid #111; flex: none"></span>掃描 QR Code 收服</div>
+              <div style="display: flex; gap: 12px; align-items: center; font-size: 20px"><span aria-hidden="true" style="width: 16px; height: 16px; border: 3px solid #111; flex: none"></span>集滿打開寶藏</div>
+              <div aria-hidden="true" style="position: absolute; right: -3px; bottom: -3px; width: 0; height: 0; border-left: 30px solid #111; border-top: 30px solid transparent"></div>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 18px">
+              <span style="background: #f4f4f0; border: 2px solid #111; padding: 2px 10px; font-size: 13px">點擊空白處關閉</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <a ref="{{setGoLink}}" href="scan.html" tabindex="-1" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none">前往搜查</a>
+        <sc-if value="{{showGo}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; overflow: hidden; z-index: 20">
+            <sc-if value="{{showGoScan}}" hint-placeholder-val="{{ false }}">
+              <div class="desk" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; box-sizing: border-box; color: #111; font-family: 'DotGothic16', monospace; display: flex; flex-direction: column; overflow: hidden">
+  <div style="height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 15px">
+    <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg>
+    <span style="font-weight: bold">搜查令</span>
+    <span>檔案</span>
+    <span>圖鑑</span>
+    <span>寶藏</span>
+  </div>
+
+  <div style="padding: 16px 16px 0 16px; display: flex; flex-direction: column; gap: 14px">
+    <div style="background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; display: flex; flex-direction: column">
+      <div class="stripes" style="background-image: repeating-linear-gradient(#111 0 2px, transparent 2px 4px), linear-gradient(#ffd23f, #ffd23f); background-clip: content-box, border-box; height: 24px; box-sizing: border-box; padding: 5px 4px; border-bottom: 2px solid #111; display: flex; align-items: center; position: relative">
+        <span style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px; position: relative; z-index: 1"></span>
+        <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #ffd23f; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">搜查模式</span>
+      </div>
+      <div style="padding: 12px 14px; border-bottom: 2px solid #111; display: flex; align-items: center; justify-content: space-between">
+        <span style="font-size: 14px">收服進度</span>
+        <div role="img" aria-label="已收服 {{introGot}} / 9" style="display: flex; border: 2px solid #111">
+          <sc-for list="{{introBoxes}}" as="b"><span style="width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-family: 'Silkscreen', monospace; font-size: 11px; background: {{b.bg}}; color: {{b.fg}}; border-right: {{b.br}}">{{b.n}}</span></sc-for>
+        </div>
+      </div>
+      <div style="padding: 14px">
+        <div style="height: 300px; background: #111; position: relative; display: flex; align-items: center; justify-content: center">
+          <div style="position: absolute; left: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
+          <div style="position: absolute; left: 14px; top: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
+          <div style="position: absolute; right: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
+          <div style="position: absolute; right: 14px; top: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
+          <div style="position: absolute; left: 14px; bottom: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
+          <div style="position: absolute; left: 14px; bottom: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
+          <div style="position: absolute; right: 14px; bottom: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
+          <div style="position: absolute; right: 14px; bottom: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
+          <div style="position: absolute; left: 30px; right: 30px; top: 120px; height: 0; border-top: 4px dashed #f4f4f0"></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 70px; color: #f4f4f0">
+            <svg width="36" height="36" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="12" y="2" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="2" y="12" width="6" height="6" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="12" y="12" width="2" height="2" fill="#f4f4f0"></rect><rect x="16" y="16" width="2" height="2" fill="#f4f4f0"></rect><rect x="16" y="12" width="2" height="2" fill="#f4f4f0"></rect><rect x="12" y="16" width="2" height="2" fill="#f4f4f0"></rect></svg>
+            <span style="font-size: 14px">對準怪獸身上的 QR Code</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 0 14px 16px 14px; display: flex; flex-direction: column; gap: 10px; align-items: stretch">
+        <span style="height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; text-decoration: none; font-size: 16px; font-weight: bold; background: #ffd23f; color: #111">
+          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="5" width="16" height="12" fill="none" stroke="#111" stroke-width="2"></rect><rect x="7" y="2" width="6" height="3" fill="#111"></rect><rect x="8" y="8" width="4" height="4" fill="none" stroke="#111" stroke-width="2"></rect></svg>
+          開啟相機掃描
+        </span>
+        <span style="height: 40px; display: flex; align-items: center; justify-content: center; font-size: 14px">相機打不開？改用手動輸入代碼</span>
+      </div>
+    </div>
+
+    <div style="position: relative; height: 118px"><div aria-hidden="true" class="" style="position: absolute; left: 0; top: 0; right: 0; min-height: 110px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; padding: 10px 14px 14px 14px; display: flex; flex-direction: column; gap: 6px; text-align: left; color: #111; font-family: inherit"><span aria-hidden="true" style="position: absolute; left: calc(50%% - 6px); top: -9px; width: 12px; height: 12px; z-index: 2"><span style="position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; background: #111"></span><span style="position: absolute; left: 0; top: 0; width: 12px; height: 12px; box-sizing: border-box; background: #e8384f; border: 2px solid #111"></span><span style="position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; background: #f4f4f0"></span></span>
+          <span style="display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #111; padding-bottom: 6px">
+            <span style="font-size: 14px; font-weight: bold">冷知識</span>
+            <span style="font-family: 'Silkscreen', monospace; font-size: 11px">#01 / 20</span>
+            <span aria-hidden="true" style="flex: 1; height: 6px" class="stripes"></span>
+            <span style="font-size: 12px">點我換一則 ▸</span>
+          </span>
+          <span style="font-size: 14px; line-height: 1.6; padding-right: 12px">霧霧打噴嚏的時候，會噴出一小朵雲。</span>
+          <span aria-hidden="true" style="position: absolute; right: -2px; bottom: -2px; width: 0; height: 0; border-left: 16px solid #111; border-top: 16px solid transparent"></span>
+        </div></div>
+  </div>
+
+  <nav aria-label="主選單" style="margin-top: auto; padding: 0 16px 18px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111; min-height: 64px">
+      <span style="width: 40px; height: 36px; background: #111; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="10" height="10" fill="none" stroke="#f4f4f0" stroke-width="2"></rect><rect x="13" y="13" width="5" height="3" fill="#f4f4f0" transform="rotate(45 15 15)"></rect></svg></span>
+      <span style="background: #111; color: #f4f4f0; padding: 0 6px; font-size: 13px">搜查</span>
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111; min-height: 64px">
+      <span style="width: 40px; height: 36px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="7" height="7" fill="#111"></rect><rect x="11" y="2" width="7" height="7" fill="none" stroke="#111" stroke-width="2"></rect><rect x="2" y="11" width="7" height="7" fill="none" stroke="#111" stroke-width="2"></rect><rect x="11" y="11" width="7" height="7" fill="#111"></rect></svg></span>
+      <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">圖鑑</span>
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #111; min-height: 64px">
+      <span style="width: 40px; height: 36px; background: #f4f4f0; border: 2px solid #111; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="8" width="16" height="10" fill="none" stroke="#111" stroke-width="2"></rect><rect x="2" y="4" width="16" height="4" fill="#111"></rect><rect x="9" y="8" width="2" height="10" fill="#111"></rect></svg></span>
+      <span style="background: #f4f4f0; padding: 0 6px; font-size: 13px">寶藏</span>
+    </span>
+  </nav>
+</div>
+            </sc-if>
+            <sc-for list="{{goTapes}}" as="g" hint-placeholder-count="37"><div aria-hidden="true" style="clip-path: {{g.clip}}; -webkit-clip-path: {{g.clip}}; position: absolute; left: -405px; top: {{g.top}}; width: 1200px; height: {{g.h}}; transform: rotate({{g.a}}); background: #ffd23f; border-top: 2px solid #111; border-bottom: 2px solid #111; box-sizing: border-box; overflow: hidden; white-space: nowrap; font-family: 'Silkscreen', 'DotGothic16', monospace; font-size: {{g.fs}}; line-height: {{g.lh}}; color: #111; letter-spacing: 1px">{{tapeText}}</div></sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showDialog}}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; left: 20px; right: 20px; top: {{dialogTop}}; transform: translateY(-50%); transition: top 320ms steps(4)">
+          <div class="{{dialogShake}}">
+          <div role="dialog" aria-labelledby="q" class="pop" style="background: #f4f4f0; border: 2px solid #111; box-shadow: inset 0 0 0 3px #f4f4f0, inset 0 0 0 5px #111, 3px 3px 0 #111; padding: 20px 18px 18px 18px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; gap: 14px; align-items: center; min-height: 56px">
+              <div aria-hidden="true" style="width: 52px; height: 52px; border: 2px solid #111; display: flex; align-items: center; justify-content: center; flex: none">
+                <span style="font-family: 'Silkscreen', monospace; font-size: 16px; font-weight: bold">{{iconText}}</span>
+              </div>
+              <span id="q" aria-live="polite" style="font-size: 17px; line-height: 1.6">{{typedText}}<span class="cursor" aria-hidden="true">▌</span></span>
+            </div>
+            <div style="min-height: 48px; display: flex; flex-direction: column; justify-content: center">
+            <sc-if value="{{showChoice}}" hint-placeholder-val="{{ false }}">
+              <div class="pop" style="display: flex; gap: 14px; justify-content: flex-end; align-items: center">
+                <button type="button" onClick="{{doubt}}" style="height: 42px; padding: 0 14px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 15px; cursor: pointer">我才不相信勒</button>
+                <button type="button" onClick="{{believe}}" style="height: 42px; padding: 0 16px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; background: #ffd23f; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer">我相信你！</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{showDoubtChoice}}" hint-placeholder-val="{{ false }}">
+              <div class="pop" style="display: flex; justify-content: flex-end; align-items: center">
+                <button type="button" onClick="{{believe}}" style="height: 42px; padding: 0 16px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; background: #ffd23f; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer">好啦，相信你一次！</button>
+              </div>
+            </sc-if>
+            </div>
+          </div>
+          </div>
+          <sc-if value="{{showEnvelope}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 0; right: 0; bottom: calc(100% + 20px); display: flex; flex-direction: column; align-items: center; gap: 12px">
+            <sc-if value="{{showEnvHint}}" hint-placeholder-val="{{ false }}">
+              <span class="hint" style="background: #f4f4f0; border: 2px solid #111; padding: 2px 10px; font-size: 14px">點開信封 ▼</span>
+            </sc-if>
+            <button type="button" onClick="{{openLetter}}" aria-label="打開信封" class="fly" style="width: 168px; height: 108px; padding: 0; border: none; background: transparent; cursor: pointer">
+              <svg width="168" height="108" viewBox="0 0 168 108" aria-hidden="true">
+                <rect x="5" y="5" width="160" height="100" fill="#111"></rect>
+                <rect x="2" y="2" width="160" height="100" fill="#ffd23f" stroke="#111" stroke-width="3"></rect>
+                <path d="M3 3 L82 60 L161 3" fill="none" stroke="#111" stroke-width="3"></path>
+                <path d="M3 101 L62 46 M161 101 L102 46" fill="none" stroke="#111" stroke-width="2"></path>
+                <circle cx="82" cy="60" r="15" fill="#111"></circle>
+                <text x="82" y="66" text-anchor="middle" font-size="16" fill="#f4f4f0" font-family="DotGothic16, monospace">令</text>
+              </svg>
+            </button>
+          </div>
+          </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showPaper}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 16px; right: 16px; top: calc(50% + 16px); transform: translateY(-50%)">
+          <sc-if value="{{showConfirmHint}}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; left: 0; right: 0; bottom: calc(100% + 14px); display: flex; justify-content: center">
+              <span class="hint" style="background: #ffd23f; border: 2px solid #111; padding: 2px 10px; font-size: 14px">點擊確認 ▼</span>
+            </div>
+          </sc-if>
+          <div class="{{paperClass}}" style="position: relative">
+            <div class="{{revealClass}}" style="position: relative">
+            <div aria-hidden="true" class="paper-cut" style="position: absolute; left: 5px; top: 5px; right: -5px; bottom: -5px; background: #111"></div>
+            <div class="paper-cut" style="position: relative; background: #f4f4f0; border: 2px solid #111; padding: 6px">
+              <div style="border: 2px solid #111; padding: 14px 16px 16px 16px; display: flex; flex-direction: column; gap: 10px; min-height: 340px; box-sizing: border-box">
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <span style="font-family: 'Silkscreen', monospace; font-size: 11px">CASE No.08</span>
+                  <span style="font-size: 12px; border: 2px solid #111; padding: 0 6px; background: #111; color: #f4f4f0">機密</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+                  <span style="font-size: 14px; letter-spacing: 6px">霧城怪獸</span>
+                  <span style="font-size: 46px; line-height: 1.05; letter-spacing: 14px; padding-left: 14px">搜查令</span>
+                  <div aria-hidden="true" style="width: 100%; height: 6px; border-top: 2px solid #111; border-bottom: 2px solid #111; margin-top: 4px"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 44px 1fr; row-gap: 4px; font-size: 14px; line-height: 1.5">
+                  <span>案件</span><span style="border-bottom: 1px dashed #111">霧城怪獸失蹤案</span>
+                  <span>目標</span><span style="border-bottom: 1px dashed #111">小怪獸 9 隻（詳見圖鑑）</span>
+                  <span>地點</span><span style="border-bottom: 1px dashed #111">[場館名稱] 全館</span>
+                  <span>期限</span><span style="border-bottom: 1px dashed #111">[活動日期]</span>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 2px">
+                  <div role="img" aria-label="通緝照片：像素小怪獸" style="flex: none; border: 2px solid #111; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+                    <div style="display: grid; grid-template-columns: repeat(12, 6px); grid-auto-rows: 6px">
+                      <sc-for list="{{px}}" as="p" hint-placeholder-count="144"><div style="background: {{p.c}}"></div></sc-for>
+                    </div>
+                    <span style="font-family: 'Silkscreen', monospace; font-size: 9px">WANTED</span>
+                  </div>
+                  <p style="margin: 0; font-size: 13px; line-height: 1.65">霧散不去的夜裡，9 隻小怪獸躲進了場館的各個角落。持本令者，發現怪獸請立即掃描 QR Code 收服歸檔。</p>
+                </div>
+                <div style="display: flex; align-items: flex-end; gap: 8px; margin-top: 6px; font-size: 12px; padding-right: 96px">
+                  <span style="white-space: nowrap">簽發</span>
+                  <span style="flex: 1; border-bottom: 2px solid #111; font-size: 13px; padding-bottom: 2px">霧城搜查局 局長</span>
+                </div>
+              </div>
+            </div>
+            </div>
+
+            <sc-if value="{{showFlaps}}" hint-placeholder-val="{{ false }}">
+              <div aria-hidden="true" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; perspective: 1200px; pointer-events: none">
+                <div class="botflap" style="position: absolute; left: 0; right: 0; top: 66.6%; height: 33.4%">
+                  <div class="face face-front"></div>
+                  <div class="face face-back"></div>
+                </div>
+                <div class="topflap" style="position: absolute; left: 0; right: 0; top: 0; height: 33.4%">
+                  <div class="face face-front"></div>
+                  <div class="face face-back"></div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{marked}}" hint-placeholder-val="{{ false }}">
+              <div aria-hidden="true" class="inked" style="position: absolute; right: 26px; bottom: 30px; width: 96px; height: 96px; border: 3px solid #111; border-radius: 50%; box-sizing: border-box; background: #ffd23f; display: flex; align-items: center; justify-content: center">
+                <div style="width: 80px; height: 80px; border: 1.5px solid #111; border-radius: 50%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+                  <span style="font-family: 'Silkscreen', monospace; font-size: 8px; letter-spacing: 1px">★ ★ ★</span>
+                  <span style="font-size: 13px; letter-spacing: 1px; line-height: 1.2">霧城</span>
+                  <span style="font-size: 13px; letter-spacing: 1px; line-height: 1.2">搜查局</span>
+                  <span style="font-size: 10px; border-top: 1.5px solid #111; padding-top: 1px; margin-top: 1px">核准</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <svg aria-hidden="true" class="{{curlClass}}" width="58" height="58" viewBox="0 0 58 58" style="position: absolute; right: -2px; bottom: -2px; overflow: visible">
+              <defs>
+                <pattern id="backdots" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#f4f4f0"></rect><rect x="1" y="1" width="1.5" height="1.5" fill="#111"></rect></pattern>
+              </defs>
+              <path d="M56 12 L56 56 L12 56 Z" fill="#111"></path>
+              <path d="M56 4 L4 56 C6 40 8 20 12 12 C20 8 38 6 56 4 Z" fill="url(#backdots)" stroke="#111" stroke-width="2" stroke-linejoin="round"></path>
+              <path d="M56 4 L4 56" fill="none" stroke="#111" stroke-width="2.5"></path>
+            </svg>
+
+            <sc-if value="{{showStampTool}}" hint-placeholder-val="{{ false }}">
+              <div aria-hidden="true" class="stampgo" style="position: absolute; right: 26px; bottom: 74px; width: 96px; display: flex; flex-direction: column; align-items: center; z-index: 2">
+                <div style="width: 34px; height: 30px; background: #111; border-radius: 50%; position: relative"><span style="position: absolute; left: 8px; top: 6px; width: 6px; height: 6px; background: #f4f4f0"></span></div>
+                <div style="width: 14px; height: 24px; background: #111"></div>
+                <div style="width: 64px; height: 10px; background: #111"></div>
+                <div style="width: 96px; height: 22px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; border-bottom: 6px solid #ffd23f"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{showConfirmHint}}" hint-placeholder-val="{{ false }}">
+              <button type="button" onClick="{{confirm}}" aria-label="點擊確認搜查令" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; padding: 0; border: none; background: transparent; cursor: pointer; z-index: 3"></button>
+            </sc-if>
+          </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showGust}}" hint-placeholder-val="{{ false }}">
+          <div aria-hidden="true" class="gust" style="position: absolute; left: 60px; top: 230px; width: 130px; height: 6px; background: #f4f4f0; border: 2px solid #111"></div>
+          <div aria-hidden="true" class="gust" style="position: absolute; left: 160px; top: 340px; width: 90px; height: 6px; background: #f4f4f0; border: 2px solid #111; animation-delay: 120ms"></div>
+          <div aria-hidden="true" class="gust" style="position: absolute; left: 40px; top: 470px; width: 150px; height: 6px; background: #f4f4f0; border: 2px solid #111; animation-delay: 240ms"></div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</template>
+<script>
+const MF = { get: (k) => { try { return window.localStorage.getItem('mfhunt.' + k); } catch (e) { return null; } }, set: (k, v) => { try { window.localStorage.setItem('mfhunt.' + k, String(v)); } catch (e) {} } };
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.TEXT1 = '你相信，小怪獸就躲在這座場館裡嗎？';
+    this.TEXT2 = '我說的都是真的……QAQ';
+    this.TEXT3 = '太好了！快收下這封搜查令吧';
+    this.state = Object.assign({}, this.state, { stage: 'black', text: this.TEXT1, typed: 0, doubted: false, marked: false, shaking: false, curl: false, magX: 12, magY: 520, dragging: false, pressing: false, used: false });
+    this.timers = [];
+    this.typer = null;
+    this.reduce = false;
+    this.later = (ms, fn) => { const id = setTimeout(fn, ms); this.timers.push(id); };
+    this.clear = () => {
+      this.timers.forEach((id) => clearTimeout(id));
+      this.timers = [];
+      if (this.typer) { clearInterval(this.typer); this.typer = null; }
+    };
+    this.type = (text, done) => {
+      if (this.typer) clearInterval(this.typer);
+      this.setState({ text: text, typed: 0 });
+      let n = 0;
+      this.typer = setInterval(() => {
+        n += 1;
+        this.setState({ typed: n });
+        if (n >= text.length) { clearInterval(this.typer); this.typer = null; if (done) done(); }
+      }, 70);
+    };
+    this.fresh = { doubted: false, marked: false, shaking: false, curl: false, tool: false, dshake: false, landed: false, zoomList: false, go: '' };
+    this.toStamp = () => {
+      this.setState({ stage: 'stamp', marked: false, tool: true });
+      this.later(1990, () => {
+        this.setState({ marked: true, shaking: !this.reduce });
+        this.later(260, () => this.setState({ shaking: false }));
+      });
+      this.later(2750, () => this.setState({ stage: 'stamped', tool: false }));
+    };
+    this.toWind = () => {
+      this.setState({ stage: 'wind', curl: true, tool: false });
+      this.later(1250, () => this.setState({ stage: 'end' }));
+    };
+    this.play = (from) => {
+      this.clear();
+      const T1 = this.TEXT1;
+      if (from === '對話') {
+        this.setState(Object.assign({}, this.fresh, { stage: 'dialog', text: T1, typed: 0 }));
+        this.later(300, () => this.type(T1, () => this.setState({ stage: 'choice' })));
+      } else if (from === '信封') {
+        this.setState(Object.assign({}, this.fresh, { stage: 'letter', text: this.TEXT3, typed: this.TEXT3.length }));
+        this.later(1700, () => this.setState({ landed: true }));
+      } else if (from === '蓋章') {
+        this.setState(Object.assign({}, this.fresh, { text: T1, typed: T1.length }));
+        this.toStamp();
+      } else if (from === '吹走') {
+        this.setState(Object.assign({}, this.fresh, { stage: 'stamped', marked: true }));
+        this.later(400, this.toWind);
+      } else if (from === '結尾') {
+        this.setState(Object.assign({}, this.fresh, { stage: 'end', marked: true }));
+      } else {
+        this.setState(Object.assign({}, this.fresh, { stage: 'black', text: T1, typed: 0 }));
+        this.later(600, () => this.setState({ stage: 'crt' }));
+        this.later(1700, () => {
+          this.setState({ stage: 'dialog' });
+          this.later(350, () => this.type(T1, () => this.setState({ stage: 'choice' })));
+        });
+      }
+    };
+    this.replay = () => this.play('完整播放');
+    this.believe = () => {
+      if (this.typer) return;
+      this.setState({ stage: 'letter', landed: false });
+      this.type(this.TEXT3);
+      this.later(1700, () => this.setState({ landed: true }));
+    };
+    this.doubt = () => {
+      this.setState({ stage: 'doubt', doubted: true, dshake: true });
+      this.later(1000, () => this.setState({ dshake: false }));
+      this.type(this.TEXT2, () => this.setState({ stage: 'doubtChoice' }));
+    };
+    this.openLetter = () => {
+      if (this.state.stage !== 'letter') return;
+      if (this.typer) { clearInterval(this.typer); this.typer = null; }
+      this.setState({ stage: 'unfold' });
+      this.later(2900, this.toStamp);
+    };
+    this.HOME = { x: 12, y: 520 };
+    this.rootEl = null;
+    this.setRoot = (el) => { this.rootEl = el; };
+    this.noMenu = (e) => { e.preventDefault(); };
+    this.toLocal = (ev) => {
+      const r = this.rootEl ? this.rootEl.getBoundingClientRect() : { left: 0, top: 0, width: 390, height: 844 };
+      const k = 390 / (r.width || 390);
+      return { x: (ev.clientX - r.left) * k, y: (ev.clientY - r.top) * k };
+    };
+    this.snap = (v) => Math.round(v / 4) * 4;
+    this.magDown = (e) => {
+      e.preventDefault();
+      const start = this.toLocal(e);
+      let grabbed = false;
+      let cancelled = false;
+      let rel = { x: 0, y: 0 };
+      this.setState({ pressing: true });
+      const holdTimer = setTimeout(() => {
+        grabbed = true;
+        rel = { x: this.state.magX - start.x, y: Math.min(this.state.magY - start.y, -164) };
+        const nx = this.snap(Math.max(-84, Math.min(306, start.x + rel.x)));
+        const ny = this.snap(Math.max(-52, Math.min(760, start.y + rel.y)));
+        this.setState({ dragging: true, pressing: false, used: true, magX: nx, magY: ny });
+        try { if (navigator.vibrate) navigator.vibrate(15); } catch (err) {}
+      }, 600);
+      const move = (ev) => {
+        const p = this.toLocal(ev);
+        if (!grabbed) {
+          if (Math.abs(p.x - start.x) > 10 || Math.abs(p.y - start.y) > 10) { cancelled = true; clearTimeout(holdTimer); cleanup(); this.setState({ pressing: false }); }
+          return;
+        }
+        const nx = this.snap(Math.max(-84, Math.min(306, p.x + rel.x)));
+        const ny = this.snap(Math.max(-52, Math.min(760, p.y + rel.y)));
+        if (nx !== this.state.magX || ny !== this.state.magY) this.setState({ magX: nx, magY: ny });
+      };
+      const up = (ev) => {
+        clearTimeout(holdTimer);
+        cleanup();
+        if (!grabbed && !cancelled && ev && document.elementsFromPoint) {
+          const hit = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => n.closest && !n.closest('[data-mag]') && n.closest('a,button'));
+          if (hit) setTimeout(() => hit.closest('a,button').click(), 0);
+        }
+        this.setState({ pressing: false, dragging: false, magX: this.HOME.x, magY: this.HOME.y });
+      };
+      const cleanup = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        window.removeEventListener('pointercancel', up);
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      window.addEventListener('pointercancel', up);
+    };
+    this.handle = [];
+    for (let i = 0; i < 14; i++) {
+      const t = i / 13;
+      const w = i === 0 ? 26 : 20;
+      const x = Math.round((138 + (238 - 138) * t) / 4) * 4 - (i === 0 ? 3 : 0);
+      const y = Math.round((138 + (318 - 138) * t) / 4) * 4 - (i === 0 ? 3 : 0);
+      this.handle.push({ x: x + 'px', y: y + 'px', w: w + 'px', hl: i >= 7 && i % 2 === 1 ? '#f4f4f0' : 'transparent', down: (e) => this.magDown(e), menu: (e) => e.preventDefault() });
+    }
+    this.tapes = [[-40, 135, 430, 67], [-40, 249, 385, -30], [110, 900, 440, 427], [-40, 812, 430, 670]].map((a) => {
+      const dx = a[2] - a[0], dy = a[3] - a[1];
+      return { left: a[0] + 'px', top: (a[1] - 13) + 'px', width: Math.round(Math.hypot(dx, dy)) + 'px', rot: 'rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(2) + 'deg)' };
+    });
+    this.tapes.forEach((t, i) => { t.delay = (2200 + i * 120) + 'ms'; });
+    const ln = (a) => {
+      const dx = a[2] - a[0], dy = a[3] - a[1];
+      const ang = (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(2) + 'deg';
+      return { left: a[0] + 'px', top: (a[1] - 1) + 'px', width: Math.round(Math.hypot(dx, dy)) + 'px', rot: 'rotate(' + ang + ')', ang: ang };
+    };
+    this.papers = [
+      { cx: 100, cy: 245, w: 112, h: 122, r: -28, no: 'No.01', name: '霓虹蛙', trait: '舌頭會發光', seen: '入口附近' },
+      { cx: 313, cy: 232, w: 112, h: 122, r: 14, no: 'No.02', name: '插座獸', trait: '尾巴是插頭', seen: '充電的地方' },
+      { cx: 238, cy: 112, w: 104, h: 112, r: -14, no: 'No.03', name: '雨傘怪', trait: '下雨天才現身', seen: '屋簷下' },
+      { cx: 330, cy: 662, w: 112, h: 122, r: 24, no: 'No.05', name: '齒輪鼠', trait: '走路喀啦喀啦', seen: '機器旁' },
+      { cx: 68, cy: 748, w: 112, h: 122, r: -18, no: 'No.06', name: '燈籠魚', trait: '其實很怕黑', seen: '暗處' },
+      { cx: 312, cy: 792, w: 108, h: 116, r: 8, no: 'No.07', name: '磁帶龜', trait: '會自己倒帶', seen: '音樂聲旁' },
+      { cx: 98, cy: 606, w: 112, h: 122, r: -6, no: 'No.08', name: '貓頭鍵', trait: '頭上有按鍵', seen: '安靜的角落' }
+    ].map((d, i) => {
+      const from = [[-420, -40], [420, 0], [0, -320], [420, 60], [-420, 0], [0, 420], [-320, 320]][i] || [0, 400];
+      return { left: (d.cx - d.w / 2) + 'px', top: (d.cy - d.h / 2) + 'px', w: d.w + 'px', h: d.h + 'px', rot: 'rotate(' + d.r + 'deg)', r: d.r + 'deg', fx: from[0] + 'px', fy: from[1] + 'px', delay: (i * 140) + 'ms, ' + (i * 140 + 420) + 'ms', dur: '420ms, ' + (2300 + (i % 4) * 300) + 'ms', pd: (d.h / 2 - 10) + 'px', no: d.no, name: d.name, trait: d.trait, seen: d.seen };
+    });
+    const RAW = [
+      [100, 245, 122, -28], [313, 232, 122, 14], [238, 112, 112, -14], [330, 662, 122, 24],
+      [68, 748, 122, -18], [312, 792, 116, 8], [98, 606, 122, -6]
+    ];
+    const PIN = RAW.map((d) => {
+      const dist = d[2] / 2 - 10, th = d[3] * Math.PI / 180;
+      return [Math.round(d[0] + dist * Math.sin(th)), Math.round(d[1] - dist * Math.cos(th))];
+    });
+    this.pins = PIN.map((q, i) => ({ left: (q[0] - 6) + 'px', top: (q[1] - 6) + 'px', delay: (1400 + i * 90) + 'ms' }));
+    const L = (m, n) => ln([PIN[m][0], PIN[m][1], PIN[n][0], PIN[n][1]]);
+    this.strings = [L(0, 2), L(0, 1), L(2, 1), L(1, 3), L(3, 5), L(4, 5)];
+    this.strings.forEach((r, i) => { r.delay = (2200 + i * 90) + 'ms'; });
+    this.openList = () => this.setState({ zoomList: true });
+    this.closeList = () => this.setState({ zoomList: false });
+    const vis = (cy, deg, h) => {
+      const r = deg * Math.PI / 180, cx = Math.cos(r), sy = Math.sin(r), m = h / 2 + 4;
+      let lo = -600, hi = 600;
+      const clip = (c0, d, a0, a1) => {
+        if (Math.abs(d) < 1e-6) return (c0 >= a0 && c0 <= a1);
+        let t0 = (a0 - c0) / d, t1 = (a1 - c0) / d;
+        if (t0 > t1) { const t = t0; t0 = t1; t1 = t; }
+        lo = Math.max(lo, t0); hi = Math.min(hi, t1); return true;
+      };
+      clip(195, cx, -m, 390 + m); clip(cy, sy, -m, 844 + m);
+      return [Math.round(lo + 600), Math.round(hi + 600)];
+    };
+    const mk = (cy, deg, h, dir, inDelay, outDelay, fs, lh) => {
+      const u = vis(cy, deg, h);
+      const L = (x) => [x, 0], R = (x) => [0, 1200 - x];
+      const a0 = Math.max(0, Math.min(u[0], u[1]) - 20), a1 = Math.min(1200, Math.max(u[0], u[1]) + 20);
+      return {
+        top: (cy - h / 2) + 'px', a: deg + 'deg', h: h + 'px', fs: fs, lh: lh, inDelay: inDelay, outDelay: outDelay,
+        in0: dir ? L(a1) : R(a0), in1: dir ? L(a0) : R(a1),
+        out0: dir ? R(a1) : L(a0), out1: dir ? R(a0) : L(a1)
+      };
+    };
+    this.goBase = [];
+    for (let i = 0; i < 29; i++) this.goBase.push(mk(-60 + i * 34, -6, 46, i % 2, i * 15, ((i * 37) % 29) * 10, '13px', '42px'));
+    [[130, 32], [270, -34], [420, 28], [560, -30], [700, 34], [820, -28], [200, -62], [620, 58]].forEach((c, j) => {
+      this.goBase.push(mk(c[0], c[1], 40, j % 2, 150 + j * 40, j * 30, '12px', '36px'));
+    });
+    this.goLink = null;
+    this.setGoLink = (el) => { this.goLink = el; };
+    this.goScan = () => { if (this.goLink) this.goLink.click(); this.later(80, () => this.setState({ go: '' })); };
+    this.startSearch = () => {
+      if (this.state.go) return;
+      if (this.reduce) { this.goScan(); return; }
+      const t0 = Date.now();
+      this.setState({ go: 'flood', goT: 0, zoomList: false });
+      if (this.goTick) clearInterval(this.goTick);
+      this.goTick = setInterval(() => {
+        const t = Date.now() - t0;
+        this.setState({ goT: t, go: t >= 1350 ? 'out' : t >= 850 ? 'flooded' : 'flood' });
+        if (t >= 1350 + 280 + 420 + 120) { clearInterval(this.goTick); this.goTick = null; this.goScan(); }
+      }, 40);
+    };
+    this.confirm = () => {
+      if (this.state.stage !== 'stamped') return;
+      this.toWind();
+    };
+  }
+  componentDidMount() {
+    try { this.reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { this.reduce = false; }
+    this.play(this.props.startAt ?? '完整播放');
+  }
+  componentDidUpdate(prev) {
+    if (prev.startAt !== this.props.startAt) this.play(this.props.startAt ?? '完整播放');
+  }
+  componentWillUnmount() { this.clear(); if (this.goTick) clearInterval(this.goTick); }
+  renderVals() {
+    const s = this.state.stage;
+    const pat = ['....XXXX....','..XXXXXXXX..','.XXXXXXXXXX.','.XXWWXXWWXX.','XXXWPXXWPXXX','XXXXXXXXXXXX','XXXXMMMMXXXX','XXXXXMMXXXXX','XXXXXXXXXXXX','XXXXXXXXXXXX','XX.XXX.XXX.X','X...X...X...'];
+    const map = { '.': 'transparent', 'X': '#111', 'W': '#f4f4f0', 'P': '#111', 'M': '#f4f4f0' };
+    const px = [];
+    pat.forEach((row) => row.split('').forEach((ch) => px.push({ c: map[ch] })));
+    const IG = window.MH.caughtCount();
+    const introBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({ n: n, bg: n <= IG ? '#111' : '#f4f4f0', fg: n <= IG ? '#f4f4f0' : '#111', br: n < 9 ? '2px solid #111' : 'none' }));
+    return {
+      introGot: IG,
+      introBoxes,
+      px,
+      showBlack: s === 'black',
+      showDesk: s !== 'black',
+      showDialog: ['dialog', 'choice', 'doubt', 'doubtChoice', 'letter'].indexOf(s) >= 0,
+      showChoice: s === 'choice',
+      showDoubtChoice: s === 'doubtChoice',
+      showEnvelope: s === 'letter',
+      dialogTop: s === 'letter' ? 'calc(50% + 102px)' : 'calc(50% + 16px)',
+      showPaper: ['unfold', 'stamp', 'stamped', 'wind'].indexOf(s) >= 0,
+      showFlaps: s === 'unfold',
+      revealClass: s === 'unfold' ? 'reveal' : '',
+      showEnvHint: s === 'letter' && this.state.landed,
+      showConfirmHint: s === 'stamped',
+      showStampTool: s === 'stamp' && this.state.tool,
+      showUnder: s === 'wind' || s === 'end',
+      showGust: s === 'wind',
+      paperClass: s === 'unfold' ? 'unfold' : s === 'wind' ? 'blow' : '',
+      curlClass: s === 'unfold' ? 'curl-hide' : this.state.curl ? 'curl-lift' : '',
+      innerClass: this.state.shaking ? 'shake' : '',
+      dialogShake: this.state.dshake ? 'dshake' : '',
+      marked: this.state.marked,
+      iconText: s === 'letter' ? '^_^' : this.state.doubted ? 'QAQ' : '?!',
+      typedText: this.state.text.slice(0, this.state.typed),
+      replay: this.replay,
+      believe: this.believe,
+      doubt: this.doubt,
+      openLetter: this.openLetter,
+      setRoot: this.setRoot,
+      noMenu: this.noMenu,
+      magDown: this.magDown,
+      showMag: s === 'end',
+      showMagHint: s === 'end' && !this.state.dragging,
+      chargeClass: this.state.pressing ? 'charge-fill' : '',
+      hintClass: this.state.used ? 'hintback' : 'hintin',
+      magLeft: this.state.magX + 'px',
+      magTop: this.state.magY + 'px',
+      lensTf: 'translate(' + (80 - (this.state.magX + 84) * 2) + 'px, ' + (80 - (this.state.magY + 84) * 2) + 'px) scale(2)',
+      handle: this.handle,
+      tapes: this.tapes,
+      papers: this.papers,
+      treasureHref: (parseInt(MF.get('collected'), 10) >= 9) ? 'reward.html' : 'locked.html',
+      startSearch: this.startSearch,
+      setGoLink: this.setGoLink,
+      showGo: !!this.state.go,
+      showGoScan: this.state.go === 'flooded' || this.state.go === 'out',
+      goTapes: this.state.go ? this.goBase.map((t) => {
+        const T = this.state.goT || 0;
+        const out = T >= 1350;
+        const raw = out ? (T - 1350 - t.outDelay) / 420 : (T - t.inDelay) / 360;
+        const k = Math.floor(Math.max(0, Math.min(1, raw)) * 8) / 8;
+        const A = out ? t.out0 : t.in0, B = out ? t.out1 : t.in1;
+        const l = Math.round(A[0] + (B[0] - A[0]) * k), r = Math.round(A[1] + (B[1] - A[1]) * k);
+        return { top: t.top, a: t.a, h: t.h, fs: t.fs, lh: t.lh, clip: 'inset(0px ' + r + 'px 0px ' + l + 'px)' };
+      }) : [],
+      showBoard: s === 'end',
+      zoomList: !!this.state.zoomList && s === 'end',
+      openList: this.openList,
+      closeList: this.closeList,
+      pins: this.pins,
+      strings: this.strings,
+      tapeText: '封鎖線 ▲ KEEP OUT ▲ 封鎖線 ▲ KEEP OUT ▲ 封鎖線 ▲ KEEP OUT ▲ 封鎖線 ▲ KEEP OUT ▲ 封鎖線 ▲ KEEP OUT ▲ 封鎖線 ▲ KEEP OUT ▲ ',
+      magTrans: this.state.dragging ? 'none' : 'left 360ms steps(6), top 360ms steps(6)',
+      lensTrans: this.state.dragging ? 'none' : 'transform 360ms steps(6)',
+      magClass: this.state.dragging ? 'lifted' : this.state.pressing ? 'charging' : this.state.used ? '' : 'idle',
+      shadowOff: this.state.dragging ? '10px' : '4px',
+      confirm: this.confirm
+    };
+  }
+}
+</script>
+<script>DCMini.boot(Component);</script>
+</body>
+</html>

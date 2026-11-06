@@ -1,0 +1,75 @@
+/* 外框：把 390×844 的遊戲畫面等比縮放置中 */
+html, body { margin: 0; height: 100%; background: #111; overflow: hidden; overscroll-behavior: none; }
+body {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  background-color: #111;
+  background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+  background-size: 6px 6px;
+}
+#app {
+  position: absolute; left: 0; top: 0;
+  width: 390px; height: 844px; overflow: hidden;
+  transform-origin: 0 0;
+  background: #f4f4f0;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+}
+#app input, #app textarea, #app select { -webkit-user-select: text; user-select: text; }
+
+/* 共用按鈕 */
+.mh-btn {
+  font-family: 'DotGothic16', system-ui, sans-serif; font-size: 16px;
+  min-height: 44px; padding: 0 18px; border: 2px solid #111; border-radius: 10px;
+  background: #f4f4f0; color: #111; box-shadow: 2px 2px 0 #111; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+}
+.mh-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+.mh-yellow { background: #ffd23f; }
+
+/* 內建瀏覽器提示 */
+.mh-inapp {
+  position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 50;
+  background: #f4f4f0; border: 2px solid #111; box-shadow: 4px 4px 0 #111; padding: 14px 16px;
+  font-family: 'DotGothic16', system-ui, sans-serif; color: #111;
+}
+.mh-inapp p { margin: 0 0 12px; font-size: 14px; line-height: 1.6; }
+.mh-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.mh-tip { font-size: 13px; }
+
+/* 掃描器 */
+.mh-scan {
+  position: fixed; inset: 0; z-index: 60; background: #111; color: #f4f4f0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+  font-family: 'DotGothic16', system-ui, sans-serif;
+}
+.mh-scan-bar {
+  width: min(86vw, 360px); height: 28px; box-sizing: border-box; border: 2px solid #f4f4f0;
+  background-image: repeating-linear-gradient(#111 0 2px, transparent 2px 4px), linear-gradient(#ffd23f, #ffd23f);
+  background-clip: content-box, border-box; padding: 4px; display: flex; align-items: center; justify-content: center;
+}
+.mh-scan-bar span { background: #111; color: #ffd23f; padding: 0 10px; font-size: 14px; line-height: 18px; }
+.mh-scan-view { position: relative; width: min(86vw, 360px); aspect-ratio: 1; overflow: hidden; border: 2px solid #f4f4f0; background: #000; }
+.mh-scan-view video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mh-scan-frame { position: absolute; inset: 14%; }
+.mh-scan-frame i { position: absolute; width: 22%; height: 22%; border: 0 solid #ffd23f; }
+.mh-scan-frame i:nth-child(1) { left: 0; top: 0; border-left-width: 6px; border-top-width: 6px; }
+.mh-scan-frame i:nth-child(2) { right: 0; top: 0; border-right-width: 6px; border-top-width: 6px; }
+.mh-scan-frame i:nth-child(3) { left: 0; bottom: 0; border-left-width: 6px; border-bottom-width: 6px; }
+.mh-scan-frame i:nth-child(4) { right: 0; bottom: 0; border-right-width: 6px; border-bottom-width: 6px; }
+.mh-scan-frame b { position: absolute; left: 4%; right: 4%; height: 4px; background: #ffd23f; opacity: .85; animation: mhsweep 1.6s steps(8) infinite; }
+@keyframes mhsweep { 0% { top: 4%; } 50% { top: 94%; } 100% { top: 4%; } }
+.mh-scan-msg { margin: 0; min-height: 3.2em; text-align: center; font-size: 15px; line-height: 1.6; max-width: 340px; }
+.mh-scan-error .mh-scan-view { display: none; }
+.mh-scan-error .mh-scan-msg { background: #f4f4f0; color: #111; border: 2px solid #111; box-shadow: 4px 4px 0 #ffd23f; padding: 14px 16px; }
+.mh-fake { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(90vw, 380px); }
+@media (prefers-reduced-motion: reduce) { .mh-scan-frame b { animation: none; top: 48%; } }
+.mh-manual { width: min(86vw, 340px); display: flex; flex-direction: column; gap: 12px; }
+.mh-manual label { font-size: 15px; }
+.mh-manual input {
+  font-family: 'Silkscreen', 'DotGothic16', monospace; font-size: 22px; letter-spacing: 2px; text-transform: uppercase;
+  height: 52px; padding: 0 12px; border: 2px solid #f4f4f0; background: #f4f4f0; color: #111; border-radius: 0;
+}
+.mh-manual .mh-scan-msg { min-height: 1.6em; color: #ffd23f; }

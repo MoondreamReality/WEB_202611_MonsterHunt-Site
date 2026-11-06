@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="format-detection" content="telephone=no">
+<title>寶藏解鎖：領取代幣</title>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&amp;family=Silkscreen:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111}a:hover{color:#444}
+input::placeholder{color:#555}
+.desk{background-color:#f4f4f0;background-image:repeating-conic-gradient(#111 0 25%, transparent 0 50%);background-size:4px 4px}
+.stripes{background-image:repeating-linear-gradient(#111 0 2px, transparent 2px 4px);background-clip:content-box}
+.pixel-round{clip-path:polygon(31.25% 0,68.75% 0,68.75% 6.25%,81.25% 6.25%,81.25% 12.5%,87.5% 12.5%,87.5% 18.75%,93.75% 18.75%,93.75% 31.25%,100% 31.25%,100% 68.75%,93.75% 68.75%,93.75% 81.25%,87.5% 81.25%,87.5% 87.5%,81.25% 87.5%,81.25% 93.75%,68.75% 93.75%,68.75% 100%,31.25% 100%,31.25% 93.75%,18.75% 93.75%,18.75% 87.5%,12.5% 87.5%,12.5% 81.25%,6.25% 81.25%,6.25% 68.75%,0 68.75%,0 31.25%,6.25% 31.25%,6.25% 18.75%,12.5% 18.75%,12.5% 12.5%,18.75% 12.5%,18.75% 6.25%,31.25% 6.25%);-webkit-clip-path:polygon(31.25% 0,68.75% 0,68.75% 6.25%,81.25% 6.25%,81.25% 12.5%,87.5% 12.5%,87.5% 18.75%,93.75% 18.75%,93.75% 31.25%,100% 31.25%,100% 68.75%,93.75% 68.75%,93.75% 81.25%,87.5% 81.25%,87.5% 87.5%,81.25% 87.5%,81.25% 93.75%,68.75% 93.75%,68.75% 100%,31.25% 100%,31.25% 93.75%,18.75% 93.75%,18.75% 87.5%,12.5% 87.5%,12.5% 81.25%,6.25% 81.25%,6.25% 68.75%,0 68.75%,0 31.25%,6.25% 31.25%,6.25% 18.75%,12.5% 18.75%,12.5% 12.5%,18.75% 12.5%,18.75% 6.25%,31.25% 6.25%)}
+@keyframes chestshake{0%,100%{transform:rotate(0deg)}12%{transform:rotate(-4deg)}25%{transform:rotate(4deg)}37%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}62%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}87%{transform:rotate(-1deg)}}
+.chest-shake{animation:chestshake 900ms steps(9) 400ms both;transform-origin:50% 100%}
+@keyframes lidopen{0%{transform:none}40%{transform:translateY(-14px) rotate(-8deg)}100%{transform:translate(-18px,-34px) rotate(-28deg)}}
+.lid-open{animation:lidopen 400ms steps(6) 1400ms both;transform-origin:0 100%}
+@keyframes raysin{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.rays-in{animation:raysin 300ms steps(4) 1450ms both}
+@keyframes raysspin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.rays-spin{animation:raysspin 4000ms steps(16) infinite}
+@keyframes tokenpop{0%{transform:translateY(40px) scale(0.4);opacity:0}15%{opacity:1}70%{transform:translateY(-120px) scale(1.15);opacity:1}100%{transform:translateY(-100px) scale(1);opacity:1}}
+.token-pop{animation:tokenpop 700ms steps(10) 1500ms both}
+@keyframes tokenspin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(0.15)}}
+.token-spin{animation:tokenspin 233ms steps(4) 1500ms 3}
+@keyframes tokenfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.token-float{animation:tokenfloat 1400ms steps(4) 2900ms infinite}
+@keyframes sparkle{0%,100%{opacity:0}50%{opacity:1}}
+.sparkle{animation:sparkle 600ms steps(1) 2200ms infinite both}
+@keyframes popin{0%{transform:scale(0.2);opacity:0}50%{transform:scale(0.8);opacity:1}100%{transform:scale(1);opacity:1}}
+.caption-in{animation:popin 240ms steps(3) 2900ms both}
+@keyframes formin{0%{transform:translateY(160px);opacity:0}100%{transform:none;opacity:1}}
+.form-in{animation:formin 500ms steps(8) 3300ms both}
+@keyframes chestgrow{0%{transform:scale(0)}7%{transform:scale(1.95)}10.7%{transform:scale(1.8)}89.3%{transform:scale(1.8)}100%{transform:scale(1)}}
+.chest-grow{animation:chestgrow 2800ms steps(28) both;transform-origin:179px 288px}
+@keyframes bang{0%{transform:scale(0.3);opacity:0}20%{transform:scale(1.2);opacity:1}70%{transform:scale(1);opacity:1}100%{transform:scale(1);opacity:0}}
+.bang{animation:bang 900ms steps(6) 1400ms both}
+@keyframes bangshake{0%,100%{transform:translate(0,0)}25%{transform:translate(-4px,3px)}50%{transform:translate(4px,-3px)}75%{transform:translate(-3px,-1px)}}
+.bang-shake{animation:bangshake 260ms steps(4) 1400ms 1}
+@keyframes dlgbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.dialog-in{animation:popin 240ms steps(3) 2700ms both, dlgbreathe 1600ms steps(4) 3000ms infinite}
+@keyframes shine{0%{transform:translateX(-90px) skewX(-20deg)}20%{transform:translateX(400px) skewX(-20deg)}100%{transform:translateX(400px) skewX(-20deg)}}
+.shine{animation:shine 3200ms steps(32) 3100ms infinite backwards}
+@keyframes heroup{0%{transform:translateY(60px)}100%{transform:translateY(0)}}
+.hero-up{animation:heroup 500ms steps(8) 3300ms both}
+.claim-in{animation:popin 240ms steps(3) both}
+@keyframes stampdown{0%{transform:rotate(-12deg) scale(1.6);opacity:0}100%{transform:rotate(-12deg) scale(1);opacity:1}}
+.stamp-down{animation:stampdown 160ms steps(2) both}
+@media (prefers-reduced-motion: reduce){.chest-shake,.lid-open,.rays-in,.rays-spin,.token-pop,.token-spin,.token-float,.sparkle,.caption-in,.form-in,.claim-in,.stamp-down,.chest-grow,.bang,.bang-shake,.dialog-in,.hero-up,.shine{animation:none}.shine{display:none}.bang{opacity:0}.lid-open{transform:translate(-18px,-34px) rotate(-28deg)}.token-pop{transform:translateY(-100px)}}
+</style>
+<link rel="stylesheet" href="mh.css?v=202611060951">
+<script src="mh.js?v=202611060951"></script>
+<script src="dcmini.js?v=202611060951"></script>
+<script>if (!MH.debug && MH.caughtCount() < MH.total) location.replace('locked.html');</script>
+</head>
+<body>
+<div id="app"></div>
+<template id="dc-tpl">
+
+<div class="desk bang-shake" style="width: 390px; min-height: 1040px; box-sizing: border-box; color: #111; font-family: 'DotGothic16', monospace; display: flex; flex-direction: column; padding-bottom: 28px; overflow: hidden">
+  <div style="height: 32px; background: #f4f4f0; border-bottom: 2px solid #111; display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 15px">
+    <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#f4f4f0"></rect><rect x="7" y="3" width="2" height="2" fill="#f4f4f0"></rect></svg>
+    <span style="font-weight: bold">搜查令</span>
+    <span>檔案</span>
+    <span>圖鑑</span>
+    <span>寶藏</span>
+  </div>
+
+  <div style="padding: 16px 16px 0 16px; display: flex; flex-direction: column; gap: 16px">
+    <div class="hero-up" style="display: flex; flex-direction: column; gap: 16px">
+    <div role="dialog" aria-labelledby="done" class="dialog-in" style="position: relative; overflow: hidden; background: #ffd23f; border: 2px solid #111; box-shadow: inset 0 0 0 3px #ffd23f, inset 0 0 0 5px #111, 3px 3px 0 #111; padding: 18px 18px 16px 18px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+      <div class="shine" aria-hidden="true" style="position: absolute; top: -20px; bottom: -20px; left: 0; width: 60px; pointer-events: none; display: flex; gap: 8px">
+        <span style="width: 26px; background: rgba(255, 255, 255, 0.75)"></span>
+        <span style="width: 8px; background: rgba(255, 255, 255, 0.6)"></span>
+      </div>
+      <span style="font-family: 'Silkscreen', monospace; font-size: 14px; font-weight: bold; border: 3px solid #111; padding: 4px 10px; transform: rotate(-4deg)">CASE CLOSED</span>
+      <span id="done" style="font-size: 28px; letter-spacing: 6px; margin-top: 6px">寶藏解鎖！</span>
+      <span style="font-size: 14px">9 隻怪獸全數歸隊，霧城的霧散了。</span>
+    </div>
+
+    <div role="img" aria-label="寶箱打開，跳出一枚霧城代幣" style="position: relative; height: 290px">
+      <div class="chest-grow" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0">
+      <div class="rays-in" style="position: absolute; left: 50%; top: 150px; width: 0; height: 0">
+        <div class="rays-spin" style="position: absolute; left: -130px; top: -130px; width: 260px; height: 260px">
+          <div style="position: absolute; left: 124px; top: 0; width: 12px; height: 260px; background: #ffd23f; border-left: 2px solid #111; border-right: 2px solid #111; box-sizing: border-box"></div>
+          <div style="position: absolute; left: 124px; top: 0; width: 12px; height: 260px; background: #ffd23f; border-left: 2px solid #111; border-right: 2px solid #111; box-sizing: border-box; transform: rotate(45deg)"></div>
+          <div style="position: absolute; left: 124px; top: 0; width: 12px; height: 260px; background: #ffd23f; border-left: 2px solid #111; border-right: 2px solid #111; box-sizing: border-box; transform: rotate(90deg)"></div>
+          <div style="position: absolute; left: 124px; top: 0; width: 12px; height: 260px; background: #ffd23f; border-left: 2px solid #111; border-right: 2px solid #111; box-sizing: border-box; transform: rotate(135deg)"></div>
+        </div>
+      </div>
+
+      <div class="chest-shake" style="position: absolute; left: 119px; top: 160px; width: 120px; height: 128px">
+        <svg width="120" height="88" viewBox="0 0 30 22" style="position: absolute; left: 0; bottom: 0" shape-rendering="crispEdges">
+          <rect x="0" y="8" width="30" height="14" fill="#111"></rect>
+          <rect x="1" y="9" width="28" height="12" fill="#f4f4f0"></rect>
+          <rect x="1" y="9" width="28" height="2" fill="#ffd23f"></rect>
+          <rect x="6" y="9" width="1" height="12" fill="#111"></rect>
+          <rect x="23" y="9" width="1" height="12" fill="#111"></rect>
+          <rect x="1" y="14" width="28" height="1" fill="#111"></rect>
+          <rect x="12" y="11" width="6" height="7" fill="#111"></rect>
+          <rect x="13" y="12" width="4" height="5" fill="#ffd23f"></rect>
+          <rect x="14" y="13" width="2" height="3" fill="#111"></rect>
+        </svg>
+        <svg class="lid-open" width="120" height="40" viewBox="0 0 30 10" style="position: absolute; left: 0; top: 33px" shape-rendering="crispEdges">
+          <path d="M3 0 H27 V1 H29 V2 H30 V10 H0 V2 H1 V1 H3 Z" fill="#111"></path>
+          <path d="M4 1 H26 V2 H28 V3 H29 V9 H1 V3 H2 V2 H4 Z" fill="#f4f4f0"></path>
+          <rect x="6" y="1" width="1" height="9" fill="#111"></rect>
+          <rect x="23" y="1" width="1" height="9" fill="#111"></rect>
+          <rect x="1" y="7" width="28" height="2" fill="#ffd23f"></rect>
+        </svg>
+      </div>
+
+      <div class="token-pop" style="position: absolute; left: 141px; top: 190px; width: 76px; height: 76px">
+        <div class="token-float" style="width: 76px; height: 76px">
+          <div class="token-spin" style="width: 76px; height: 76px; position: relative">
+            <div class="pixel-round" style="position: absolute; left: 0; top: 0; width: 76px; height: 76px; background: #111"></div>
+            <div class="pixel-round" style="position: absolute; left: 4px; top: 4px; width: 68px; height: 68px; background: #ffd23f"></div>
+            <div class="pixel-round" style="position: absolute; left: 12px; top: 12px; width: 52px; height: 52px; background: #111"></div>
+            <div class="pixel-round" style="position: absolute; left: 15px; top: 15px; width: 46px; height: 46px; background: #ffd23f; display: flex; align-items: center; justify-content: center">
+              <svg width="26" height="26" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#ffd23f"></rect><rect x="7" y="3" width="2" height="2" fill="#ffd23f"></rect></svg>
+            </div>
+            <div style="position: absolute; left: 14px; top: 10px; width: 8px; height: 8px; background: #ffffff"></div>
+          </div>
+        </div>
+      </div>
+
+      <span class="sparkle" aria-hidden="true" style="position: absolute; left: 96px; top: 70px; font-family: 'Silkscreen', monospace; font-size: 22px">+</span>
+      <span class="sparkle" aria-hidden="true" style="position: absolute; left: 246px; top: 96px; font-family: 'Silkscreen', monospace; font-size: 16px; animation-delay: 2100ms">+</span>
+      <span class="sparkle" aria-hidden="true" style="position: absolute; left: 236px; top: 40px; font-family: 'Silkscreen', monospace; font-size: 22px; animation-delay: 1950ms">+</span>
+      <span class="sparkle" aria-hidden="true" style="position: absolute; left: 108px; top: 130px; font-family: 'Silkscreen', monospace; font-size: 16px; animation-delay: 2250ms">+</span>
+
+      <div class="bang" aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 96px; display: flex; justify-content: center">
+        <span style="background: #ffd23f; border: 3px solid #111; box-shadow: 3px 3px 0 #111; padding: 2px 12px; font-size: 30px; font-weight: bold; letter-spacing: 2px; transform: rotate(-6deg)">碰！</span>
+      </div>
+      </div>
+      <div class="caption-in" style="position: absolute; left: 0; right: 0; bottom: -6px; display: flex; justify-content: center">
+        <span style="background: #111; color: #f4f4f0; padding: 4px 12px; font-size: 16px; letter-spacing: 2px">霧城代幣 ×1 入手！</span>
+      </div>
+    </div>
+    </div>
+
+    <sc-if value="{{showForm}}" hint-placeholder-val="{{ true }}">
+      <div class="form-in" style="background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; display: flex; flex-direction: column; margin-top: 8px">
+        <div class="stripes" style="height: 24px; box-sizing: border-box; padding: 5px 4px; border-bottom: 2px solid #111; display: flex; align-items: center; position: relative">
+          <span aria-hidden="true" style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px"></span>
+          <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #f4f4f0; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">領取登記</span>
+        </div>
+        <form style="padding: 14px 16px 18px 16px; display: flex; flex-direction: column; gap: 12px">
+          <span style="font-size: 14px; line-height: 1.6">填好資料，就能拿到領取代幣的兌換畫面。</span>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-name" style="font-size: 14px">姓名</label>
+            <input id="f-name" type="text" autocomplete="name" placeholder="王小明" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-phone" style="font-size: 14px">手機</label>
+            <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912-345-678" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-bday" style="font-size: 14px">生日</label>
+            <input id="f-bday" type="date" autocomplete="bday" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-mail" style="font-size: 14px">Email</label>
+            <input id="f-mail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+          </div>
+          <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.6; min-height: 44px">
+            <input type="checkbox" style="width: 18px; height: 18px; margin: 2px 0 0 0; accent-color: #111; flex: none">
+            我同意 [場館名稱] 依隱私權政策使用以上資料，寄送活動資訊。
+          </label>
+          <div style="display: flex; justify-content: flex-end">
+            <button type="button" onClick="{{submit}}" style="height: 44px; padding: 0 20px; margin: 3px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; background: #ffd23f; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer">送出，領取代幣</button>
+          </div>
+        </form>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showClaim}}" hint-placeholder-val="{{ false }}">
+      <div class="claim-in" style="background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; display: flex; flex-direction: column; margin-top: 8px">
+        <div class="stripes" style="height: 24px; box-sizing: border-box; padding: 5px 4px; border-bottom: 2px solid #111; display: flex; align-items: center; position: relative">
+          <span aria-hidden="true" style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px"></span>
+          <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #f4f4f0; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">領取通知.txt</span>
+        </div>
+        <div style="padding: 18px 16px 20px 16px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; gap: 12px; align-items: center">
+            <div aria-hidden="true" style="width: 48px; height: 48px; position: relative; flex: none">
+              <div class="pixel-round" style="position: absolute; left: 0; top: 0; width: 48px; height: 48px; background: #111"></div>
+              <div class="pixel-round" style="position: absolute; left: 3px; top: 3px; width: 42px; height: 42px; background: #ffd23f; display: flex; align-items: center; justify-content: center">
+                <svg width="18" height="18" viewBox="0 0 12 12"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#ffd23f"></rect><rect x="7" y="3" width="2" height="2" fill="#ffd23f"></rect></svg>
+              </div>
+            </div>
+            <span style="font-size: 16px; line-height: 1.6">請到 <b>[場館名稱] 服務櫃檯</b>，出示這個畫面領取代幣。</span>
+          </div>
+          <div style="position: relative; border: 2px dashed #111; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+            <span style="font-size: 12px">兌換碼</span>
+            <span style="font-family: 'Silkscreen', monospace; font-size: 26px; font-weight: bold; letter-spacing: 3px">MF-[XXXX]</span>
+            <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
+              <span class="stamp-down" style="position: absolute; right: 14px; top: 10px; border: 3px solid #e8384f; color: #e8384f; padding: 4px 10px; font-size: 18px; font-weight: bold; letter-spacing: 2px; background: rgba(244, 244, 240, 0.85)">已領取</span>
+            </sc-if>
+          </div>
+          <span style="font-size: 13px; line-height: 1.6">櫃檯服務時間 [時間]・每人限領一次・櫃檯確認後此兌換碼即失效</span>
+          <div style="display: flex; justify-content: center">
+            <sc-if value="{{notRedeemed}}" hint-placeholder-val="{{ true }}">
+              <button type="button" onClick="{{redeem}}" style="height: 40px; padding: 0 16px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 13px; cursor: pointer">櫃檯人員確認領取（工作人員按）</button>
+            </sc-if>
+            <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
+              <a href="dex.html" class="claim-in" style="height: 44px; padding: 0 20px; margin: 3px; display: flex; align-items: center; gap: 8px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; background: #ffd23f; color: #111; text-decoration: none; font-size: 16px; font-weight: bold">
+                <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#ffd23f"></rect><rect x="7" y="3" width="2" height="2" fill="#ffd23f"></rect></svg>
+                看看怪獸圖鑑
+              </a>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</template>
+<script>
+const MF = { get: (k) => { try { return window.localStorage.getItem('mfhunt.' + k); } catch (e) { return null; } }, set: (k, v) => { try { window.localStorage.setItem('mfhunt.' + k, String(v)); } catch (e) {} } };
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = Object.assign({}, this.state, { claimed: false, redeemed: false });
+    this.submit = () => { this.setState({ claimed: true }); };
+    this.redeem = () => { if (!this.state.redeemed) this.setState({ redeemed: true }); };
+  }
+  renderVals() {
+    return {
+      showForm: !this.state.claimed,
+      showClaim: this.state.claimed,
+      redeemed: this.state.redeemed,
+      notRedeemed: !this.state.redeemed,
+      submit: this.submit,
+      redeem: this.redeem
+    };
+  }
+}
+</script>
+<script>DCMini.boot(Component);</script>
+</body>
+</html>
