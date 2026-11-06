@@ -120,7 +120,7 @@
   let ss = null; try { ss = window.sessionStorage; } catch (e) {}
 
   // ?debug=1 開啟除錯工具（同一個分頁內有效），?debug=0 關閉
-  const q = new URLSearchParams(location.search);
+  let q = new URLSearchParams(location.search);
   if (q.get('debug') === '1') { try { ss.setItem(P + 'debug', '1'); } catch (e) {} }
   if (q.get('debug') === '0') { try { ss.removeItem(P + 'debug'); } catch (e) {} }
   let debug = false; try { debug = ss.getItem(P + 'debug') === '1'; } catch (e) {}
@@ -180,12 +180,14 @@
       try { history.replaceState(null, '', location.pathname); } catch (e) {}
       return { status, mon: ROSTER[no - 1], got: after.length };
     },
+    refresh() { q = new URLSearchParams(location.search); },
     catchUrl(no) {
       const mon = ROSTER[no - 1];
       return 'catch.html?m=' + String(no).padStart(2, '0') + '&k=' + mon.key;
     }
   };
   window.MH = MH;
+  const snd = (id) => { try { window.MHSound && window.MHSound.play(id); } catch (e) {} };
 
   // ---------- 內建瀏覽器（LINE / FB / IG）提示 ----------
   const ua = navigator.userAgent || '';
@@ -236,6 +238,7 @@
         '<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>' +
         '<button type="button" class="mh-btn mh-scan-cancel">取消</button>';
       document.body.appendChild(ov);
+      snd('scanOpen');
       const video = ov.querySelector('video');
       const msg = ov.querySelector('.mh-scan-msg');
       let stream = null, done = false, timer = null, warnT = null;
@@ -251,15 +254,17 @@
       }
       ov.querySelector('.mh-scan-cancel').addEventListener('click', () => finish(0));
       function fail(text) {
+        snd('error');
         ov.classList.add('mh-scan-error');
         msg.innerHTML = text;
       }
       function handle(text) {
         const no = MH.parseCode(text);
-        if (no) { try { navigator.vibrate && navigator.vibrate(80); } catch (e) {} finish(no); return true; }
+        if (no) { try { navigator.vibrate && navigator.vibrate(80); } catch (e) {} snd('confirm'); finish(no); return true; }
+        if (!warnT) snd('error');
         msg.textContent = '這不是怪獸的 QR code 喔，再找找看！';
         clearTimeout(warnT);
-        warnT = setTimeout(() => { if (!done) msg.textContent = '把怪獸旁邊的 QR code 放進框框裡'; }, 1800);
+        warnT = setTimeout(() => { warnT = null; if (!done) msg.textContent = '把怪獸旁邊的 QR code 放進框框裡'; }, 1800);
         return false;
       }
 
@@ -344,6 +349,7 @@
         const no = parseInt(raw.slice(0, 2), 10);
         const mon = ROSTER[no - 1];
         if (mon && raw.slice(2) === mon.key) { ov.remove(); resolve(no); return; }
+        snd('error');
         msg.textContent = '代碼不對喔，再檢查一次！';
       });
     });
