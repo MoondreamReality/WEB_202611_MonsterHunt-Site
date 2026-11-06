@@ -131,6 +131,26 @@
     jCatch:   { name: '收服成功（短樂句）', scene: '發現怪獸', jingle: true, play: (t) => { arp(t, [72, 76, 79, 84], 0.09, { v: 0.24 }); tone(t + 0.4, { f: N(88), d: 0.5, v: 0.24 }); arp(t, [48, 55], 0.2, { type: 'triangle', v: 0.35, d: 0.3 }); } },
     jAgain:   { name: '已收服過', scene: '發現怪獸（重複掃描）', jingle: true, play: (t) => { tone(t, { f: N(79), d: 0.1, v: 0.2 }); tone(t + 0.12, { f: N(84), d: 0.25, v: 0.2 }); } },
     jUnlock:  { name: '寶藏解鎖（樂句）', scene: '寶藏解鎖對話框', jingle: true, play: (t) => { arp(t, [72, 76, 79, 72, 76, 79, 84], 0.08, { v: 0.22 }); tone(t + 0.6, { f: N(88), d: 0.8, v: 0.22 }); tone(t + 0.6, { f: N(91), d: 0.8, v: 0.14 }); arp(t, [48, 52, 55, 60], 0.15, { type: 'triangle', v: 0.35 }); } },
+    drumroll: { name: '鼓聲鋪墊', scene: '寶藏解鎖：寶箱出現到打開前（約 1.4 秒，越來越密、越來越大聲）', play: (t) => {
+      const D = 1.36; let x = 0, i = 0;
+      while (x < D) {
+        const k = x / D;                                  // 0 → 1
+        noise(t + x, { filter: 'bandpass', f: 1800 + 1200 * k, d: 0.05, v: 0.12 + 0.55 * k * k, q: 0.7 });
+        noise(t + x, { filter: 'lowpass', f: 400, d: 0.03, v: 0.08 + 0.25 * k });
+        x += 0.11 - 0.075 * k; i++;
+      }
+      [0, 0.34, 0.68, 0.96, 1.16, 1.28].forEach((y, j) => tone(t + y, { type: 'sine', f: 95 + j * 6, f2: 55, d: 0.16, v: 0.3 + j * 0.08 }));
+    } },
+    jAchieve: { name: '成就解鎖（歡樂樂句）', scene: '寶藏解鎖：碰！之後，最後長和弦對上「寶藏解鎖！」對話框', jingle: true, play: (t) => {
+      arp(t, [72, 76, 79], 0.07, { v: 0.22 });
+      arp(t + 0.21, [76, 79, 84], 0.07, { v: 0.22 });
+      arp(t + 0.42, [79, 84, 88], 0.07, { v: 0.24 });
+      tone(t + 0.66, { f: N(86), d: 0.16, v: 0.22 });
+      tone(t + 0.84, { f: N(88), d: 0.16, v: 0.22 });
+      [84, 88, 91].forEach((m, i) => { const o = tone(t + 1.05, { f: N(m), d: 0.95, v: i ? 0.14 : 0.24 }); const l = ctx.createOscillator(); const lg = ctx.createGain(); l.frequency.value = 6; lg.gain.value = N(m) * 0.012; l.connect(lg); lg.connect(o.frequency); l.start(t + 1.25); l.stop(t + 2.1); });
+      [48, 55, 60, 48].forEach((m, i) => tone(t + [0, 0.42, 0.84, 1.05][i], { type: 'triangle', f: N(m), d: i === 3 ? 0.9 : 0.3, v: 0.4 }));
+      noise(t + 1.05, { filter: 'highpass', f: 5000, d: 0.6, v: 0.18 });
+    } },
     jSubmit:  { name: '送出登記', scene: '領取登記送出', jingle: true, play: (t) => arp(t, [79, 84, 88], 0.07, { v: 0.2 }) }
   };
 
@@ -145,34 +165,36 @@
       bass: [45,52,45,52, 41,48,41,48, 48,43,48,43, 40,47,40,44, 45,52,45,52, 41,48,41,48, 38,45,38,45, 40,47,40,44]
     },
     treasure: {
-      name: '寶藏主題（C 大調，慶祝）', bpm: 128,
+      name: '寶藏主題（C 大調，歡快）', bpm: 140, snare: true,
       lead: [72,76,79,84,79,76,72,76, 71,74,79,83,79,74,71,74, 69,72,76,81,76,72,69,72, 69,72,77,81,79,77,76,74],
       bass: [48,55,48,55, 43,50,43,50, 45,52,45,52, 41,48,41,48]
     }
   };
   let bgm = { id: null, timer: null, step: 0, next: 0, gain: null };
-  function stopBgm() {
+  function stopBgm(fast) {
     if (bgm.timer) clearInterval(bgm.timer);
     if (bgm.src) { try { bgm.src.stop(); } catch (e) {} }
-    if (bgm.gain && ctx) { const g = bgm.gain; g.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.15); _setTimeout(() => { try { g.disconnect(); } catch (e) {} }, 800); }
+    if (bgm.gain && ctx) { const g = bgm.gain; g.gain.cancelScheduledValues(ctx.currentTime); g.gain.setTargetAtTime(0.0001, ctx.currentTime, fast ? 0.05 : 0.15); _setTimeout(() => { try { g.disconnect(); } catch (e) {} }, 800); }
     bgm = { id: null, timer: null, step: 0, next: 0, gain: null };
   }
-  function startBgm(id) {
+  function startBgm(id, delaySec) {
     if (bgm.id === id) return;
+    const dl = Math.max(0, delaySec || 0);
     stopBgm();
     const tr = TRACKS[id];
     if (!tr || !ensure()) return;
     const g = ctx.createGain(); g.gain.value = 0.0001; g.connect(bgmBus);
-    g.gain.setTargetAtTime(1, ctx.currentTime + 0.05, 0.4);
-    bgm = { id, timer: null, step: 0, next: ctx.currentTime + 0.1, gain: g };
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.setTargetAtTime(1, ctx.currentTime + dl + 0.05, dl ? 0.25 : 0.4);
+    bgm = { id, timer: null, step: 0, next: ctx.currentTime + dl + 0.1, gain: g };
     if (files['bgm_' + id]) {   // 音檔覆蓋
-      const s = ctx.createBufferSource(); s.buffer = files['bgm_' + id]; s.loop = true; s.connect(g); s.start();
+      const s = ctx.createBufferSource(); s.buffer = files['bgm_' + id]; s.loop = true; s.connect(g); s.start(ctx.currentTime + dl);
       bgm.src = s;
       return;
     }
     const e8 = 60 / tr.bpm / 2;
     bgm.timer = _setInterval(() => {
-      if (!ctx || ctx.state !== 'running') { bgm.next = ctx ? ctx.currentTime + 0.05 : 0; return; }
+      if (!ctx || ctx.state !== 'running') { if (ctx && bgm.next < ctx.currentTime) bgm.next = ctx.currentTime + 0.05; return; }
       while (bgm.next < ctx.currentTime + 0.2) {
         const i = bgm.step, t = bgm.next;
         const m = tr.lead[i % tr.lead.length];
@@ -180,6 +202,8 @@
         if (i % 2 === 0) { const b = tr.bass[(i / 2) % tr.bass.length]; tone(t, { type: 'triangle', f: N(b), d: e8 * 1.7, v: 0.5, bus: g }); }
         if (i % 2 === 1) noise(t, { filter: 'highpass', f: 7000, d: 0.03, v: 0.12, bus: g });
         if (i % 4 === 0) tone(t, { type: 'sine', f: 120, f2: 45, d: 0.12, v: 0.45, bus: g });
+        if (tr.snare && i % 4 === 2) noise(t, { filter: 'bandpass', f: 2200, d: 0.08, v: 0.35, q: 0.7, bus: g });
+        if (tr.snare && i % 2 === 0) { const ch = tr.bass[(i / 2) % tr.bass.length] + 24; tone(t + e8 * 0.5, { f: N(ch + 4), d: e8 * 0.3, v: 0.07, bus: g }); tone(t + e8 * 0.5, { f: N(ch + 7), d: e8 * 0.3, v: 0.07, bus: g }); }
         bgm.step++; bgm.next += e8;
       }
     }, 25);

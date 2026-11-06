@@ -127,16 +127,17 @@
     },
     // ---------- 05 寶藏解鎖 ----------
     reward: {
-      bgm: 'treasure',
+      bgm: null,   // 這頁自己控制：先停音樂 → 鼓聲 → 碰！→ 成就樂句 → 換歡快背景樂
       mount() {
-        play('whoosh', 0);
-        play('rattle', 420); play('rattle', 850);
+        const s = S();
+        if (s) s.stopBgm(true);
+        play('drumroll', 40);
         play('bang', 1400);
         play('coin', 1500);
-        [1733, 1966].forEach((d) => play('tick', d));
-        play('sparkle', 2200);
-        play('jUnlock', 2700);
+        play('jAchieve', 1650);
+        play('sparkle', 2750);
         play('whoosh', 3300);
+        if (s) s.startBgm('treasure', 3.6);
       },
       update(c, p) {
         const s = c.state;
