@@ -242,7 +242,8 @@
     } else {
       // data-fit：可伸縮的區塊（例如圖鑑列表），先回到設計高度，放不下再縮，最小到 data-fit-min
       const fitEl = root && root.querySelector('[data-fit]');
-      const base = fitEl ? +fitEl.getAttribute('data-fit') : 0;
+      let base = fitEl ? +fitEl.getAttribute('data-fit') : 0;
+      if (fitEl && fitEl.getAttribute('data-fit-max') === 'square') base = Math.min(base, fitEl.offsetWidth);
       if (fitEl) fitEl.style.height = base + 'px';
       app.style.setProperty('--mh-h', 'auto');
       let natural = root ? root.offsetHeight : 844;
@@ -251,7 +252,8 @@
         fitEl.style.height = Math.max(min, Math.floor(base - (natural - Hl))) + 'px';
         natural = root.offsetHeight;
       } else if (fitEl && fitEl.getAttribute('data-fit-max') && natural < Hl) {
-        const max = +fitEl.getAttribute('data-fit-max');
+        const mx = fitEl.getAttribute('data-fit-max');
+        const max = mx === 'square' ? fitEl.offsetWidth : +mx;
         fitEl.style.height = Math.min(max, Math.floor(base + (Hl - natural))) + 'px';
         natural = root.offsetHeight;
       }

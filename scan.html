@@ -27,9 +27,9 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611061046">
-<script src="mh.js?v=202611061046"></script>
-<script src="dcmini.js?v=202611061046"></script>
+<link rel="stylesheet" href="mh.css?v=202611061052">
+<script src="mh.js?v=202611061052"></script>
+<script src="dcmini.js?v=202611061052"></script>
 
 </head>
 <body data-layout="flex">
@@ -50,8 +50,8 @@ a{color:#111}a:hover{color:#444}
           <sc-for list="{{boxes}}" as="b" hint-placeholder-count="9"><span style="width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-family: 'Silkscreen', monospace; font-size: 11px; background: {{b.bg}}; color: {{b.fg}}; border-right: {{b.br}}">{{b.n}}</span></sc-for>
         </div>
       </div>
-      <div style="padding: 14px">
-        <div ref="{{setVf}}" data-fit="300" data-fit-min="170" data-fit-max="340" style="height: 300px; background: #111; position: relative; display: flex; align-items: center; justify-content: center">
+      <div style="padding: 14px 14px 10px 14px">
+        <div ref="{{setVf}}" data-fit="326" data-fit-min="170" data-fit-max="square" style="height: 326px; background: #111; position: relative; display: flex; align-items: center; justify-content: center">
           <div style="position: absolute; left: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
           <div style="position: absolute; left: 14px; top: 14px; width: 6px; height: 36px; background: #f4f4f0"></div>
           <div style="position: absolute; right: 14px; top: 14px; width: 36px; height: 6px; background: #f4f4f0"></div>
@@ -67,12 +67,12 @@ a{color:#111}a:hover{color:#444}
           </div>
         </div>
       </div>
-      <div style="padding: 0 14px 16px 14px; display: flex; flex-direction: column; gap: 10px; align-items: stretch">
+      <div style="padding: 0 14px 10px 14px; display: flex; flex-direction: column; gap: 6px; align-items: stretch">
         <button type="button" onClick="{{startCatch}}" style="height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; font-family: inherit; font-size: 16px; font-weight: bold; background: #ffd23f; color: #111; cursor: pointer">
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="5" width="16" height="12" fill="none" stroke="#111" stroke-width="2"></rect><rect x="7" y="2" width="6" height="3" fill="#111"></rect><rect x="8" y="8" width="4" height="4" fill="none" stroke="#111" stroke-width="2"></rect></svg>
           開啟相機掃描
         </button>
-        <button type="button" onClick="{{manualCode}}" style="border: none; background: transparent; font-family: inherit; color: #111; text-decoration: underline; cursor: pointer; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 14px">相機打不開？改用手動輸入代碼</button>
+        <button type="button" onClick="{{manualCode}}" style="border: none; background: transparent; font-family: inherit; color: #111; text-decoration: underline; cursor: pointer; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 14px">相機打不開？改用手動輸入代碼</button>
       </div>
     </div>
 
