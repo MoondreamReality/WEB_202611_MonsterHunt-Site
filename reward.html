@@ -53,11 +53,11 @@ input::placeholder{color:#555}
 .live-dot{animation:livedot 1s steps(1) infinite}
 @media (prefers-reduced-motion: reduce){.chest-shake,.lid-open,.rays-in,.rays-spin,.token-pop,.token-spin,.token-float,.sparkle,.caption-in,.form-in,.claim-in,.stamp-down,.chest-grow,.bang,.bang-shake,.dialog-in,.hero-up,.shine{animation:none}.shine{display:none}.bang{opacity:0}.lid-open{transform:translate(-18px,-34px) rotate(-28deg)}.token-pop{transform:translateY(-100px)}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231630">
-<script src="mh.js?v=202611231630"></script>
-<script src="mh-audio.js?v=202611231630"></script>
-<script src="dcmini.js?v=202611231630"></script>
-<script src="mh-cues.js?v=202611231630"></script>
+<link rel="stylesheet" href="mh.css?v=202611231637">
+<script src="mh.js?v=202611231637"></script>
+<script src="mh-audio.js?v=202611231637"></script>
+<script src="dcmini.js?v=202611231637"></script>
+<script src="mh-cues.js?v=202611231637"></script>
 <script data-guard>if (!MH.debug && MH.caughtCount() < MH.total) location.replace('locked.html');</script>
 </head>
 <body data-layout="tall">
@@ -153,11 +153,6 @@ input::placeholder{color:#555}
             <sc-if value="{{errName}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errName}}</span></sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px">
-            <label for="f-phone" style="font-size: 14px">手機</label>
-            <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0912345678" aria-invalid="{{errPhoneInvalid}}" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
-            <sc-if value="{{errPhone}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errPhone}}</span></sc-if>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 6px">
             <label for="f-mail" style="font-size: 14px">Email</label>
             <input id="f-mail" type="email" inputmode="email" autocomplete="email" maxlength="80" placeholder="you@example.com" aria-invalid="{{errMailInvalid}}" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
             <sc-if value="{{errMail}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errMail}}</span></sc-if>
@@ -204,7 +199,7 @@ input::placeholder{color:#555}
             </div>
             <div style="display: grid; grid-template-columns: 52px minmax(0, 1fr); row-gap: 6px; font-size: 15px; line-height: 1.5">
               <span>姓名</span><span style="font-weight: bold; overflow-wrap: anywhere">{{pName}}</span>
-              <span>手機</span><span style="font-family: 'Silkscreen', monospace; font-size: 14px">{{pPhone}}</span>
+              <span>Email</span><span style="overflow-wrap: anywhere">{{pMailMask}}</span>
               <span>最愛</span><span style="display: flex; align-items: center; gap: 6px; font-weight: bold"><img src="{{favImg}}" alt="" style="width: 28px; height: 28px; image-rendering: pixelated">{{favName}}</span>
             </div>
             <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
@@ -215,7 +210,7 @@ input::placeholder{color:#555}
           <span style="font-size: 13px; line-height: 1.6">時間每秒跳動才是有效畫面・櫃檯服務時間 [時間]・每人限領一次・兌換後此畫面即失效</span>
           <sc-if value="{{showDup}}" hint-placeholder-val="{{ false }}">
             <div role="alert" style="border: 3px solid #111; background: #ffd23f; padding: 12px; display: flex; flex-direction: column; gap: 10px">
-              <span style="font-size: 15px; font-weight: bold; line-height: 1.6">注意：這支手機號碼已在 {{dupAt}} 兌換過代幣</span>
+              <span style="font-size: 15px; font-weight: bold; line-height: 1.6">注意：這個 Email 已在 {{dupAt}} 兌換過代幣</span>
               <span style="font-size: 13px; line-height: 1.6">請館員確認是否仍要發放。</span>
               <div style="display: flex; gap: 10px">
                 <button type="button" onClick="{{dupCancel}}" style="flex: 1; height: 44px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 15px; cursor: pointer">不發放</button>
@@ -261,7 +256,7 @@ class Component extends DCLogic {
       try { claim = JSON.parse(MF.get('claim') || 'null'); } catch (e) { claim = null; }
       at = MF.get('redeemedAt');
     } else if (demo !== '表單') {
-      claim = { name: '王小明', phone: '0912345678', email: 'ming@example.com', fav: 1 };
+      claim = { name: '王小明', email: 'ming@example.com', fav: 1 };
       if (demo === '已兌換') at = String(Date.now());
     }
     this.demo = demo !== '依進度';
@@ -269,30 +264,27 @@ class Component extends DCLogic {
     this.pick = (no) => this.setState({ fav: no, errFav: '' });
     this.state = Object.assign({}, this.state, {
       claimed: !!claim, claim: claim, redeemed: !!at, redeemedAt: at ? Number(at) : 0,
-      errName: '', errPhone: '', errMail: '', errFav: '', fav: 0, now: Date.now(), holdPct: 0, holding: false, checking: false, dupAt: ''
+      errName: '', errMail: '', errFav: '', fav: 0, now: Date.now(), holdPct: 0, holding: false, checking: false, dupAt: ''
     });
     this.submit = (e) => {
       if (e && e.preventDefault) e.preventDefault();
       const v = (id) => { const el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
       const name = v('f-name');
-      let phone = v('f-phone').replace(/[\s\-()]/g, '');
-      if (/^\+?886/.test(phone)) phone = '0' + phone.replace(/^\+?886/, '');
-      const mail = v('f-mail');
+      const mail = v('f-mail').toLowerCase();
       const okEl = document.getElementById('f-ok');
       const errs = {
         errName: name ? '' : '請填寫姓名',
-        errPhone: /^09\d{8}$/.test(phone) ? '' : '請填寫手機號碼，例如 0912345678',
         errMail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? '' : '請填寫正確的 Email',
         errFav: this.state.fav ? '' : '請選一隻最喜歡的怪獸'
       };
-      if (errs.errName || errs.errPhone || errs.errMail || errs.errFav) {
+      if (errs.errName || errs.errMail || errs.errFav) {
         this.setState(errs);
-        const first = errs.errName ? 'f-name' : errs.errPhone ? 'f-phone' : errs.errMail ? 'f-mail' : '';
+        const first = errs.errName ? 'f-name' : errs.errMail ? 'f-mail' : '';
         const el = document.getElementById(first); if (el) el.focus();
         return;
       }
       const favM = this.mons.find((m) => m.no === this.state.fav) || {};
-      const claim = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), name: name, phone: phone, email: mail, fav: this.state.fav, favName: favM.name || '', marketing: !!(okEl && okEl.checked), at: Date.now() };
+      const claim = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), name: name, email: mail, fav: this.state.fav, favName: favM.name || '', marketing: !!(okEl && okEl.checked), at: Date.now() };
       if (!this.demo) MF.set('claim', JSON.stringify(claim));
       try { if (!this.demo && window.MH && window.MH.sendClaim) window.MH.sendClaim(claim); } catch (err) {}
       this.setState(Object.assign({ claimed: true, claim: claim }, errs));
@@ -303,16 +295,16 @@ class Component extends DCLogic {
       if (!this.demo) {
         MF.set('redeemedAt', at);
         const c = this.state.claim || {};
-        try { if (window.MH && window.MH.logRedeem) window.MH.logRedeem({ action: 'redeem', id: c.id || '', phone: c.phone || '', name: c.name || '', at: at, override: !!override, offline: !!offline }); } catch (err) {}
+        try { if (window.MH && window.MH.logRedeem) window.MH.logRedeem({ action: 'redeem', id: c.id || '', email: c.email || '', name: c.name || '', at: at, override: !!override, offline: !!offline }); } catch (err) {}
       }
       this.setState({ redeemed: true, redeemedAt: at, holding: false, holdPct: 0, checking: false, dupAt: '' });
     };
-    // 兌換前向後台查這支手機號碼是否已領過；查不到（離線、逾時）就照常兌換，稍後同步
+    // 兌換前向後台查這個 Email 是否已領過；查不到（離線、逾時）就照常兌換，稍後同步
     this.check = () => {
       const c = this.state.claim || {};
       if (this.demo || !(window.MH && window.MH.checkRedeem)) { this.redeem(false, false); return; }
       this.setState({ checking: true, holding: false, holdPct: 100 });
-      window.MH.checkRedeem(c.phone).then((r) => {
+      window.MH.checkRedeem(c.email).then((r) => {
         if (r && r.redeemed && r.id !== c.id) this.setState({ checking: false, holdPct: 0, dupAt: r.at || '先前' });
         else this.redeem(false, !r || r.offline);
       });
@@ -345,9 +337,8 @@ class Component extends DCLogic {
     this.fillFake = () => {
       const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
       set('f-name', '測試玩家');
-      set('f-phone', '0912345678');
       set('f-mail', 'test@example.com');
-      this.setState({ fav: 1 + Math.floor(Math.random() * this.mons.length), errName: '', errPhone: '', errMail: '', errFav: '' });
+      this.setState({ fav: 1 + Math.floor(Math.random() * this.mons.length), errName: '', errMail: '', errFav: '' });
       const el = document.getElementById('f-mail'); if (el) { el.focus(); el.select && el.select(); }
     };
     this.resetClaim = () => {
@@ -370,8 +361,9 @@ class Component extends DCLogic {
     const d = new Date(st.now);
     const clock = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
     const c = st.claim || {};
-    const ph = String(c.phone || '');
-    const pPhone = ph.length >= 10 ? ph.slice(0, 4) + '-***-' + ph.slice(-3) : ph;
+    const em = String(c.email || '');
+    const at = em.indexOf('@');
+    const pMailMask = at > 0 ? em.slice(0, Math.min(2, at)) + '***' + em.slice(at) : em;
     const fm = this.mons.find((m) => m.no === Number(c.fav)) || this.mons[0];
     const favs = this.mons.map((m) => { const on = st.fav === m.no; return { name: m.name, img: m.img, on: on, checked: on ? 'true' : 'false', bg: on ? '#ffd23f' : '#f4f4f0', border: on ? '3px solid #111' : '2px solid #111', pick: () => this.pick(m.no) }; });
     let redeemedAt = '';
@@ -381,11 +373,11 @@ class Component extends DCLogic {
       showClaim: st.claimed,
       redeemed: st.redeemed,
       notRedeemed: !st.redeemed,
-      errName: st.errName, errPhone: st.errPhone, errMail: st.errMail,
-      errNameInvalid: st.errName ? 'true' : 'false', errPhoneInvalid: st.errPhone ? 'true' : 'false', errMailInvalid: st.errMail ? 'true' : 'false',
+      errName: st.errName, errMail: st.errMail,
+      errNameInvalid: st.errName ? 'true' : 'false', errMailInvalid: st.errMail ? 'true' : 'false',
       clock: clock,
       pName: c.name || '',
-      pPhone: pPhone,
+      pMailMask: pMailMask,
       pMail: c.email || '',
       favName: fm ? fm.name : '',
       favImg: fm ? fm.img : '',

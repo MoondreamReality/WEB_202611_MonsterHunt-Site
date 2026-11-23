@@ -214,12 +214,12 @@
     saveOutbox(list);
     MH.flushClaims();
   };
-  /** 兌換前查這支手機號碼是否已領過：回傳 { redeemed, at, id } 或 { offline: true } */
-  MH.checkRedeem = function (phone) {
+  /** 兌換前查這個 Email 是否已領過：回傳 { redeemed, at, id } 或 { offline: true } */
+  MH.checkRedeem = function (email) {
     if (!ENDPOINT || !navigator.onLine) return Promise.resolve({ offline: true });
     const ctl = window.AbortController ? new AbortController() : null;
     const t = setTimeout(() => ctl && ctl.abort(), 5000);
-    return fetch(ENDPOINT + (ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + 'action=check&phone=' + encodeURIComponent(phone || ''), { signal: ctl ? ctl.signal : undefined })
+    return fetch(ENDPOINT + (ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + 'action=check&email=' + encodeURIComponent(email || ''), { signal: ctl ? ctl.signal : undefined })
       .then((r) => r.json())
       .then((j) => (j && j.ok ? j : { offline: true }))
       .catch(() => ({ offline: true }))
