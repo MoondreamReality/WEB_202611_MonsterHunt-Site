@@ -53,11 +53,12 @@ input::placeholder{color:#555}
 .live-dot{animation:livedot 1s steps(1) infinite}
 @media (prefers-reduced-motion: reduce){.chest-shake,.lid-open,.rays-in,.rays-spin,.token-pop,.token-spin,.token-float,.sparkle,.caption-in,.form-in,.claim-in,.stamp-down,.chest-grow,.bang,.bang-shake,.dialog-in,.hero-up,.shine{animation:none}.shine{display:none}.bang{opacity:0}.lid-open{transform:translate(-18px,-34px) rotate(-28deg)}.token-pop{transform:translateY(-100px)}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231730">
-<script src="mh.js?v=202611231730"></script>
-<script src="mh-audio.js?v=202611231730"></script>
-<script src="dcmini.js?v=202611231730"></script>
-<script src="mh-cues.js?v=202611231730"></script>
+<link rel="stylesheet" href="mh.css?v=202611231747">
+<script src="mh-i18n.js?v=202611231747"></script>
+<script src="mh.js?v=202611231747"></script>
+<script src="mh-audio.js?v=202611231747"></script>
+<script src="dcmini.js?v=202611231747"></script>
+<script src="mh-cues.js?v=202611231747"></script>
 <script data-guard>if (!MH.debug && MH.caughtCount() < MH.total) location.replace('locked.html');</script>
 </head>
 <body data-layout="tall">
@@ -284,7 +285,7 @@ class Component extends DCLogic {
         return;
       }
       const favM = this.mons.find((m) => m.no === this.state.fav) || {};
-      const claim = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), name: name, email: mail, fav: this.state.fav, favName: favM.name || '', marketing: !!(okEl && okEl.checked), at: Date.now() };
+      const claim = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), name: name, email: mail, lang: (window.MHI18N ? window.MHI18N.lang() : 'zh'), fav: this.state.fav, favName: favM.name || '', marketing: !!(okEl && okEl.checked), at: Date.now() };
       if (!this.demo) MF.set('claim', JSON.stringify(claim));
       try { if (!this.demo && window.MH && window.MH.sendClaim) window.MH.sendClaim(claim); } catch (err) {}
       this.setState(Object.assign({ claimed: true, claim: claim }, errs));

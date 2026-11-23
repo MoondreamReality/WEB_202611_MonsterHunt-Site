@@ -47,9 +47,18 @@
     }
     return v;
   }
-  function interp(str, scope) {
+  function interp(str, scope, tv) {
     if (str.indexOf('{{') < 0) return str;
-    return str.replace(HOLE, (m, p) => { const v = lookup(p, scope); return v == null ? '' : String(v); });
+    return str.replace(HOLE, (m, p) => { const v = lookup(p, scope); return v == null ? '' : (tv ? tv(String(v)) : String(v)); });
+  }
+  // 語言：英文模式時先查模板原文（含 {{洞}}），查不到再查填好值的結果
+  const I18N = () => window.MHI18N;
+  const TATTR = { 'aria-label': 1, placeholder: 1, alt: 1, title: 1 };
+  function tr(raw, scope) {
+    const I = I18N();
+    if (!I || I.lang() !== 'en') return interp(raw, scope);
+    const x = I.t(raw);
+    return x !== raw ? interp(x, scope, I.t) : I.t(interp(raw, scope));
   }
   function whole(str, scope) {
     const m = WHOLE.exec(str);
@@ -60,7 +69,7 @@
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       if (node.nodeType === 3) {
-        out.push({ k: tid(node) + path, t: interp(node.data, scope) });
+        out.push({ k: tid(node) + path, t: tr(node.data, scope) });
         continue;
       }
       if (node.nodeType !== 1) continue;
@@ -97,9 +106,9 @@
         const w = whole(val, scope);
         if (w.hit) {
           if (w.v == null || w.v === false) continue;
-          v.a[name] = w.v === true ? '' : String(w.v);
+          v.a[name] = w.v === true ? '' : (TATTR[name] && I18N() ? I18N().t(String(w.v)) : String(w.v));
         } else {
-          v.a[name] = interp(val, scope);
+          v.a[name] = TATTR[name] ? tr(val, scope) : interp(val, scope);
         }
       }
       build(node.childNodes, scope, path, v.c);
@@ -283,7 +292,7 @@
       if (ro) { ro.disconnect(); ro = null; }
       // 換網址、標題、版面設定、頁面樣式
       if (push) history.pushState({ mh: 1 }, '', url.pathname.split('/').pop() + url.search);
-      document.title = doc.title;
+      document.title = I18N() ? I18N().t(doc.title) : doc.title;
       document.body.setAttribute('data-layout', doc.body.getAttribute('data-layout') || 'flex');
       document.querySelectorAll('head [data-page]').forEach((n) => n.remove());
       doc.head.querySelectorAll('[data-page]').forEach((n) => document.head.appendChild(document.importNode(n, true)));
@@ -401,5 +410,5 @@
     setTimeout(fit, 300); setTimeout(fit, 1200);
   }
 
-  window.DCMini = { boot: start, fit, nav: (h) => softNav(h, true) };
+  window.DCMini = { boot: start, fit, nav: (h) => softNav(h, true), reload: () => softNav(location.href, false) };
 })();

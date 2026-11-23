@@ -19,11 +19,12 @@ a{color:#111}a:hover{color:#444}
 .floaty{animation:floaty 2400ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.dlg-breathe,.floaty{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231730">
-<script src="mh.js?v=202611231730"></script>
-<script src="mh-audio.js?v=202611231730"></script>
-<script src="dcmini.js?v=202611231730"></script>
-<script src="mh-cues.js?v=202611231730"></script>
+<link rel="stylesheet" href="mh.css?v=202611231747">
+<script src="mh-i18n.js?v=202611231747"></script>
+<script src="mh.js?v=202611231747"></script>
+<script src="mh-audio.js?v=202611231747"></script>
+<script src="dcmini.js?v=202611231747"></script>
+<script src="mh-cues.js?v=202611231747"></script>
 
 </head>
 <body data-layout="flex">
@@ -83,7 +84,7 @@ a{color:#111}a:hover{color:#444}
 class Component extends DCLogic {
   componentDidMount() {
     const v = this.renderVals();
-    document.title = v.ok ? '發現怪獸：' + v.name : '找不到怪獸';
+    document.title = window.MHI18N.t(v.ok ? '發現怪獸：' + v.name : '找不到怪獸');
   }
   renderVals() {
     const r = this.r || (this.r = window.MH.handleCatchUrl());

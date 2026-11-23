@@ -248,9 +248,10 @@
   // ---------- 靜音按鈕 ----------
   const ICON_ON = '<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M3 7h4l5-4v14l-5-4H3z" fill="#111"/><path d="M14 7c1.2 1.6 1.2 4.4 0 6M16 5c2.2 2.8 2.2 7.2 0 10" fill="none" stroke="#111" stroke-width="2"/></svg>';
   const ICON_OFF = '<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M3 7h4l5-4v14l-5-4H3z" fill="#111"/><path d="M14 7l5 6M19 7l-5 6" fill="none" stroke="#111" stroke-width="2"/></svg>';
+  const T = (x) => (window.MHI18N ? window.MHI18N.t(x) : x);
   function paintMute(b) {
     b.innerHTML = muted ? ICON_OFF : ICON_ON;
-    b.setAttribute('aria-label', muted ? '開啟聲音' : '關閉聲音');
+    b.setAttribute('aria-label', muted ? T('開啟聲音') : T('關閉聲音'));
     b.setAttribute('aria-pressed', muted ? 'true' : 'false');
     b.classList.toggle('is-off', muted);
   }
@@ -269,14 +270,26 @@
       const g = document.createElement('div');
       g.className = 'mh-gate';
       g.innerHTML =
-        '<div class="mh-gate-box"><p class="mh-gate-title">夢境怪獸搜查令</p>' +
-        '<button type="button" class="mh-btn mh-yellow mh-gate-go">點一下開始</button>' +
-        '<p class="mh-gate-tip">建議開啟聲音遊玩</p></div>';
+        '<div class="mh-gate-box"><p class="mh-gate-title"></p>' +
+        '<button type="button" class="mh-btn mh-yellow mh-gate-go"></button>' +
+        '<p class="mh-gate-tip"></p></div>';
+      paintGate(g);
       const go = () => { unlock(); g.remove(); resolve(); };
       g.querySelector('.mh-gate-go').addEventListener('click', go);
       document.body.appendChild(g);
     });
   }
 
-  window.MHSound = { play, charge, startBgm, stopBgm, setMuted, isMuted: () => muted, unlock, ready, gate, muteButton, list: S, tracks: TRACKS, _setTimeout, _clearTimeout };
+  function paintGate(g) {
+    g.querySelector('.mh-gate-title').textContent = T('夢境怪獸搜查令');
+    g.querySelector('.mh-gate-go').textContent = T('點一下開始');
+    g.querySelector('.mh-gate-tip').textContent = T('建議開啟聲音遊玩');
+  }
+  /** 換語言後重畫喇叭鈕和開始畫面的文字 */
+  function repaint() {
+    document.querySelectorAll('.mh-mute').forEach(paintMute);
+    document.querySelectorAll('.mh-gate').forEach(paintGate);
+  }
+
+  window.MHSound = { repaint, play, charge, startBgm, stopBgm, setMuted, isMuted: () => muted, unlock, ready, gate, muteButton, list: S, tracks: TRACKS, _setTimeout, _clearTimeout };
 })();

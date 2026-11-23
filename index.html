@@ -91,11 +91,12 @@ a{color:#111}a:hover{color:#444}
 .gust{animation:gust 700ms steps(8) both}
 @media (prefers-reduced-motion: reduce){.shake,.flicker,.dshake{animation:none}.fly{animation:flyin 1700ms steps(24) both}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231730">
-<script src="mh.js?v=202611231730"></script>
-<script src="mh-audio.js?v=202611231730"></script>
-<script src="dcmini.js?v=202611231730"></script>
-<script src="mh-cues.js?v=202611231730"></script>
+<link rel="stylesheet" href="mh.css?v=202611231747">
+<script src="mh-i18n.js?v=202611231747"></script>
+<script src="mh.js?v=202611231747"></script>
+<script src="mh-audio.js?v=202611231747"></script>
+<script src="dcmini.js?v=202611231747"></script>
+<script src="mh-cues.js?v=202611231747"></script>
 
 </head>
 <body data-layout="main">
@@ -482,9 +483,9 @@ const MF = { get: (k) => { try { return window.localStorage.getItem('mfhunt.' + 
 class Component extends DCLogic {
   constructor(...args) {
     super(...args);
-    this.TEXT1 = '你相信，小怪獸就躲在這座場館裡嗎？';
-    this.TEXT2 = '我說的都是真的……QAQ';
-    this.TEXT3 = '太好了！快收下這封搜查令吧';
+    this.TEXT1 = window.MHI18N.t('你相信，小怪獸就躲在這座場館裡嗎？');
+    this.TEXT2 = window.MHI18N.t('我說的都是真的……QAQ');
+    this.TEXT3 = window.MHI18N.t('太好了！快收下這封搜查令吧');
     this.state = Object.assign({}, this.state, { stage: 'black', text: this.TEXT1, typed: 0, doubted: false, marked: false, shaking: false, curl: false, magX: 12, magY: 520 - (844 - (window.MH_PAGE_H || 844)) / 2, dragging: false, pressing: false, used: false });
     this.timers = [];
     this.typer = null;

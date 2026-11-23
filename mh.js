@@ -118,6 +118,20 @@
     set(k, v) { try { window.localStorage.setItem(P + k, String(v)); } catch (e) {} }
   };
   let ss = null; try { ss = window.sessionStorage; } catch (e) {}
+  const T = (x) => (window.MHI18N ? window.MHI18N.t(x) : x);
+
+  // 語言：怪獸資料整份換成英文欄位（中文原稿另存，切回中文時還原）
+  const FIELDS = ['name', 'type', 'trait', 'seen', 'note', 'catchLine'];
+  ROSTER.forEach((m) => { m._zh = {}; FIELDS.forEach((f) => { m._zh[f] = m[f]; }); });
+  function applyLang() {
+    const en = window.MHI18N && window.MHI18N.lang() === 'en';
+    const R = (window.MHI18N && window.MHI18N.roster) || {};
+    ROSTER.forEach((m) => {
+      const e = R[m.no] || {};
+      FIELDS.forEach((f) => { m[f] = en && e[f] ? e[f] : m._zh[f]; });
+    });
+  }
+  applyLang();
 
   // ?debug=1 開啟除錯工具（同一個分頁內有效），?debug=0 關閉
   let q = new URLSearchParams(location.search);
@@ -137,6 +151,7 @@
 
   const MH = {
     roster: ROSTER,
+    applyLang,
     total: TOTAL,
     debug,
     caughtList,
@@ -248,10 +263,10 @@
     b.setAttribute('role', 'alert');
     const ext = location.href + (location.search ? '&' : '?') + 'openExternalBrowser=1';
     b.innerHTML =
-      '<p>你正在 App 內建瀏覽器裡玩。<br>建議改用 <b>Safari 或 Chrome</b> 開啟，<br>相機掃描比較順，收服進度也不會不見。</p>' +
+      T('<p>你正在 App 內建瀏覽器裡玩。<br>建議改用 <b>Safari 或 Chrome</b> 開啟，<br>相機掃描比較順，收服進度也不會不見。</p>') +
       '<div class="mh-row">' +
-      (inLine ? '<a class="mh-btn mh-yellow" href="' + ext + '">用瀏覽器開啟</a>' : '<span class="mh-tip">點右上角「⋯」→ 用瀏覽器開啟</span>') +
-      '<button type="button" class="mh-btn">先這樣玩</button></div>';
+      (inLine ? '<a class="mh-btn mh-yellow" href="' + ext + T('">用瀏覽器開啟</a>') : T('<span class="mh-tip">點右上角「⋯」→ 用瀏覽器開啟</span>')) +
+      T('<button type="button" class="mh-btn">先這樣玩</button></div>');
     b.querySelector('button').addEventListener('click', () => { try { ss.setItem(P + 'inappDismissed', '1'); } catch (e) {} b.remove(); });
     document.body.appendChild(b);
   }
@@ -278,11 +293,11 @@
       const ov = document.createElement('div');
       ov.className = 'mh-scan';
       ov.innerHTML =
-        '<div class="mh-scan-bar"><span>搜查中…</span></div>' +
+        T('<div class="mh-scan-bar"><span>搜查中…</span></div>') +
         '<div class="mh-scan-view"><video playsinline muted autoplay></video>' +
         '<div class="mh-scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div></div>' +
-        '<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>' +
-        '<button type="button" class="mh-btn mh-scan-cancel">取消</button>';
+        T('<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>') +
+        T('<button type="button" class="mh-btn mh-scan-cancel">取消</button>');
       document.body.appendChild(ov);
       snd('scanOpen');
       const video = ov.querySelector('video');
@@ -308,14 +323,14 @@
         const no = MH.parseCode(text);
         if (no) { try { navigator.vibrate && navigator.vibrate(80); } catch (e) {} snd('confirm'); finish(no); return true; }
         if (!warnT) snd('error');
-        msg.textContent = '這不是怪獸的 QR code 喔，再找找看！';
+        msg.textContent = T('這不是怪獸的 QR code 喔，再找找看！');
         clearTimeout(warnT);
-        warnT = setTimeout(() => { warnT = null; if (!done) msg.textContent = '把怪獸旁邊的 QR code 放進框框裡'; }, 1800);
+        warnT = setTimeout(() => { warnT = null; if (!done) msg.textContent = T('把怪獸旁邊的 QR code 放進框框裡'); }, 1800);
         return false;
       }
 
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        fail('這個瀏覽器不能開相機。<br>請改用 Safari 或 Chrome 開啟遊戲，<br>或直接用手機相機掃怪獸的 QR code。');
+        fail(T('這個瀏覽器不能開相機。<br>請改用 Safari 或 Chrome 開啟遊戲，<br>或直接用手機相機掃怪獸的 QR code。'));
         return;
       }
       navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false })
@@ -334,7 +349,7 @@
           let jsqr = null;
           if (!detector) {
             try { jsqr = await loadJsQR(); }
-            catch (e) { fail('掃描元件載入失敗，請確認網路後再試一次。'); return; }
+            catch (e) { fail(T('掃描元件載入失敗，請確認網路後再試一次。')); return; }
           }
           const tick = async () => {
             if (done) return;
@@ -362,11 +377,11 @@
         .catch((err) => {
           const name = err && err.name;
           if (name === 'NotAllowedError' || name === 'SecurityError') {
-            fail('需要相機權限才能掃描。<br>請到瀏覽器設定允許「相機」，再按一次掃描；<br>也可以直接用手機相機掃怪獸的 QR code。');
+            fail(T('需要相機權限才能掃描。<br>請到瀏覽器設定允許「相機」，再按一次掃描；<br>也可以直接用手機相機掃怪獸的 QR code。'));
           } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
-            fail('找不到可以用的相機。<br>可以直接用手機相機掃怪獸的 QR code。');
+            fail(T('找不到可以用的相機。<br>可以直接用手機相機掃怪獸的 QR code。'));
           } else {
-            fail('相機開啟失敗，請關掉其他正在用相機的 App 再試一次。');
+            fail(T('相機開啟失敗，請關掉其他正在用相機的 App 再試一次。'));
           }
         });
     });
@@ -378,12 +393,12 @@
       const ov = document.createElement('div');
       ov.className = 'mh-scan';
       ov.innerHTML =
-        '<div class="mh-scan-bar"><span>手動輸入代碼</span></div>' +
-        '<form class="mh-manual"><label for="mh-code">輸入怪獸 QR code 下方的代碼</label>' +
-        '<input id="mh-code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例如 04-ABCDE" maxlength="12">' +
+        T('<div class="mh-scan-bar"><span>手動輸入代碼</span></div>') +
+        T('<form class="mh-manual"><label for="mh-code">輸入怪獸 QR code 下方的代碼</label>') +
+        T('<input id="mh-code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例如 04-ABCDE" maxlength="12">') +
         '<p class="mh-scan-msg" aria-live="polite"></p>' +
-        '<div class="mh-row"><button type="submit" class="mh-btn mh-yellow">送出</button>' +
-        '<button type="button" class="mh-btn mh-scan-cancel">取消</button></div></form>';
+        T('<div class="mh-row"><button type="submit" class="mh-btn mh-yellow">送出</button>') +
+        T('<button type="button" class="mh-btn mh-scan-cancel">取消</button></div></form>');
       document.body.appendChild(ov);
       const input = ov.querySelector('input');
       const msg = ov.querySelector('.mh-scan-msg');
@@ -396,7 +411,7 @@
         const mon = ROSTER[no - 1];
         if (mon && raw.slice(2) === mon.key) { ov.remove(); resolve(no); return; }
         snd('error');
-        msg.textContent = '代碼不對喔，再檢查一次！';
+        msg.textContent = T('代碼不對喔，再檢查一次！');
       });
     });
   };
@@ -406,7 +421,7 @@
     return new Promise((resolve) => {
       const ov = document.createElement('div');
       ov.className = 'mh-scan';
-      ov.innerHTML = '<div class="mh-scan-bar"><span>除錯：模擬掃描</span></div><div class="mh-fake"></div><button type="button" class="mh-btn mh-scan-cancel">取消</button>';
+      ov.innerHTML = T('<div class="mh-scan-bar"><span>除錯：模擬掃描</span></div><div class="mh-fake"></div><button type="button" class="mh-btn mh-scan-cancel">取消</button>');
       const box = ov.querySelector('.mh-fake');
       ROSTER.forEach((m) => {
         const b = document.createElement('button');
@@ -416,7 +431,7 @@
         box.appendChild(b);
       });
       const real = document.createElement('button');
-      real.type = 'button'; real.className = 'mh-btn mh-yellow'; real.textContent = '改用真的相機';
+      real.type = 'button'; real.className = 'mh-btn mh-yellow'; real.textContent = T('改用真的相機');
       real.addEventListener('click', () => { ov.remove(); MH.scan().then(resolve); });
       box.appendChild(real);
       ov.querySelector('.mh-scan-cancel').addEventListener('click', () => { ov.remove(); resolve(0); });
