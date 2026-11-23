@@ -49,13 +49,15 @@ input::placeholder{color:#555}
 .claim-in{animation:popin 240ms steps(3) both}
 @keyframes stampdown{0%{transform:rotate(-12deg) scale(1.6);opacity:0}100%{transform:rotate(-12deg) scale(1);opacity:1}}
 .stamp-down{animation:stampdown 160ms steps(2) both}
+@keyframes livedot{0%,49%{opacity:1}50%,100%{opacity:0.15}}
+.live-dot{animation:livedot 1s steps(1) infinite}
 @media (prefers-reduced-motion: reduce){.chest-shake,.lid-open,.rays-in,.rays-spin,.token-pop,.token-spin,.token-float,.sparkle,.caption-in,.form-in,.claim-in,.stamp-down,.chest-grow,.bang,.bang-shake,.dialog-in,.hero-up,.shine{animation:none}.shine{display:none}.bang{opacity:0}.lid-open{transform:translate(-18px,-34px) rotate(-28deg)}.token-pop{transform:translateY(-100px)}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611061416">
-<script src="mh.js?v=202611061416"></script>
-<script src="mh-audio.js?v=202611061416"></script>
-<script src="dcmini.js?v=202611061416"></script>
-<script src="mh-cues.js?v=202611061416"></script>
+<link rel="stylesheet" href="mh.css?v=202611231539">
+<script src="mh.js?v=202611231539"></script>
+<script src="mh-audio.js?v=202611231539"></script>
+<script src="dcmini.js?v=202611231539"></script>
+<script src="mh-cues.js?v=202611231539"></script>
 <script data-guard>if (!MH.debug && MH.caughtCount() < MH.total) location.replace('locked.html');</script>
 </head>
 <body data-layout="tall">
@@ -143,30 +145,29 @@ input::placeholder{color:#555}
           <span aria-hidden="true" style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px"></span>
           <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #f4f4f0; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">領取登記</span>
         </div>
-        <form style="padding: 14px 16px 18px 16px; display: flex; flex-direction: column; gap: 12px">
-          <span style="font-size: 14px; line-height: 1.6">填好資料，就能拿到領取代幣的兌換畫面。</span>
+        <form style="padding: 14px 16px 18px 16px; display: flex; flex-direction: column; gap: 12px" onSubmit="{{submit}}" novalidate>
+          <span style="font-size: 14px; line-height: 1.6">留下聯絡資訊，就能拿到領取代幣的兌換畫面。</span>
           <div style="display: flex; flex-direction: column; gap: 6px">
             <label for="f-name" style="font-size: 14px">姓名</label>
-            <input id="f-name" type="text" autocomplete="name" placeholder="王小明" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <input id="f-name" type="text" autocomplete="name" maxlength="20" placeholder="王小明" aria-invalid="{{errNameInvalid}}" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <sc-if value="{{errName}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errName}}</span></sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px">
             <label for="f-phone" style="font-size: 14px">手機</label>
-            <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912-345-678" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 6px">
-            <label for="f-bday" style="font-size: 14px">生日</label>
-            <input id="f-bday" type="date" autocomplete="bday" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0912345678" aria-invalid="{{errPhoneInvalid}}" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <sc-if value="{{errPhone}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errPhone}}</span></sc-if>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px">
             <label for="f-mail" style="font-size: 14px">Email</label>
-            <input id="f-mail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <input id="f-mail" type="email" inputmode="email" autocomplete="email" maxlength="80" placeholder="you@example.com" aria-invalid="{{errMailInvalid}}" style="height: 44px; box-sizing: border-box; background: #f4f4f0; border: 2px solid #111; color: #111; font-family: inherit; font-size: 16px; padding: 0 10px; border-radius: 0">
+            <sc-if value="{{errMail}}" hint-placeholder-val="{{ false }}"><span role="alert" style="align-self: flex-start; background: #ffd23f; border: 2px solid #111; padding: 2px 8px; font-size: 13px; line-height: 1.5">！{{errMail}}</span></sc-if>
           </div>
           <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.6; min-height: 44px">
-            <input type="checkbox" style="width: 18px; height: 18px; margin: 2px 0 0 0; accent-color: #111; flex: none">
-            我同意 [場館名稱] 依隱私權政策使用以上資料，寄送活動資訊。
+            <input id="f-ok" type="checkbox" style="width: 18px; height: 18px; margin: 2px 0 0 0; accent-color: #111; flex: none">
+            我同意 [場館名稱] 依隱私權政策使用以上資料，寄送活動資訊。（可不勾選）
           </label>
           <div style="display: flex; justify-content: flex-end">
-            <button type="button" onClick="{{submit}}" style="height: 44px; padding: 0 20px; margin: 3px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; background: #ffd23f; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer">送出，領取代幣</button>
+            <button type="submit" style="height: 44px; padding: 0 20px; margin: 3px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; background: #ffd23f; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer">送出，領取代幣</button>
           </div>
         </form>
       </div>
@@ -176,37 +177,43 @@ input::placeholder{color:#555}
       <div class="claim-in" style="background: #f4f4f0; border: 2px solid #111; box-shadow: 3px 3px 0 #111; display: flex; flex-direction: column; margin-top: 8px">
         <div class="stripes" style="height: 24px; box-sizing: border-box; padding: 5px 4px; border-bottom: 2px solid #111; display: flex; align-items: center; position: relative">
           <span aria-hidden="true" style="width: 12px; height: 12px; border: 2px solid #111; background: #f4f4f0; margin-left: 4px"></span>
-          <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #f4f4f0; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">領取通知.txt</span>
+          <span style="position: absolute; left: 50%; transform: translateX(-50%); background: #f4f4f0; padding: 0 10px; font-size: 15px; font-weight: bold; line-height: 18px">兌換畫面</span>
         </div>
-        <div style="padding: 18px 16px 20px 16px; display: flex; flex-direction: column; gap: 14px">
-          <div style="display: flex; gap: 12px; align-items: center">
-            <div aria-hidden="true" style="width: 48px; height: 48px; position: relative; flex: none">
-              <div class="pixel-round" style="position: absolute; left: 0; top: 0; width: 48px; height: 48px; background: #111"></div>
-              <div class="pixel-round" style="position: absolute; left: 3px; top: 3px; width: 42px; height: 42px; background: #ffd23f; display: flex; align-items: center; justify-content: center">
-                <svg width="18" height="18" viewBox="0 0 12 12"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#ffd23f"></rect><rect x="7" y="3" width="2" height="2" fill="#ffd23f"></rect></svg>
-              </div>
+        <div style="padding: 16px 16px 20px 16px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font-size: 16px; line-height: 1.6">請到 <b>[場館名稱] 服務櫃檯</b>，把這個畫面拿給館員看。</span>
+          <div style="position: relative; border: 2px dashed #111; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+              <span style="background: #111; color: #ffd23f; padding: 2px 10px; font-size: 14px; font-weight: bold">怪獸收集 9 / 9 完成</span>
+              <span aria-label="現在時間 {{clock}}" style="display: flex; align-items: center; gap: 6px; font-family: 'Silkscreen', monospace; font-size: 16px; font-weight: bold">
+                <span class="live-dot" aria-hidden="true" style="width: 10px; height: 10px; background: #111"></span>{{clock}}
+              </span>
             </div>
-            <span style="font-size: 16px; line-height: 1.6">請到 <b>[場館名稱] 服務櫃檯</b>，出示這個畫面領取代幣。</span>
-          </div>
-          <div style="position: relative; border: 2px dashed #111; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 4px">
-            <span style="font-size: 12px">兌換碼</span>
-            <span style="font-family: 'Silkscreen', monospace; font-size: 26px; font-weight: bold; letter-spacing: 3px">MF-[XXXX]</span>
+            <div style="display: grid; grid-template-columns: 52px minmax(0, 1fr); row-gap: 6px; font-size: 15px; line-height: 1.5">
+              <span>姓名</span><span style="font-weight: bold; overflow-wrap: anywhere">{{pName}}</span>
+              <span>手機</span><span style="font-family: 'Silkscreen', monospace; font-size: 14px">{{pPhone}}</span>
+            </div>
             <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
-              <span class="stamp-down" style="position: absolute; right: 14px; top: 10px; border: 3px solid #e8384f; color: #e8384f; padding: 4px 10px; font-size: 18px; font-weight: bold; letter-spacing: 2px; background: rgba(244, 244, 240, 0.85)">已領取</span>
+              <div class="stamp-down" style="position: absolute; right: 12px; bottom: 10px; border: 3px solid #e8384f; color: #e8384f; padding: 4px 10px; font-size: 18px; font-weight: bold; letter-spacing: 2px; background: rgba(244, 244, 240, 0.9); display: flex; flex-direction: column; align-items: center; line-height: 1.2">已兌換<span style="font-size: 11px; letter-spacing: 0">{{redeemedAt}}</span></div>
             </sc-if>
           </div>
-          <span style="font-size: 13px; line-height: 1.6">櫃檯服務時間 [時間]・每人限領一次・櫃檯確認後此兌換碼即失效</span>
-          <div style="display: flex; justify-content: center">
-            <sc-if value="{{notRedeemed}}" hint-placeholder-val="{{ true }}">
-              <button type="button" onClick="{{redeem}}" style="height: 40px; padding: 0 16px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 13px; cursor: pointer">櫃檯人員確認領取（工作人員按）</button>
-            </sc-if>
-            <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
+          <span style="font-size: 13px; line-height: 1.6">時間每秒跳動才是有效畫面・櫃檯服務時間 [時間]・每人限領一次・兌換後此畫面即失效</span>
+          <sc-if value="{{notRedeemed}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 6px; align-items: stretch">
+              <span style="font-size: 12px; text-align: center">― 以下由館員操作 ―</span>
+              <button type="button" onPointerDown="{{holdStart}}" onContextMenu="{{noMenu}}" aria-label="館員兌換：按住兩秒" style="position: relative; overflow: hidden; height: 52px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer; touch-action: none">
+                <span aria-hidden="true" style="position: absolute; left: 0; top: 0; bottom: 0; width: {{holdPct}}%; background: #ffd23f"></span>
+                <span style="position: relative">{{holdLabel}}</span>
+              </button>
+            </div>
+          </sc-if>
+          <sc-if value="{{redeemed}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; justify-content: center">
               <a href="dex.html" class="claim-in" style="height: 44px; padding: 0 20px; margin: 3px; display: flex; align-items: center; gap: 8px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; background: #ffd23f; color: #111; text-decoration: none; font-size: 16px; font-weight: bold">
                 <svg width="18" height="18" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 0h4v1h2v1h1v2h1v6h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-1h-1v1h-1v-7h1v-2h1v-1h2z" fill="#111"></path><rect x="3" y="3" width="2" height="2" fill="#ffd23f"></rect><rect x="7" y="3" width="2" height="2" fill="#ffd23f"></rect></svg>
                 看看怪獸圖鑑
               </a>
-            </sc-if>
-          </div>
+            </div>
+          </sc-if>
         </div>
       </div>
     </sc-if>
@@ -218,18 +225,108 @@ const MF = { get: (k) => { try { return window.localStorage.getItem('mfhunt.' + 
 class Component extends DCLogic {
   constructor(...args) {
     super(...args);
-    this.state = Object.assign({}, this.state, { claimed: false, redeemed: false });
-    this.submit = () => { this.setState({ claimed: true }); };
-    this.redeem = () => { if (!this.state.redeemed) this.setState({ redeemed: true }); };
+    const demo = this.props.demo || '依進度';
+    let claim = null, at = null;
+    if (demo === '依進度') {
+      try { claim = JSON.parse(MF.get('claim') || 'null'); } catch (e) { claim = null; }
+      at = MF.get('redeemedAt');
+    } else if (demo !== '表單') {
+      claim = { name: '王小明', phone: '0912345678' };
+      if (demo === '已兌換') at = String(Date.now());
+    }
+    this.demo = demo !== '依進度';
+    this.state = Object.assign({}, this.state, {
+      claimed: !!claim, claim: claim, redeemed: !!at, redeemedAt: at ? Number(at) : 0,
+      errName: '', errPhone: '', errMail: '', now: Date.now(), holdPct: 0, holding: false
+    });
+    this.submit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const v = (id) => { const el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+      const name = v('f-name');
+      let phone = v('f-phone').replace(/[\s\-()]/g, '');
+      if (/^\+?886/.test(phone)) phone = '0' + phone.replace(/^\+?886/, '');
+      const mail = v('f-mail');
+      const okEl = document.getElementById('f-ok');
+      const errs = {
+        errName: name ? '' : '請填寫姓名',
+        errPhone: /^09\d{8}$/.test(phone) ? '' : '請填寫手機號碼，例如 0912345678',
+        errMail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? '' : '請填寫正確的 Email'
+      };
+      if (errs.errName || errs.errPhone || errs.errMail) {
+        this.setState(errs);
+        const first = errs.errName ? 'f-name' : errs.errPhone ? 'f-phone' : 'f-mail';
+        const el = document.getElementById(first); if (el) el.focus();
+        return;
+      }
+      const claim = { name: name, phone: phone, email: mail, marketing: !!(okEl && okEl.checked), at: Date.now() };
+      if (!this.demo) MF.set('claim', JSON.stringify(claim));
+      try { if (window.MH && window.MH.onClaim) window.MH.onClaim(claim); } catch (err) {}
+      this.setState(Object.assign({ claimed: true, claim: claim }, errs));
+    };
+    this.redeem = () => {
+      if (this.state.redeemed) return;
+      const at = Date.now();
+      if (!this.demo) MF.set('redeemedAt', at);
+      this.setState({ redeemed: true, redeemedAt: at, holding: false, holdPct: 0 });
+    };
+    // 館員按住 2 秒才兌換：避免誤觸或玩家自己點掉
+    this.HOLD = 2000;
+    this.holdStop = () => {
+      if (this.holdTimer) { clearInterval(this.holdTimer); this.holdTimer = null; }
+      window.removeEventListener('pointerup', this.holdStop);
+      window.removeEventListener('pointercancel', this.holdStop);
+      if (!this.state.redeemed) this.setState({ holding: false, holdPct: 0 });
+    };
+    this.holdStart = (e) => {
+      if (this.state.redeemed || this.holdTimer) return;
+      if (e && e.preventDefault) e.preventDefault();
+      const t0 = Date.now();
+      window.addEventListener('pointerup', this.holdStop);
+      window.addEventListener('pointercancel', this.holdStop);
+      this.setState({ holding: true, holdPct: 0 });
+      this.holdTimer = setInterval(() => {
+        const pct = Math.min(100, ((Date.now() - t0) / this.HOLD) * 100);
+        if (pct >= 100) { clearInterval(this.holdTimer); this.holdTimer = null; this.redeem(); return; }
+        this.setState({ holdPct: Math.round(pct) });
+      }, 40);
+    };
+    this.noMenu = (e) => { if (e && e.preventDefault) e.preventDefault(); };
+  }
+  componentDidMount() {
+    this.clockTimer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.clockTimer);
+    if (this.holdTimer) clearInterval(this.holdTimer);
+    window.removeEventListener('pointerup', this.holdStop);
+    window.removeEventListener('pointercancel', this.holdStop);
   }
   renderVals() {
+    const st = this.state;
+    const pad = (n) => String(n).padStart(2, '0');
+    const d = new Date(st.now);
+    const clock = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    const c = st.claim || {};
+    const ph = String(c.phone || '');
+    const pPhone = ph.length >= 10 ? ph.slice(0, 4) + '-***-' + ph.slice(-3) : ph;
+    let redeemedAt = '';
+    if (st.redeemedAt) { const r = new Date(st.redeemedAt); redeemedAt = (r.getMonth() + 1) + '/' + r.getDate() + ' ' + pad(r.getHours()) + ':' + pad(r.getMinutes()); }
     return {
-      showForm: !this.state.claimed,
-      showClaim: this.state.claimed,
-      redeemed: this.state.redeemed,
-      notRedeemed: !this.state.redeemed,
+      showForm: !st.claimed,
+      showClaim: st.claimed,
+      redeemed: st.redeemed,
+      notRedeemed: !st.redeemed,
+      errName: st.errName, errPhone: st.errPhone, errMail: st.errMail,
+      errNameInvalid: st.errName ? 'true' : 'false', errPhoneInvalid: st.errPhone ? 'true' : 'false', errMailInvalid: st.errMail ? 'true' : 'false',
+      clock: clock,
+      pName: c.name || '',
+      pPhone: pPhone,
+      redeemedAt: redeemedAt,
+      holdPct: st.holdPct,
+      holdLabel: st.holding ? '繼續按住…' : '館員兌換（按住 2 秒）',
       submit: this.submit,
-      redeem: this.redeem
+      holdStart: this.holdStart,
+      noMenu: this.noMenu
     };
   }
 }

@@ -229,11 +229,11 @@
     if (s.jingle) duck(1.6 + (delay || 0) / 1000);
   }
   // 長按集氣：回傳停止函式
-  function charge() {
+  function charge(sec) {
     if (!ensure() || !ready()) return () => {};
     const t = ctx.currentTime;
     const o = ctx.createOscillator(); o.type = 'square';
-    o.frequency.setValueAtTime(280, t); o.frequency.linearRampToValueAtTime(900, t + 0.6);
+    o.frequency.setValueAtTime(280, t); o.frequency.linearRampToValueAtTime(900, t + (sec || 0.6));
     const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.1, t + 0.05);
     o.connect(g); g.connect(sfxBus); o.start(t);
     return () => { const n = ctx.currentTime; g.gain.cancelScheduledValues(n); g.gain.setTargetAtTime(0.0001, n, 0.02); o.stop(n + 0.15); };

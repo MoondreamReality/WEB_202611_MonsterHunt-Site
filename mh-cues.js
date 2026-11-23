@@ -142,7 +142,10 @@
       update(c, p) {
         const s = c.state;
         if (rose(p, s, 'claimed')) play('jSubmit');
-        if (rose(p, s, 'redeemed')) { play('stamp'); play('coin', 250); }
+        if ((s.errName && !p.errName) || (s.errPhone && !p.errPhone) || (s.errMail && !p.errMail)) play('error');
+        if (rose(p, s, 'holding')) { if (this.stop) this.stop(); this.stop = S() ? S().charge(2) : null; }
+        if (fell(p, s, 'holding') && this.stop) { this.stop(); this.stop = null; }
+        if (rose(p, s, 'redeemed')) { if (this.stop) { this.stop(); this.stop = null; } play('stamp'); play('coin', 250); }
       }
     },
     // ---------- 06 寶藏未解鎖 ----------
