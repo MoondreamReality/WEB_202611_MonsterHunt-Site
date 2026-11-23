@@ -1,4 +1,4 @@
-/* mh-audio.js — 霧城怪獸搜查令 聲音系統 v1
+/* mh-audio.js — 夢境怪獸搜查令 聲音系統 v1
    ・全部聲音用 Web Audio 即時合成 8-bit 晶片音色（不需要音檔）
    ・之後若在 sounds/ 放入同名音檔並列在 sounds/manifest.json，會自動改用音檔
    ・靜音狀態記在手機裡；iPhone 側邊的靜音開關打開時，網頁聲音也會被靜音 */
@@ -269,7 +269,7 @@
       const g = document.createElement('div');
       g.className = 'mh-gate';
       g.innerHTML =
-        '<div class="mh-gate-box"><p class="mh-gate-title">霧城怪獸搜查令</p>' +
+        '<div class="mh-gate-box"><p class="mh-gate-title">夢境怪獸搜查令</p>' +
         '<button type="button" class="mh-btn mh-yellow mh-gate-go">點一下開始</button>' +
         '<p class="mh-gate-tip">建議開啟聲音遊玩</p></div>';
       const go = () => { unlock(); g.remove(); resolve(); };
