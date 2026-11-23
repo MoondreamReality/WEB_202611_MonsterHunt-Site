@@ -19,11 +19,11 @@ a{color:#111}a:hover{color:#444}
 .floaty{animation:floaty 2400ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.dlg-breathe,.floaty{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231705">
-<script src="mh.js?v=202611231705"></script>
-<script src="mh-audio.js?v=202611231705"></script>
-<script src="dcmini.js?v=202611231705"></script>
-<script src="mh-cues.js?v=202611231705"></script>
+<link rel="stylesheet" href="mh.css?v=202611231730">
+<script src="mh.js?v=202611231730"></script>
+<script src="mh-audio.js?v=202611231730"></script>
+<script src="dcmini.js?v=202611231730"></script>
+<script src="mh-cues.js?v=202611231730"></script>
 
 </head>
 <body data-layout="flex">
@@ -97,7 +97,7 @@ class Component extends DCLogic {
     const left = T - r.got;
     const tail = left > 0 ? '還差 ' + left + ' 隻，就能打開寶藏。' : '全部收服！快去打開寶藏吧！';
     return {
-      ok: true, bad: false, img: m.img, name: m.name, no: 'No.' + nn, file: 'No.' + nn + '_' + m.name + '.png',
+      ok: true, bad: false, img: m.img, name: m.name, no: 'No.' + nn, file: m.name,
       type: m.type, seen: m.seen,
       headline: r.status === 'again' ? m.name + ' 已經在你的圖鑑裡了！' : m.name + ' 加入了你的圖鑑！',
       line: m.catchLine + tail
