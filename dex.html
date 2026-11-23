@@ -31,11 +31,11 @@ a{color:#111}a:hover{color:#444}
 .floaty{animation:floaty 2400ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.floaty,.card-breathe,.err-shake,.tv-on,.tv-off,.dim-in,.dim-out{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231655">
-<script src="mh.js?v=202611231655"></script>
-<script src="mh-audio.js?v=202611231655"></script>
-<script src="dcmini.js?v=202611231655"></script>
-<script src="mh-cues.js?v=202611231655"></script>
+<link rel="stylesheet" href="mh.css?v=202611231705">
+<script src="mh.js?v=202611231705"></script>
+<script src="mh-audio.js?v=202611231705"></script>
+<script src="dcmini.js?v=202611231705"></script>
+<script src="mh-cues.js?v=202611231705"></script>
 
 </head>
 <body data-layout="flex">
@@ -150,10 +150,10 @@ a{color:#111}a:hover{color:#444}
           <span style="position: absolute; right: 10px; top: 8px; font-size: 12px; background: #111; color: #f4f4f0; padding: 0 6px">{{card.status}}</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 2px solid #111">
-          <div style="padding: 8px 12px; border-right: 2px solid #111; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>名字</span><span id="mcname">{{card.name}}</span></div>
-          <div style="padding: 8px 12px; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>屬性</span><span>{{card.type}}</span></div>
-          <div style="padding: 8px 12px; border-right: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px"><span>出沒</span><span>{{card.seen}}</span></div>
-          <div style="padding: 8px 12px; display: flex; justify-content: space-between; font-size: 14px"><span>特徵</span><span>{{card.trait}}</span></div>
+          <div style="padding: 8px 12px; border-right: 2px solid #111; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px; gap: 8px; align-items: baseline"><span style="flex: none; white-space: nowrap">名字</span><span style="text-align: right; min-width: 0; word-break: keep-all; overflow-wrap: anywhere" id="mcname">{{card.name}}</span></div>
+          <div style="padding: 8px 12px; border-bottom: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px; gap: 8px; align-items: baseline"><span style="flex: none; white-space: nowrap">屬性</span><span style="text-align: right; min-width: 0; word-break: keep-all; overflow-wrap: anywhere">{{card.type}}</span></div>
+          <div style="padding: 8px 12px; border-right: 2px solid #111; display: flex; justify-content: space-between; font-size: 14px; gap: 8px; align-items: baseline"><span style="flex: none; white-space: nowrap">出沒</span><span style="text-align: right; min-width: 0; word-break: keep-all; overflow-wrap: anywhere">{{card.seen}}</span></div>
+          <div style="padding: 8px 12px; display: flex; justify-content: space-between; font-size: 14px; gap: 8px; align-items: baseline"><span style="flex: none; white-space: nowrap">特徵</span><span style="text-align: right; min-width: 0; word-break: keep-all; overflow-wrap: anywhere">{{card.trait}}</span></div>
         </div>
         <div style="padding: 12px 14px 14px 14px; display: flex; flex-direction: column; gap: 10px">
           <span style="font-size: 12px; font-weight: bold">小檔案</span>
