@@ -53,11 +53,11 @@ input::placeholder{color:#555}
 .live-dot{animation:livedot 1s steps(1) infinite}
 @media (prefers-reduced-motion: reduce){.chest-shake,.lid-open,.rays-in,.rays-spin,.token-pop,.token-spin,.token-float,.sparkle,.caption-in,.form-in,.claim-in,.stamp-down,.chest-grow,.bang,.bang-shake,.dialog-in,.hero-up,.shine{animation:none}.shine{display:none}.bang{opacity:0}.lid-open{transform:translate(-18px,-34px) rotate(-28deg)}.token-pop{transform:translateY(-100px)}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611231610">
-<script src="mh.js?v=202611231610"></script>
-<script src="mh-audio.js?v=202611231610"></script>
-<script src="dcmini.js?v=202611231610"></script>
-<script src="mh-cues.js?v=202611231610"></script>
+<link rel="stylesheet" href="mh.css?v=202611231615">
+<script src="mh.js?v=202611231615"></script>
+<script src="mh-audio.js?v=202611231615"></script>
+<script src="dcmini.js?v=202611231615"></script>
+<script src="mh-cues.js?v=202611231615"></script>
 <script data-guard>if (!MH.debug && MH.caughtCount() < MH.total) location.replace('locked.html');</script>
 </head>
 <body data-layout="tall">
@@ -213,7 +213,17 @@ input::placeholder{color:#555}
           </div>
           <span style="font-size: 14px; line-height: 1.6; background: #111; color: #f4f4f0; padding: 8px 10px">我們會把「{{favName}}」的作品介紹寄到 <b style="color: #ffd23f; overflow-wrap: anywhere">{{pMail}}</b>，幾分鐘內沒收到，請看看垃圾郵件匣。</span>
           <span style="font-size: 13px; line-height: 1.6">時間每秒跳動才是有效畫面・櫃檯服務時間 [時間]・每人限領一次・兌換後此畫面即失效</span>
-          <sc-if value="{{notRedeemed}}" hint-placeholder-val="{{ true }}">
+          <sc-if value="{{showDup}}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="border: 3px solid #111; background: #ffd23f; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+              <span style="font-size: 15px; font-weight: bold; line-height: 1.6">注意：這支手機號碼已在 {{dupAt}} 兌換過代幣</span>
+              <span style="font-size: 13px; line-height: 1.6">請館員確認是否仍要發放。</span>
+              <div style="display: flex; gap: 10px">
+                <button type="button" onClick="{{dupCancel}}" style="flex: 1; height: 44px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 15px; cursor: pointer">不發放</button>
+                <button type="button" onClick="{{dupOverride}}" style="flex: 1; height: 44px; border: 2px solid #111; border-radius: 10px; background: #111; color: #ffd23f; font-family: inherit; font-size: 15px; font-weight: bold; cursor: pointer">仍要兌換</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{showStaff}}" hint-placeholder-val="{{ true }}">
             <div style="display: flex; flex-direction: column; gap: 6px; align-items: stretch">
               <span style="font-size: 12px; text-align: center">― 以下由館員操作 ―</span>
               <button type="button" onPointerDown="{{holdStart}}" onContextMenu="{{noMenu}}" aria-label="館員兌換：按住兩秒" style="position: relative; overflow: hidden; height: 52px; border: 2px solid #111; border-radius: 10px; background: #f4f4f0; color: #111; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer; touch-action: none">
@@ -259,7 +269,7 @@ class Component extends DCLogic {
     this.pick = (no) => this.setState({ fav: no, errFav: '' });
     this.state = Object.assign({}, this.state, {
       claimed: !!claim, claim: claim, redeemed: !!at, redeemedAt: at ? Number(at) : 0,
-      errName: '', errPhone: '', errMail: '', errFav: '', fav: 0, now: Date.now(), holdPct: 0, holding: false
+      errName: '', errPhone: '', errMail: '', errFav: '', fav: 0, now: Date.now(), holdPct: 0, holding: false, checking: false, dupAt: ''
     });
     this.submit = (e) => {
       if (e && e.preventDefault) e.preventDefault();
@@ -287,22 +297,38 @@ class Component extends DCLogic {
       try { if (!this.demo && window.MH && window.MH.sendClaim) window.MH.sendClaim(claim); } catch (err) {}
       this.setState(Object.assign({ claimed: true, claim: claim }, errs));
     };
-    this.redeem = () => {
+    this.redeem = (override, offline) => {
       if (this.state.redeemed) return;
       const at = Date.now();
-      if (!this.demo) MF.set('redeemedAt', at);
-      this.setState({ redeemed: true, redeemedAt: at, holding: false, holdPct: 0 });
+      if (!this.demo) {
+        MF.set('redeemedAt', at);
+        const c = this.state.claim || {};
+        try { if (window.MH && window.MH.logRedeem) window.MH.logRedeem({ action: 'redeem', id: c.id || '', phone: c.phone || '', name: c.name || '', at: at, override: !!override, offline: !!offline }); } catch (err) {}
+      }
+      this.setState({ redeemed: true, redeemedAt: at, holding: false, holdPct: 0, checking: false, dupAt: '' });
     };
+    // 兌換前向後台查這支手機號碼是否已領過；查不到（離線、逾時）就照常兌換，稍後同步
+    this.check = () => {
+      const c = this.state.claim || {};
+      if (this.demo || !(window.MH && window.MH.checkRedeem)) { this.redeem(false, false); return; }
+      this.setState({ checking: true, holding: false, holdPct: 100 });
+      window.MH.checkRedeem(c.phone).then((r) => {
+        if (r && r.redeemed && r.id !== c.id) this.setState({ checking: false, holdPct: 0, dupAt: r.at || '先前' });
+        else this.redeem(false, !r || r.offline);
+      });
+    };
+    this.dupCancel = () => this.setState({ dupAt: '', holdPct: 0 });
+    this.dupOverride = () => this.redeem(true, false);
     // 館員按住 2 秒才兌換：避免誤觸或玩家自己點掉
     this.HOLD = 2000;
     this.holdStop = () => {
       if (this.holdTimer) { clearInterval(this.holdTimer); this.holdTimer = null; }
       window.removeEventListener('pointerup', this.holdStop);
       window.removeEventListener('pointercancel', this.holdStop);
-      if (!this.state.redeemed) this.setState({ holding: false, holdPct: 0 });
+      if (!this.state.redeemed && !this.state.checking) this.setState({ holding: false, holdPct: 0 });
     };
     this.holdStart = (e) => {
-      if (this.state.redeemed || this.holdTimer) return;
+      if (this.state.redeemed || this.holdTimer || this.state.checking || this.state.dupAt) return;
       if (e && e.preventDefault) e.preventDefault();
       const t0 = Date.now();
       window.addEventListener('pointerup', this.holdStop);
@@ -310,7 +336,7 @@ class Component extends DCLogic {
       this.setState({ holding: true, holdPct: 0 });
       this.holdTimer = setInterval(() => {
         const pct = Math.min(100, ((Date.now() - t0) / this.HOLD) * 100);
-        if (pct >= 100) { clearInterval(this.holdTimer); this.holdTimer = null; this.redeem(); return; }
+        if (pct >= 100) { clearInterval(this.holdTimer); this.holdTimer = null; this.check(); return; }
         this.setState({ holdPct: Math.round(pct) });
       }, 40);
     };
@@ -326,7 +352,7 @@ class Component extends DCLogic {
     };
     this.resetClaim = () => {
       if (!this.demo) { MF.set('claim', 'null'); MF.set('redeemedAt', ''); }
-      this.setState({ claimed: false, claim: null, redeemed: false, redeemedAt: 0, fav: 0, holding: false, holdPct: 0 });
+      this.setState({ claimed: false, claim: null, redeemed: false, redeemedAt: 0, fav: 0, holding: false, holdPct: 0, checking: false, dupAt: '' });
     };
   }
   componentDidMount() {
@@ -367,7 +393,12 @@ class Component extends DCLogic {
       errFav: st.errFav,
       redeemedAt: redeemedAt,
       holdPct: st.holdPct,
-      holdLabel: st.holding ? '繼續按住…' : '館員兌換（按住 2 秒）',
+      holdLabel: st.checking ? '確認中…' : st.holding ? '繼續按住…' : '館員兌換（按住 2 秒）',
+      showDup: !st.redeemed && !!st.dupAt,
+      showStaff: !st.redeemed && !st.dupAt,
+      dupAt: st.dupAt,
+      dupCancel: this.dupCancel,
+      dupOverride: this.dupOverride,
       submit: this.submit,
       debug: !!(window.MH && window.MH.debug),
       fillFake: this.fillFake,

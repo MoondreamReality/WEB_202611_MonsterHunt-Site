@@ -202,14 +202,31 @@
     // text/plain＋no-cors：Apps Script 不支援預檢請求，這樣才送得出去（回應內容讀不到，送出成功就算完成）
     fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(item) })
       .then(() => {
-        saveOutbox(outbox().filter((x) => x.id !== item.id));
+        saveOutbox(outbox().filter((x) => (x.qid || x.id) !== (item.qid || item.id)));
         flushing = false;
         MH.flushClaims();
       })
       .catch(() => { flushing = false; });
   };
+  MH.logRedeem = function (item) {
+    const list = outbox();
+    list.push(Object.assign({ v: 1, id: '', type: 'redeem' }, item, { qid: 'r' + item.at }));
+    saveOutbox(list);
+    MH.flushClaims();
+  };
+  /** 兌換前查這支手機號碼是否已領過：回傳 { redeemed, at, id } 或 { offline: true } */
+  MH.checkRedeem = function (phone) {
+    if (!ENDPOINT || !navigator.onLine) return Promise.resolve({ offline: true });
+    const ctl = window.AbortController ? new AbortController() : null;
+    const t = setTimeout(() => ctl && ctl.abort(), 5000);
+    return fetch(ENDPOINT + (ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + 'action=check&phone=' + encodeURIComponent(phone || ''), { signal: ctl ? ctl.signal : undefined })
+      .then((r) => r.json())
+      .then((j) => (j && j.ok ? j : { offline: true }))
+      .catch(() => ({ offline: true }))
+      .finally(() => clearTimeout(t));
+  };
   MH.sendClaim = function (claim) {
-    const list = outbox().filter((x) => x.id !== claim.id);
+    const list = outbox().filter((x) => x.qid || x.id !== claim.id);
     list.push(Object.assign({ v: 1, page: location.href.split('?')[0] }, claim));
     saveOutbox(list);
     MH.flushClaims();
