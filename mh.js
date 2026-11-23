@@ -187,6 +187,35 @@
     }
   };
   window.MH = MH;
+
+  // ---------- 領取登記：送到後台（Google Apps Script），寄出最愛怪獸的作品介紹 ----------
+  const ENDPOINT = "";
+  function outbox() { try { return JSON.parse(ls.get('outbox') || '[]'); } catch (e) { return []; } }
+  function saveOutbox(list) { ls.set('outbox', JSON.stringify(list)); }
+  let flushing = false;
+  MH.flushClaims = function () {
+    if (!ENDPOINT || flushing) return;
+    const list = outbox();
+    if (!list.length) return;
+    flushing = true;
+    const item = list[0];
+    // text/plain＋no-cors：Apps Script 不支援預檢請求，這樣才送得出去（回應內容讀不到，送出成功就算完成）
+    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(item) })
+      .then(() => {
+        saveOutbox(outbox().filter((x) => x.id !== item.id));
+        flushing = false;
+        MH.flushClaims();
+      })
+      .catch(() => { flushing = false; });
+  };
+  MH.sendClaim = function (claim) {
+    const list = outbox().filter((x) => x.id !== claim.id);
+    list.push(Object.assign({ v: 1, page: location.href.split('?')[0] }, claim));
+    saveOutbox(list);
+    MH.flushClaims();
+  };
+  window.addEventListener('online', MH.flushClaims);
+  setTimeout(MH.flushClaims, 1500);
   const snd = (id) => { try { window.MHSound && window.MHSound.play(id); } catch (e) {} };
 
   // ---------- 內建瀏覽器（LINE / FB / IG）提示 ----------
