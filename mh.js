@@ -204,7 +204,7 @@
   window.MH = MH;
 
   // ---------- 領取登記：送到後台（Google Apps Script），寄出最愛怪獸的作品介紹 ----------
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbzdwrPUdIARPzyvI9SK7s3xANBtGTlKP6rWH6UTTL6OFi3whP-6HJ4JVmQON8XY1FbsRQ/exec";
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxhmOOh8yscC1hFYEhVO3fmNbeB-9zyAvO0U3sZ5uNBQCh93DsfmaIF9GpfRaU5m13LCQ/exec";
   function outbox() { try { return JSON.parse(ls.get('outbox') || '[]'); } catch (e) { return []; } }
   function saveOutbox(list) { ls.set('outbox', JSON.stringify(list)); }
   let flushing = false;
