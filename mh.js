@@ -237,6 +237,8 @@
     get ready() { return lineupReady; },
     applyLineup,
     facts,
+    get endpoint() { return ENDPOINT; },
+    outbox: () => outbox(),
     applyLang,
     total: TOTAL,
     debug,
