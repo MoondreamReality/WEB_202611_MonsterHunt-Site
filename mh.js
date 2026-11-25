@@ -400,7 +400,15 @@
   }
 
   /** 開啟相機掃描。成功回傳怪獸編號；使用者取消回傳 0 */
-  MH.scan = function () {
+  // 相機開成功過一次就記住；之後從「繼續搜查」回來會自動開相機，不用再按
+  MH.autoScan = function () {
+    let ok = false;
+    try { ok = new URLSearchParams(location.search).get('auto') === '1' && localStorage.getItem('mfhunt.camOK') === '1'; } catch (e) {}
+    try { if (location.search.indexOf('auto=') >= 0) history.replaceState(null, '', location.pathname); } catch (e) {}
+    return ok;
+  };
+  MH.scan = function (opts) {
+    const auto = !!(opts && opts.auto);
     return new Promise((resolve) => {
       const ov = document.createElement('div');
       ov.className = 'mh-scan';
@@ -449,6 +457,7 @@
         .then(async (s) => {
           if (done) { s.getTracks().forEach((t) => t.stop()); return; }
           stream = s;
+          try { localStorage.setItem('mfhunt.camOK', '1'); } catch (e) {}
           video.srcObject = s;
           try { await video.play(); } catch (e) {}
           let detector = null;
@@ -488,6 +497,8 @@
         })
         .catch((err) => {
           const name = err && err.name;
+          // 自動開啟沒成功（例如瀏覽器要求先點一下）：安靜關掉，讓玩家照常按按鈕
+          if (auto) { finish(0); return; }
           if (name === 'NotAllowedError' || name === 'SecurityError') {
             fail(T('需要相機權限才能掃描。<br>請到瀏覽器設定允許「相機」，再按一次掃描；<br>也可以直接用手機相機掃怪獸的 QR code。'));
           } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {

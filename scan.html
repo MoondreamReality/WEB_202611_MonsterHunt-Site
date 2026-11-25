@@ -27,12 +27,12 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611251445">
-<script src="mh-i18n.js?v=202611251445"></script>
-<script src="mh.js?v=202611251445"></script>
-<script src="mh-audio.js?v=202611251445"></script>
-<script src="dcmini.js?v=202611251445"></script>
-<script src="mh-cues.js?v=202611251445"></script>
+<link rel="stylesheet" href="mh.css?v=202611252051">
+<script src="mh-i18n.js?v=202611252051"></script>
+<script src="mh.js?v=202611252051"></script>
+<script src="mh-audio.js?v=202611252051"></script>
+<script src="dcmini.js?v=202611252051"></script>
+<script src="mh-cues.js?v=202611252051"></script>
 
 </head>
 <body data-layout="flex">
@@ -195,10 +195,10 @@ class Component extends DCLogic {
       const a = el.getBoundingClientRect(), b = root.getBoundingClientRect(), k = 390 / (b.width || 390);
       this.vf = { x: Math.round((a.left - b.left) * k), y: Math.round((a.top - b.top) * k), w: Math.round(a.width * k), h: Math.round(a.height * k) };
     };
-    this.startCatch = () => {
+    this.startCatch = (ev, auto) => {
       if (this.fxTick || this.scanning) return;
       this.scanning = true;
-      (window.MH.debug ? window.MH.fakeScan() : window.MH.scan()).then((no) => {
+      (window.MH.debug && !auto ? window.MH.fakeScan() : window.MH.scan({ auto: auto === true })).then((no) => {
         this.scanning = false;
         if (no) this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch());
       });
@@ -211,6 +211,7 @@ class Component extends DCLogic {
         if (no) this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch());
       });
     };
+    if (window.MH.autoScan()) this.later(350, () => this.startCatch(null, true));
     this.playCatch = () => {
       if (this.fxTick) return;
       let reduce = false;
