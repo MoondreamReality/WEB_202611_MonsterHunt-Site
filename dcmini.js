@@ -292,7 +292,10 @@
         try { current.comp.componentWillUnmount && current.comp.componentWillUnmount(); } catch (e) {}
       }
       clearPageTimers();
-      document.querySelectorAll('.mh-scan').forEach((n) => n.remove());
+      // 換頁一律關相機（嵌在取景框的相機層、全螢幕掃描畫面都一起收掉，鏡頭也真的停止）
+      try { window.MH && window.MH.stopScan && window.MH.stopScan(); } catch (e) {}
+      document.querySelectorAll('.mh-scan, .mh-scan-inline').forEach((n) => n.remove());
+      document.body.classList.remove('mh-scanning');
       if (ro) { ro.disconnect(); ro = null; }
       // 換網址、標題、版面設定、頁面樣式
       if (push) history.pushState({ mh: 1 }, '', url.pathname.split('/').pop() + url.search);
