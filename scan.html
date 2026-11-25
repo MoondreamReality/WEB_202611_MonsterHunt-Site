@@ -27,12 +27,12 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611252056">
-<script src="mh-i18n.js?v=202611252056"></script>
-<script src="mh.js?v=202611252056"></script>
-<script src="mh-audio.js?v=202611252056"></script>
-<script src="dcmini.js?v=202611252056"></script>
-<script src="mh-cues.js?v=202611252056"></script>
+<link rel="stylesheet" href="mh.css?v=202611252107">
+<script src="mh-i18n.js?v=202611252107"></script>
+<script src="mh.js?v=202611252107"></script>
+<script src="mh-audio.js?v=202611252107"></script>
+<script src="dcmini.js?v=202611252107"></script>
+<script src="mh-cues.js?v=202611252107"></script>
 
 </head>
 <body data-layout="flex">
@@ -71,7 +71,7 @@ a{color:#111}a:hover{color:#444}
         </div>
       </div>
       <div style="padding: 0 14px 10px 14px; display: flex; flex-direction: column; gap: 6px; align-items: stretch">
-        <button type="button" onClick="{{startCatch}}" style="height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; font-family: inherit; font-size: 16px; font-weight: bold; background: #ffd23f; color: #111; cursor: pointer">
+        <button type="button" class="mh-start" onClick="{{startCatch}}" style="height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 2px solid #111; border-radius: 10px; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111; margin: 3px; font-family: inherit; font-size: 16px; font-weight: bold; background: #ffd23f; color: #111; cursor: pointer">
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="5" width="16" height="12" fill="none" stroke="#111" stroke-width="2"></rect><rect x="7" y="2" width="6" height="3" fill="#111"></rect><rect x="8" y="8" width="4" height="4" fill="none" stroke="#111" stroke-width="2"></rect></svg>
           開啟相機掃描
         </button>
@@ -198,13 +198,14 @@ class Component extends DCLogic {
     this.startCatch = (ev, auto) => {
       if (this.fxTick || this.scanning) return;
       this.scanning = true;
-      (window.MH.debug && !auto ? window.MH.fakeScan() : window.MH.scan({ auto: auto === true })).then((no) => {
+      (window.MH.debug && !auto ? window.MH.fakeScan() : window.MH.scan({ auto: auto === true, mount: () => this.vfEl })).then((no) => {
         this.scanning = false;
         if (no) this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch());
       });
     };
     this.manualCode = () => {
-      if (this.fxTick || this.scanning) return;
+      if (this.fxTick) return;
+      if (this.scanning) { window.MH.stopScan(); setTimeout(() => this.manualCode(), 60); return; }
       this.scanning = true;
       window.MH.manual().then((no) => {
         this.scanning = false;

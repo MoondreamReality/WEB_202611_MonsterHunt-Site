@@ -401,6 +401,7 @@
 
   /** 開啟相機掃描。成功回傳怪獸編號；使用者取消回傳 0 */
   // 相機開成功過一次（玩家同意過）就記住；之後不管從哪裡進掃描頁都自動開相機
+  MH.stopScan = function () {};
   MH.autoScan = function () {
     let ok = false;
     try { ok = localStorage.getItem('mfhunt.camOK') === '1'; } catch (e) {}
@@ -409,16 +410,44 @@
   };
   MH.scan = function (opts) {
     const auto = !!(opts && opts.auto);
+    const mount = opts && opts.mount;   // 有指定：相機畫面嵌在頁面的取景框裡（冷知識照常看得到）
     return new Promise((resolve) => {
       const ov = document.createElement('div');
-      ov.className = 'mh-scan';
-      ov.innerHTML =
-        T('<div class="mh-scan-bar"><span>搜查中…</span></div>') +
-        '<div class="mh-scan-view"><video playsinline muted autoplay></video>' +
-        '<div class="mh-scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div></div>' +
-        T('<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>') +
-        T('<button type="button" class="mh-btn mh-scan-cancel">取消</button>');
-      document.body.appendChild(ov);
+      if (mount) {
+        ov.className = 'mh-scan-inline';
+        ov.innerHTML =
+          '<video playsinline muted autoplay></video>' +
+          '<div class="mh-scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>' +
+          T('<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>') +
+          '<button type="button" class="mh-scan-cancel" aria-label="' + T('關閉相機') + '">' + T('✕ 關閉') + '</button>';
+        // 不放進頁面元素裡（頁面重繪會把它清掉），改成蓋在取景框正上方、每一格畫面對齊一次
+        document.body.appendChild(ov);
+        const getEl = typeof mount === 'function' ? mount : () => mount;
+        const sync = () => {
+          if (done) return;
+          const el = getEl();
+          if (el && el.isConnected) {
+            const r = el.getBoundingClientRect();
+            ov.style.left = (r.left + window.scrollX) + 'px';
+            ov.style.top = (r.top + window.scrollY) + 'px';
+            ov.style.width = r.width + 'px';
+            ov.style.height = r.height + 'px';
+          }
+          requestAnimationFrame(sync);
+        };
+        requestAnimationFrame(sync);
+        document.querySelectorAll('.mh-start').forEach((b) => b.setAttribute('data-busy', T('搜查中…對準 QR code')));
+        document.body.classList.add('mh-scanning');
+      } else {
+        ov.className = 'mh-scan';
+        ov.innerHTML =
+          T('<div class="mh-scan-bar"><span>搜查中…</span></div>') +
+          '<div class="mh-scan-view"><video playsinline muted autoplay></video>' +
+          '<div class="mh-scan-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div></div>' +
+          T('<p class="mh-scan-msg" aria-live="polite">把怪獸旁邊的 QR code 放進框框裡</p>') +
+          T('<button type="button" class="mh-btn mh-scan-cancel">取消</button>');
+        document.body.appendChild(ov);
+      }
       snd('scanOpen');
       const video = ov.querySelector('video');
       const msg = ov.querySelector('.mh-scan-msg');
@@ -428,13 +457,18 @@
 
       function finish(no) {
         if (done) return; done = true;
+        if (MH.stopScan === stopMe) MH.stopScan = function () {};
+        document.body.classList.remove('mh-scanning');
         clearTimeout(timer); clearTimeout(warnT);
         if (stream) stream.getTracks().forEach((t) => t.stop());
         ov.remove();
         resolve(no);
       }
       ov.querySelector('.mh-scan-cancel').addEventListener('click', () => finish(0));
+      const stopMe = () => finish(0);
+      MH.stopScan = stopMe;
       function fail(text) {
+        document.body.classList.remove('mh-scanning');
         snd('error');
         ov.classList.add('mh-scan-error');
         msg.innerHTML = text;
@@ -512,6 +546,8 @@
         });
     });
   };
+
+  window.addEventListener('pagehide', () => { try { MH.stopScan(); } catch (e) {} });
 
   /** 手動輸入怪獸牌子上的代碼（例如 04-7ZU5V），回傳怪獸編號或 0 */
   MH.manual = function () {

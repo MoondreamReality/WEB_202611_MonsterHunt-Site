@@ -117,3 +117,20 @@ html[data-lang="en"] div[style*="justify-content: space-between; font-size: 14px
 html[data-lang="en"] .slapin { overflow: hidden; }
 html[data-lang="en"] .slapin span[style*="font-size: 10px; font-weight: bold"] { font-size: 8px !important; white-space: nowrap; }
 html[data-lang="en"] .slapin div[style*="font-size: 8px; line-height: 1.35"] { font-size: 6.5px !important; line-height: 1.25 !important; }
+
+/* 相機嵌在搜查頁取景框裡 */
+.mh-scan-inline { position: absolute; left: 0; top: 0; z-index: 15; font-family: 'DotGothic16', system-ui, sans-serif; background: #000; overflow: hidden; }
+.mh-scan-inline video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.mh-scan-inline .mh-scan-frame { inset: 12%; }
+.mh-scan-inline .mh-scan-msg { position: absolute; left: 8px; right: 8px; bottom: 8px; min-height: 0; max-width: none; margin: 0;
+  background: rgba(17,17,17,.82); color: #f4f4f0; font-size: 13px; line-height: 1.5; padding: 4px 8px; border: 2px solid #f4f4f0; }
+.mh-scan-inline .mh-scan-cancel { position: absolute; right: 8px; top: 8px; min-height: 32px; padding: 0 10px; font: inherit; font-size: 13px;
+  background: #f4f4f0; color: #111; border: 2px solid #111; box-shadow: 2px 2px 0 #ffd23f; cursor: pointer; }
+.mh-scan-inline.mh-scan-error video, .mh-scan-inline.mh-scan-error .mh-scan-frame { display: none; }
+.mh-scan-inline.mh-scan-error { background: #f4f4f0; }
+.mh-scan-inline.mh-scan-error .mh-scan-msg { top: 48px; bottom: auto; background: #f4f4f0; color: #111; border-color: #111; box-shadow: 3px 3px 0 #ffd23f; font-size: 14px; padding: 10px 12px; }
+body.mh-scanning .mh-start { font-size: 0 !important; background: #f4f4f0 !important; pointer-events: none; }
+body.mh-scanning .mh-start > * { display: none; }
+body.mh-scanning .mh-start::after { content: attr(data-busy); font-size: 15px; font-weight: bold; color: #111; animation: mhblink 1s steps(2) infinite; }
+@keyframes mhblink { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { body.mh-scanning .mh-start::after { animation: none; } }
