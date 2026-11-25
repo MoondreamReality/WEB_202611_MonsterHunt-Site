@@ -292,7 +292,7 @@
   window.MH = MH;
 
   // ---------- 領取登記：送到後台（Google Apps Script），寄出最愛怪獸的作品介紹 ----------
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxhmOOh8yscC1hFYEhVO3fmNbeB-9zyAvO0U3sZ5uNBQCh93DsfmaIF9GpfRaU5m13LCQ/exec";
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbydLvSbkIxpYmEFg-quZuVdDkfF_X464OsWCTQ0NfIYrvRSsTvDBzcdiLdxJsFmXlrLgg/exec";
 
   // ---------- 上場陣容：先用手機裡存的，再向後台確認有沒有新的 ----------
   // 沒存過、或存超過 10 分鐘：畫面先等後台（最多 2.5 秒）；否則直接用存的，背景更新給下一頁用
