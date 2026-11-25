@@ -91,12 +91,12 @@ a{color:#111}a:hover{color:#444}
 .gust{animation:gust 700ms steps(8) both}
 @media (prefers-reduced-motion: reduce){.shake,.flicker,.dshake{animation:none}.fly{animation:flyin 1700ms steps(24) both}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611252114">
-<script src="mh-i18n.js?v=202611252114"></script>
-<script src="mh.js?v=202611252114"></script>
-<script src="mh-audio.js?v=202611252114"></script>
-<script src="dcmini.js?v=202611252114"></script>
-<script src="mh-cues.js?v=202611252114"></script>
+<link rel="stylesheet" href="mh.css?v=202611252125">
+<script src="mh-i18n.js?v=202611252125"></script>
+<script src="mh.js?v=202611252125"></script>
+<script src="mh-audio.js?v=202611252125"></script>
+<script src="dcmini.js?v=202611252125"></script>
+<script src="mh-cues.js?v=202611252125"></script>
 
 </head>
 <body data-layout="main">
@@ -638,7 +638,7 @@ class Component extends DCLogic {
     this.papers = [
       { cx: 100, cy: 245, w: 112, h: 122, r: -28, no: 'No.01', name: '炭吉', trait: '能變成各種造型', seen: '館內四處飄' },
       { cx: 313, cy: 232, w: 112, h: 122, r: 14, no: 'No.02', name: '可可 Koko', trait: '溫暖又善良', seen: '魔法森林' },
-      { cx: 238, cy: 112, w: 104, h: 112, r: -14, no: 'No.03', name: '懶懶 Lanlan', trait: '有點愛賴床', seen: '魔法森林' },
+      { cx: 222, cy: 146, minCy: 132, w: 104, h: 112, r: -14, no: 'No.03', name: '懶懶 Lanlan', trait: '有點愛賴床', seen: '魔法森林' },
       { cx: 330, cy: 662, w: 112, h: 122, r: 24, no: 'No.05', name: '樂樂', trait: '追追閃電足球', seen: '超時空跳跳' },
       { cx: 68, cy: 748, w: 112, h: 122, r: -18, no: 'No.06', name: 'Momo', trait: '粉粉的、有黃色觸角', seen: '歡樂谷' },
       { cx: 312, cy: 792, w: 108, h: 116, r: 8, no: 'No.07', name: '鐵達尼號', trait: '可能會撞上冰山', seen: '海底' },
@@ -648,15 +648,15 @@ class Component extends DCLogic {
       return m ? Object.assign({}, d, { name: m.name, trait: m.trait, seen: m.seen }) : d;
     }).map((d, i) => {
       const from = [[-420, -40], [420, 0], [0, -320], [420, 60], [-420, 0], [0, 420], [-320, 320]][i] || [0, 400];
-      return { left: (d.cx - d.w / 2) + 'px', top: Math.round(d.cy * YS - d.h / 2) + 'px', w: d.w + 'px', h: d.h + 'px', rot: 'rotate(' + d.r + 'deg)', r: d.r + 'deg', fx: from[0] + 'px', fy: from[1] + 'px', delay: (i * 140) + 'ms, ' + (i * 140 + 420) + 'ms', dur: '420ms, ' + (2300 + (i % 4) * 300) + 'ms', pd: (d.h / 2 - 10) + 'px', no: d.no, name: d.name, trait: d.trait, seen: d.seen };
+      return { left: (d.cx - d.w / 2) + 'px', top: Math.round(Math.max(d.cy * YS, d.minCy || 0) - d.h / 2) + 'px', w: d.w + 'px', h: d.h + 'px', rot: 'rotate(' + d.r + 'deg)', r: d.r + 'deg', fx: from[0] + 'px', fy: from[1] + 'px', delay: (i * 140) + 'ms, ' + (i * 140 + 420) + 'ms', dur: '420ms, ' + (2300 + (i % 4) * 300) + 'ms', pd: (d.h / 2 - 10) + 'px', no: d.no, name: d.name, trait: d.trait, seen: d.seen };
     });
     const RAW = [
-      [100, 245, 122, -28], [313, 232, 122, 14], [238, 112, 112, -14], [330, 662, 122, 24],
+      [100, 245, 122, -28], [313, 232, 122, 14], [222, 146, 112, -14, 132], [330, 662, 122, 24],
       [68, 748, 122, -18], [312, 792, 116, 8], [98, 606, 122, -6]
     ];
     const PIN = RAW.map((d) => {
       const dist = d[2] / 2 - 10, th = d[3] * Math.PI / 180;
-      return [Math.round(d[0] + dist * Math.sin(th)), Math.round(d[1] * YS - dist * Math.cos(th))];
+      return [Math.round(d[0] + dist * Math.sin(th)), Math.round(Math.max(d[1] * YS, d[4] || 0) - dist * Math.cos(th))];
     });
     this.pins = PIN.map((q, i) => ({ left: (q[0] - 6) + 'px', top: (q[1] - 6) + 'px', delay: (1400 + i * 90) + 'ms' }));
     const L = (m, n) => ln([PIN[m][0], PIN[m][1], PIN[n][0], PIN[n][1]]);
