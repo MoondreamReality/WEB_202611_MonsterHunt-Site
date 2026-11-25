@@ -27,12 +27,12 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611252129">
-<script src="mh-i18n.js?v=202611252129"></script>
-<script src="mh.js?v=202611252129"></script>
-<script src="mh-audio.js?v=202611252129"></script>
-<script src="dcmini.js?v=202611252129"></script>
-<script src="mh-cues.js?v=202611252129"></script>
+<link rel="stylesheet" href="mh.css?v=202611252321">
+<script src="mh-i18n.js?v=202611252321"></script>
+<script src="mh.js?v=202611252321"></script>
+<script src="mh-audio.js?v=202611252321"></script>
+<script src="dcmini.js?v=202611252321"></script>
+<script src="mh-cues.js?v=202611252321"></script>
 
 </head>
 <body data-layout="flex">
@@ -176,14 +176,25 @@ class Component extends DCLogic {
     this.QR = qr;
     const qrOn = [];
     qr.forEach((on, i) => { if (on) qrOn.push([135 + (i % 12) * 10, 232 + Math.floor(i / 12) * 10]); });
-    this.PARTS = [];
-    let k = 0;
-    PAT.forEach((row, r) => row.split('').forEach((ch, c) => {
-      if (ch !== 'X' && ch !== 'P') return;
-      const src = qrOn[k % qrOn.length];
-      this.PARTS.push({ sx: src[0], sy: src[1], mx: 20 + rnd() * 340, my: 60 + rnd() * 740, tx: 101 + c * 14, ty: 90 + r * 14, d: (k % 10) * 15 });
-      k++;
-    }));
+    this.buildParts = (rows) => {
+      // rows：剪影格子（'X' 有、'.' 無）；沒有就用原本的幽靈
+      if (!rows || !rows.length) rows = PAT.map((r) => r.replace(/P/g, 'X'));
+      const H = rows.length, W = Math.max.apply(null, rows.map((r) => r.length));
+      const step = Math.min(14, 168 / Math.max(W, H));
+      const x0 = 101 + (168 - W * step) / 2, y0 = 90 + (168 - H * step) / 2;
+      const f = step / 14;
+      let s2 = 7;
+      const rnd2 = () => { s2 = (s2 * 9301 + 49297) % 233280; return s2 / 233280; };
+      this.PARTS = [];
+      let k = 0;
+      rows.forEach((row, r) => row.split('').forEach((ch, c) => {
+        if (ch !== 'X') return;
+        const src = qrOn[k % qrOn.length];
+        this.PARTS.push({ sx: src[0], sy: src[1], mx: 20 + rnd2() * 340, my: 60 + rnd2() * 740, tx: Math.round(x0 + c * step), ty: Math.round(y0 + r * step), d: (k % 10) * 15, f: f });
+        k++;
+      }));
+    };
+    this.buildParts(null);
     this.catchLink = null;
     this.setCatchLink = (el) => { this.catchLink = el; };
     this.vfEl = null;
@@ -200,7 +211,7 @@ class Component extends DCLogic {
       this.scanning = true;
       (window.MH.debug && !auto ? window.MH.fakeScan() : window.MH.scan({ auto: auto === true, mount: () => this.vfEl })).then((no) => {
         this.scanning = false;
-        if (no) this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch());
+        if (no) { this.caughtNo = no; this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch()); }
       });
     };
     this.manualCode = () => {
@@ -209,7 +220,7 @@ class Component extends DCLogic {
       this.scanning = true;
       window.MH.manual().then((no) => {
         this.scanning = false;
-        if (no) this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch());
+        if (no) { this.caughtNo = no; this.setState({ catchHref: window.MH.catchUrl(no) }, () => this.playCatch()); }
       });
     };
     if (window.MH.autoScan()) this.later(350, () => this.startCatch(null, true));
@@ -219,6 +230,7 @@ class Component extends DCLogic {
       try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
       if (reduce) { if (this.catchLink) this.catchLink.click(); return; }
       this.measureVf();
+      this.buildParts(window.MH.silhouette ? window.MH.silhouette(this.caughtNo) : null);
       const t0 = Date.now();
       this.setState({ fxT: 0 });
       this.fxTick = setInterval(() => {
@@ -264,6 +276,7 @@ class Component extends DCLogic {
         let x, y, sz;
         if (t < 1100) { const k = st((t - 600 - p.d) / 350, 8); x = p.sx + ox + (p.mx - p.sx - ox) * k; y = p.sy + oy + (p.my - p.sy - oy) * k; sz = 10 + 2 * k; }
         else { const k = st((t - 1100 - p.d) / 350, 8); x = p.mx + (p.tx - p.mx) * k; y = p.my + (p.ty - p.my) * k; sz = 12 + 2 * k; }
+        sz = Math.round(sz * (p.f || 1) * 10) / 10;
         const landed = t >= 1600;
         const flash = t >= 1600 && t < 1750;
         parts.push({ x: Math.round(x) + 'px', y: Math.round(y) + 'px', s: sz + 'px', c: flash ? '#ffd23f' : '#f4f4f0', b: landed ? 'none' : '2px solid #111' });
