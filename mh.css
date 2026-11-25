@@ -134,3 +134,19 @@ body.mh-scanning .mh-start > * { display: none; }
 body.mh-scanning .mh-start::after { content: attr(data-busy); font-size: 15px; font-weight: bold; color: #111; animation: mhblink 1s steps(2) infinite; }
 @keyframes mhblink { 50% { opacity: .35; } }
 @media (prefers-reduced-motion: reduce) { body.mh-scanning .mh-start::after { animation: none; } }
+
+/* 底部選單：「搜查」放中間、黃色加大，最醒目 */
+.mh-nav-scan { position: relative; margin-top: -14px; }
+.mh-nav-scan > span:first-child { width: 56px !important; height: 50px !important; background: #ffd23f !important;
+  border: 3px solid #111 !important; box-shadow: 0 0 0 2px #f4f4f0, 0 0 0 5px #111, 3px 5px 0 5px #111; box-sizing: border-box; }
+.mh-nav-scan > span:first-child svg { width: 28px; height: 28px; }
+.mh-nav-scan > span:first-child svg rect { stroke: #111 !important; }
+.mh-nav-scan > span:first-child svg [fill="#f4f4f0"] { fill: #111; }
+.mh-nav-scan > span:last-child { background: #ffd23f !important; color: #111 !important; font-weight: bold; font-size: 14px !important;
+  border: 2px solid #111; margin-top: 4px; }
+/* 正在搜查頁時：底下多一條黑色標示 */
+.mh-nav-scan[aria-current="page"] > span:last-child { box-shadow: 0 4px 0 #111; }
+.mh-nav-scan > span:first-child { animation: mhnavpulse 1.6s steps(2) infinite; }
+.mh-nav-scan[aria-current="page"] > span:first-child { animation: none; }
+@keyframes mhnavpulse { 50% { transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .mh-nav-scan > span:first-child { animation: none; } }
