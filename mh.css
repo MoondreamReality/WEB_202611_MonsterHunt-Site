@@ -113,3 +113,7 @@ html[data-lang="en"] div[style*="grid-template-columns: 52px minmax(0, 1fr)"] { 
 html[data-lang="en"] div[style*="justify-content: space-between; font-size: 14px"] { gap: 8px; }
 html[data-lang="en"] div[style*="justify-content: space-between; font-size: 14px"] > span:first-child { flex: none; white-space: nowrap; }
 html[data-lang="en"] div[style*="justify-content: space-between; font-size: 14px"] > span:last-child { text-align: right; min-width: 0; }
+/* 開場嫌犯檔案：英文比較長，字縮小並收在卡片內 */
+html[data-lang="en"] .slapin { overflow: hidden; }
+html[data-lang="en"] .slapin span[style*="font-size: 10px; font-weight: bold"] { font-size: 8px !important; white-space: nowrap; }
+html[data-lang="en"] .slapin div[style*="font-size: 8px; line-height: 1.35"] { font-size: 6.5px !important; line-height: 1.25 !important; }

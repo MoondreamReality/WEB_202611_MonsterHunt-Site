@@ -27,12 +27,12 @@ a{color:#111}a:hover{color:#444}
 .note-breathe{animation:notebreathe 1600ms steps(4) infinite}
 @media (prefers-reduced-motion: reduce){.tap-bounce,.pin-pull,.blow-left,.slide-in,.pinin,.note-breathe{animation:none}}
 </style>
-<link rel="stylesheet" href="mh.css?v=202611251201">
-<script src="mh-i18n.js?v=202611251201"></script>
-<script src="mh.js?v=202611251201"></script>
-<script src="mh-audio.js?v=202611251201"></script>
-<script src="dcmini.js?v=202611251201"></script>
-<script src="mh-cues.js?v=202611251201"></script>
+<link rel="stylesheet" href="mh.css?v=202611251218">
+<script src="mh-i18n.js?v=202611251218"></script>
+<script src="mh.js?v=202611251218"></script>
+<script src="mh-audio.js?v=202611251218"></script>
+<script src="dcmini.js?v=202611251218"></script>
+<script src="mh-cues.js?v=202611251218"></script>
 
 </head>
 <body data-layout="flex">
@@ -157,28 +157,7 @@ const MF = { get: (k) => { try { return window.localStorage.getItem('mfhunt.' + 
 class Component extends DCLogic {
   constructor(...args) {
     super(...args);
-    this.FACTS = [
-      '霧霧打噴嚏的時候，會噴出一小朵雲。',
-      '霓虹蛙的舌頭顏色會跟著心情變：開心是粉紅色，害羞是藍色。',
-      '插座獸每天要睡 20 個小時，因為牠一直在「充電」。',
-      '雨傘怪最怕的天氣不是大太陽，而是颳大風。',
-      '齒輪鼠走路的喀啦聲，其實是牠在哼歌。',
-      '燈籠魚會發光，可是牠自己怕黑，所以從來不關燈。',
-      '磁帶龜會把聽過的聲音錄進殼裡，敲一敲就會倒帶播放。',
-      '貓頭鍵頭上的按鍵從來沒有人按過，據說按下去會發生好事。',
-      '霧霧沒有固定的形狀，早上胖胖的，到了中午會縮水。',
-      '霓虹蛙一跳可以跳 3 公尺，但只在沒人看的時候跳。',
-      '插座獸的尾巴跟一般插頭不一樣，世界上沒有插座插得進去。',
-      '雨傘怪收起來時就像一把普通的雨傘，常常被人誤拿回家。',
-      '齒輪鼠的齒輪會越轉越快，轉太快的時候要停下來喝口水。',
-      '燈籠魚的光可以照亮一整個房間，但只能維持一首歌的時間。',
-      '磁帶龜很長壽，殼上的磁帶已經錄滿了 300 年的聲音。',
-      '貓頭鍵喜歡模仿鍵盤聲，打字聲越多的地方，牠越放鬆。',
-      '9 隻小怪獸其實是好朋友，每年霧最濃的那一晚會聚在一起。',
-      '小怪獸都很怕被拍照，但被 QR Code 掃到的時候會偷偷比 YA。',
-      '霧霧和燈籠魚是表兄弟，一個負責起霧，一個負責照路。',
-      '據說集滿 9 隻怪獸的人，會聽見夢境搜查局長的一句悄悄話。'
-    ];
+    this.FACTS = window.MH.facts();
     this.state = Object.assign({}, this.state, { idx: 0, prev: 0, phase: 'idle' });
     this.timers = [];
     this.later = (ms, fn) => { this.timers.push(setTimeout(fn, ms)); };
