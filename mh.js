@@ -12,7 +12,8 @@
   "seen": "館內四處飄",
   "note": "場館的吉祥物，會保佑大家賺大錢。身體像水球，哪裡都關不住他，常常調皮搗蛋。開心時會跳起來，館長很希望他跳的時候順便掉兩枚金幣。",
   "catchLine": "會保佑大家賺大錢的場館吉祥物。",
-  "key": "PN6JB"
+  "key": "PN6JB",
+  "id": "tanji"
  },
  {
   "no": 2,
@@ -24,7 +25,8 @@
   "seen": "魔法森林",
   "note": "懶懶的哥哥。和妹妹一起住在魔法森林，認識了山山和斑斑之後，每天都一起四處冒險，開心地學英文！",
   "catchLine": "溫暖又善良的無尾熊哥哥。",
-  "key": "YTFSU"
+  "key": "YTFSU",
+  "id": "koko"
  },
  {
   "no": 3,
@@ -36,7 +38,8 @@
   "seen": "魔法森林",
   "note": "可可的妹妹，愛做夢的小迷糊蛋。每天都要大樹奶奶 Morning Call 才起得來，最喜歡和哥哥、山山、斑斑在魔法森林裡玩耍。",
   "catchLine": "有點愛賴床的樹懶妹妹。",
-  "key": "E92U9"
+  "key": "E92U9",
+  "id": "lanlan"
  },
  {
   "no": 4,
@@ -48,7 +51,8 @@
   "seen": "地府",
   "note": "地藏王菩薩身旁的神獸，能辨別真偽、明察善惡。平時在地府四處閒晃，偶爾嘴饞、偶爾偷懶，還會主動靠近旅客撒嬌。想摸摸諦聽，就一起下地獄吧！",
   "catchLine": "生活在地府、超愛撒嬌的神祕犬獸。",
-  "key": "7ZU5V"
+  "key": "7ZU5V",
+  "id": "diting"
  },
  {
   "no": 5,
@@ -60,7 +64,8 @@
   "seen": "超時空跳跳",
   "note": "樂樂和他的小夥伴們穿梭在超時空跳跳尋找失散的工具們，如果沒有工具就不能使用魔法了QAQ你能一起幫幫忙嗎？",
   "catchLine": "在超時空跳跳裡找回魔法工具的小冒險家。",
-  "key": "P3KGQ"
+  "key": "P3KGQ",
+  "id": "lele"
  },
  {
   "no": 6,
@@ -72,7 +77,8 @@
   "seen": "歡樂谷",
   "note": "Momo率領著超能量探險隊在島上和炭吉船長相遇，因此成為了夢境號的好朋友。偶爾天氣好的時候，可以看到他們飛過來探望大家喔～",
   "catchLine": "率領超能量探險隊的粉紅毛毛蟲。",
-  "key": "4JNFV"
+  "key": "4JNFV",
+  "id": "momo"
  },
  {
   "no": 7,
@@ -84,7 +90,8 @@
   "seen": "海底",
   "note": "翻越重洋，帶你重回1912年，一睹這艘傲視世界的海上宮殿「鐵達尼號」即將啟航，準備好登船了嗎？",
   "catchLine": "載你重回 1912 年的海上宮殿。",
-  "key": "AA8U2"
+  "key": "AA8U2",
+  "id": "titanic"
  },
  {
   "no": 8,
@@ -96,7 +103,8 @@
   "seen": "台灣山區",
   "note": "台灣僅存的原生野生貓科動物。最好認的是從眼角延伸到額頭的兩條白色條紋，還有耳朵背面的白斑。",
   "catchLine": "台灣僅存的原生野生貓科動物。",
-  "key": "WALT5"
+  "key": "WALT5",
+  "id": "leopardcat"
  },
  {
   "no": 9,
@@ -108,7 +116,8 @@
   "seen": "夢境現實",
   "note": "從知名馬戲團挖角來的一級舞者，最擅長玩套圈圈。牠帶領的河馬舞團享譽國際，來夢境現實的話，一定要買票瞧瞧喔！",
   "catchLine": "最會套圈圈的馬戲團一級舞者。",
-  "key": "QHZ9C"
+  "key": "QHZ9C",
+  "id": "hippo"
  }
 ];
   const TOTAL = ROSTER.length;
@@ -120,18 +129,40 @@
   let ss = null; try { ss = window.sessionStorage; } catch (e) {}
   const T = (x) => (window.MHI18N ? window.MHI18N.t(x) : x);
 
-  // 語言：怪獸資料整份換成英文欄位（中文原稿另存，切回中文時還原）
+  // 角色像素圖庫：代號 → 底紋（圖檔在 img/c/<代號>.png）
+  const SPRITES = {"tanji": {"fill": "solid"}, "koko": {"fill": "h"}, "lanlan": {"fill": "v"}, "diting": {"fill": "solid"}, "lele": {"fill": "h"}, "momo": {"fill": "v"}, "titanic": {"fill": "solid"}, "leopardcat": {"fill": "h"}, "hippo": {"fill": "solid"}};
+
+  // 語言：怪獸資料分中文（_zh）和英文（_en）兩份，依目前語言套用；英文欄位空白就用中文
   const FIELDS = ['name', 'type', 'trait', 'seen', 'note', 'catchLine'];
-  ROSTER.forEach((m) => { m._zh = {}; FIELDS.forEach((f) => { m._zh[f] = m[f]; }); });
+  ROSTER.forEach((m) => {
+    m._zh = {}; FIELDS.forEach((f) => { m._zh[f] = m[f]; });
+    m._en = Object.assign({}, ((window.MHI18N && window.MHI18N.roster) || {})[m.no] || {});
+    if (m.id && SPRITES[m.id]) m.img = 'img/c/' + m.id + '.png';
+  });
   function applyLang() {
     const en = window.MHI18N && window.MHI18N.lang() === 'en';
-    const R = (window.MHI18N && window.MHI18N.roster) || {};
     ROSTER.forEach((m) => {
-      const e = R[m.no] || {};
+      const e = m._en || {};
       FIELDS.forEach((f) => { m[f] = en && e[f] ? e[f] : m._zh[f]; });
     });
   }
   applyLang();
+
+  /** 套用試算表發佈的上場陣容：9 個位置各換成指定角色（QR、收服進度都照位置，不受影響） */
+  function applyLineup(L) {
+    if (!L || !Array.isArray(L.slots) || L.slots.length !== ROSTER.length) return false;
+    L.slots.forEach((c) => {
+      const m = ROSTER[c.no - 1];
+      if (!m || !c.id) return;
+      m.id = c.id;
+      m._zh = {}; FIELDS.forEach((f) => { m._zh[f] = String(c[f] || ''); });
+      m._en = {}; FIELDS.forEach((f) => { if (c.en && c.en[f]) m._en[f] = String(c.en[f]); });
+      m.img = 'img/c/' + c.id + '.png';
+      m.fill = (SPRITES[c.id] && SPRITES[c.id].fill) || 'solid';
+    });
+    applyLang();
+    return true;
+  }
 
   // ?debug=1 開啟除錯工具（同一個分頁內有效），?debug=0 關閉
   let q = new URLSearchParams(location.search);
@@ -151,6 +182,8 @@
 
   const MH = {
     roster: ROSTER,
+    get ready() { return lineupReady; },
+    applyLineup,
     applyLang,
     total: TOTAL,
     debug,
@@ -205,6 +238,30 @@
 
   // ---------- 領取登記：送到後台（Google Apps Script），寄出最愛怪獸的作品介紹 ----------
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbxhmOOh8yscC1hFYEhVO3fmNbeB-9zyAvO0U3sZ5uNBQCh93DsfmaIF9GpfRaU5m13LCQ/exec";
+
+  // ---------- 上場陣容：先用手機裡存的，再向後台確認有沒有新的 ----------
+  // 沒存過、或存超過 10 分鐘：畫面先等後台（最多 2.5 秒）；否則直接用存的，背景更新給下一頁用
+  let lineupReady = Promise.resolve();
+  (function loadLineup() {
+    let cached = null;
+    try { cached = JSON.parse(ls.get('lineup') || 'null'); } catch (e) {}
+    if (cached) applyLineup(cached);
+    if (!ENDPOINT || q.get('lineup') === 'off') return;
+    const fresh = cached && Date.now() - (cached._at || 0) < 10 * 60 * 1000;
+    const ctl = window.AbortController ? new AbortController() : null;
+    const t = setTimeout(() => ctl && ctl.abort(), 8000);
+    const job = fetch(ENDPOINT + (ENDPOINT.indexOf('?') >= 0 ? '&' : '?') + 'action=lineup', { signal: ctl ? ctl.signal : undefined })
+      .then((r) => r.json())
+      .then((j) => {
+        if (!j || !j.ok || !j.lineup) return;
+        const L = j.lineup; L._at = Date.now();
+        if (!cached || cached.ver !== L.ver) applyLineup(L);
+        try { ls.set('lineup', JSON.stringify(L)); } catch (e) {}
+      })
+      .catch(() => {})
+      .finally(() => clearTimeout(t));
+    if (!fresh) lineupReady = Promise.race([job, new Promise((res) => setTimeout(res, 2500))]);
+  })();
   function outbox() { try { return JSON.parse(ls.get('outbox') || '[]'); } catch (e) { return []; } }
   function saveOutbox(list) { ls.set('outbox', JSON.stringify(list)); }
   let flushing = false;

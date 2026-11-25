@@ -248,9 +248,13 @@
   // 第一次開啟：開場頁先顯示「點一下開始」（同時解鎖手機的聲音）
   function start(Comp) {
     if (window.MHSound) window.MHSound.muteButton();
+    // 等上場陣容（最多 2.5 秒；手機裡有新鮮的就不等）再畫畫面
+    const ready = (window.MH && window.MH.ready) || Promise.resolve();
+    const after = (fn) => ready.then(fn, fn);
     if (pageId() === 'index' && window.MHSound && !(window.MH && window.MH.debug && /startAt=/.test(location.search))) {
-      window.MHSound.gate().then(() => boot(Comp));
-    } else boot(Comp);
+      // 開場頁：「點一下開始」畫面先出現，玩家點的同時陣容多半已經載好
+      window.MHSound.gate().then(() => after(() => boot(Comp)));
+    } else after(() => boot(Comp));
   }
 
   // ---------- 不重新載入的換頁：聲音與背景音樂不中斷 ----------
