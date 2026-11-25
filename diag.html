@@ -26,8 +26,8 @@
 <div class="box" id="r2">尚未測試。送出後到試算表「登記」看有沒有一列「連線測試」。</div>
 <button id="t3" class="gray">重送這支手機卡住的資料</button>
 <button id="t4" class="gray">清除這支手機的遊戲紀錄（進度、登記、兌換）</button>
-<script src="mh-i18n.js?v=202611252107"></script>
-<script src="mh.js?v=202611252107"></script>
+<script src="mh-i18n.js?v=202611252110"></script>
+<script src="mh.js?v=202611252110"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -38,7 +38,7 @@
     const ob = (window.MH && window.MH.outbox) ? window.MH.outbox() : [];
     let claim = null; try { claim = JSON.parse(get('claim') || 'null'); } catch (e) {}
     const rows = [
-      ['網站版本', '202611252107'],
+      ['網站版本', '202611252110'],
       ['後台網址', tail],
       ['網路', navigator.onLine ? '連線中' : '<span class="bad">離線</span>'],
       ['瀏覽器', navigator.userAgent.replace(/^Mozilla\/5\.0 /, '').slice(0, 90)],
