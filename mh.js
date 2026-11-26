@@ -511,22 +511,36 @@
           if (!detector) {
             try { jsqr = await loadJsQR(); }
             catch (e) { fail(T('掃描元件載入失敗，請確認網路後再試一次。')); return; }
+          } else {
+            // 黑底白碼（反白 QR）：內建偵測器不一定讀得到，背景載入 jsQR 當備援
+            loadJsQR().then((f) => { jsqr = f; }).catch(() => {});
           }
+          let n = 0;
+          const grab = () => {
+            const vw = video.videoWidth, vh = video.videoHeight;
+            const side = Math.min(vw, vh);
+            const size = Math.min(640, side);
+            canvas.width = size; canvas.height = size;
+            ctx.drawImage(video, (vw - side) / 2, (vh - side) / 2, side, side, 0, 0, size, size);
+            return { img: ctx.getImageData(0, 0, size, size), size: size };
+          };
           const tick = async () => {
             if (done) return;
             try {
               if (video.readyState >= 2) {
+                n++;
                 if (detector) {
                   const r = await detector.detect(video);
                   if (r && r.length && handle(r[0].rawValue)) return;
+                  if (jsqr && n % 2 === 0) {
+                    const g = grab();
+                    const code = jsqr(g.img.data, g.size, g.size, { inversionAttempts: 'onlyInvert' });
+                    if (code && code.data && handle(code.data)) return;
+                  }
                 } else {
-                  const vw = video.videoWidth, vh = video.videoHeight;
-                  const side = Math.min(vw, vh);
-                  const size = Math.min(640, side);
-                  canvas.width = size; canvas.height = size;
-                  ctx.drawImage(video, (vw - side) / 2, (vh - side) / 2, side, side, 0, 0, size, size);
-                  const img = ctx.getImageData(0, 0, size, size);
-                  const code = jsqr(img.data, size, size, { inversionAttempts: 'dontInvert' });
+                  // 一般碼與黑底白碼都試
+                  const g = grab();
+                  const code = jsqr(g.img.data, g.size, g.size, { inversionAttempts: 'attemptBoth' });
                   if (code && code.data && handle(code.data)) return;
                 }
               }
